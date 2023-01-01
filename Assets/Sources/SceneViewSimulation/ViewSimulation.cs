@@ -18,9 +18,11 @@ namespace SceneViewSimulation
         public T AddView<T>() where T : IView
         {
             T view;
-        
+
             if (typeof(T) == typeof(IPositionView))
                 view = (T) (IView) _gameObject.AddComponent<PositionView>();
+            else if (typeof(T) == typeof(IHealthView))
+                view = (T) (IView) _gameObject.GetComponentInChildren<HealthBar>();
             else
                 throw new InvalidOperationException();
 
@@ -30,7 +32,8 @@ namespace SceneViewSimulation
         public ISimulation AddSimulation<TSimulation>(TSimulation simulation)
         {
             if (typeof(TSimulation) == typeof(CharacterMovement))
-                return _gameObject.AddComponent<PlayerMovement>().Initialize(simulation as CharacterMovement, new AxisInput());
+                return _gameObject.AddComponent<PlayerMovement>()
+                    .Initialize(simulation as CharacterMovement, new AxisInput());
             else
                 throw new InvalidOperationException();
         }

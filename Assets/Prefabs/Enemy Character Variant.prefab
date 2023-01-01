@@ -59,5 +59,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: Enemy Character Variant
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: -7620999703828207980, guid: e6a4370b798b761409cdbff41597dd47, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: e6a4370b798b761409cdbff41597dd47, type: 3}

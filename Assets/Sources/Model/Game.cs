@@ -25,19 +25,20 @@ namespace Model
         {
             IViewSimulation playerSimulation = _playerViewSimulationFactory.Create();
             IPositionView positionView = playerSimulation.AddView<IPositionView>();
-            _player = new Player(new CompositePositionView(positionView, _cameraPositionView));
+            IHealthView healthView = playerSimulation.AddView<IHealthView>();
+            _player = new Player(new CompositePositionView(positionView, _cameraPositionView), healthView);
             _movementSimulation = playerSimulation.AddSimulation(_player.CharacterMovement);
             _positionViews.Add(positionView);
 
             IViewSimulation enemySimulation = _enemyViewSimulationFactory.Create();
             IPositionView enemyPositionView = enemySimulation.AddView<IPositionView>();
-            _enemy = new Enemy(enemyPositionView, _player.Transform);
+            _enemy = new Enemy(enemyPositionView, _player.Transform, _player.Health);
         }
 
         public void Update(float deltaTime)
         {
             _movementSimulation.UpdatePassedTime(deltaTime);
-            _enemy.FollowTarget.Follow(deltaTime);
+            _enemy.Update(deltaTime);
         }
     }
 

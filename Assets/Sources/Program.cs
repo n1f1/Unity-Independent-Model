@@ -33,10 +33,11 @@ public static class Program
             cameraView);
 
         //Rip off Update event function from all MonoBehaviours 
+        game.Start();
+        
         UnityUpdateReplace unityUpdateReplace = new UnityUpdateReplace();
         unityUpdateReplace.Replace(() => game.Update(Time.deltaTime));
 
-        game.Start();
 
         Application.quitting += () => unityUpdateReplace.Dispose();
     }

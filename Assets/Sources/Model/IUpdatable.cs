@@ -1,4 +1,7 @@
-﻿public interface IUpdatable
+﻿namespace Model
 {
-    public void UpdatePassedTime(float deltaTime);
+    public interface IUpdatable
+    {
+        public void UpdatePassedTime(float deltaTime);
+    }
 }

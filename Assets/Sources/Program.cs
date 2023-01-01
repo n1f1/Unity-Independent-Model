@@ -1,7 +1,10 @@
 using System.Threading.Tasks;
 using Model;
+using SceneViewSimulation;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using Utility.GameLoop;
+using View;
 
 public static class Program
 {
@@ -22,8 +25,16 @@ public static class Program
 #endif
 
         GameObjectFactory<Player> gameObjectFactory = Object.FindObjectOfType<GameObjectFactory<Player>>();
-        Game game = new Game(new PlayerViewSimulationFactory(gameObjectFactory));
+        IPositionView cameraView = Camera.main.GetComponentInParent<PositionView>();
+
+        Game game = new Game(new PlayerViewSimulationFactory(gameObjectFactory), cameraView);
+        
+        //Rip off Update event function from all MonoBehaviours 
+        UnityUpdateReplace unityUpdateReplace = new UnityUpdateReplace();
+        unityUpdateReplace.Replace(() => game.Update(Time.deltaTime));
+
         game.Start();
-        gameObjectFactory.Add(() => game.Update(Time.deltaTime));
+        
+        Application.quitting += () => unityUpdateReplace.Dispose();
     }
 }

@@ -1,9 +1,10 @@
 ﻿using System;
 using System.Numerics;
+using Simulation;
 
 namespace Model
 {
-    public class CharacterMovement
+    public class CharacterMovement : IMovable
     {
         private readonly Transform _transform;
         private readonly float _speed;

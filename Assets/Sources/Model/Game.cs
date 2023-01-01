@@ -5,13 +5,16 @@ namespace Model
 {
     public class Game
     {
+        private readonly IViewSimulationFactory _playerViewSimulationFactory;
+        private readonly IPositionView _cameraPositionView;
+        
         private Player _player;
-        private IViewSimulationFactory<Player> _playerViewSimulationFactory;
         private List<IPositionView> _positionViews = new List<IPositionView>();
         private ISimulation _movementSimulation;
 
-        public Game(IViewSimulationFactory<Player> playerViewSimulationFactory)
+        public Game(IViewSimulationFactory playerViewSimulationFactory, IPositionView positionView)
         {
+            _cameraPositionView = positionView;
             _playerViewSimulationFactory = playerViewSimulationFactory;
         }
 
@@ -19,7 +22,7 @@ namespace Model
         {
             IViewSimulation playerSimulation = _playerViewSimulationFactory.Create();
             IPositionView positionView = playerSimulation.AddView<IPositionView>();
-            _player = new Player(positionView);
+            _player = new Player(new CompositePositionView(positionView, _cameraPositionView));
             _movementSimulation = playerSimulation.AddSimulation(_player.CharacterMovement);
             _positionViews.Add(positionView);
         }
@@ -30,16 +33,12 @@ namespace Model
         }
     }
 
-    public interface IInputSimulation
-    {
-    }
-
     public interface IPositionView : IView
     {
         void UpdatePosition(Vector3 position);
     }
 
-    public interface IViewSimulationFactory<in TObject>
+    public interface IViewSimulationFactory
     {
         IViewSimulation Create();
     }

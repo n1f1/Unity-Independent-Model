@@ -2,7 +2,7 @@
 using UnityEngine;
 using Vector3 = System.Numerics.Vector3;
 
-namespace Simulation
+namespace View
 {
     internal class PositionView : MonoBehaviour, IPositionView
     {

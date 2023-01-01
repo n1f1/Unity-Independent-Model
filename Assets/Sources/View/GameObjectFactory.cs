@@ -3,13 +3,18 @@ using Object = UnityEngine.Object;
 
 namespace View
 {
-    public class GameObjectFactory<T> : MonoBehaviour
+    public class GameObjectFactory
     {
-        [SerializeField] private GameObject _template;
-    
+        private readonly GameObject _template;
+
+        public GameObjectFactory(GameObject template)
+        {
+            _template = template;
+        }
+        
         public GameObject Instantiate()
         {
-            return Object.Instantiate(_template, transform.position, transform.rotation);
+            return Object.Instantiate(_template);
         }
     }
 }

@@ -6,14 +6,17 @@ namespace Model
     public class Game
     {
         private readonly IViewSimulationFactory _playerViewSimulationFactory;
+        private readonly IViewSimulationFactory _enemyViewSimulationFactory;
         private readonly IPositionView _cameraPositionView;
         
         private Player _player;
         private List<IPositionView> _positionViews = new List<IPositionView>();
         private ISimulation _movementSimulation;
+        private Enemy _enemy;
 
-        public Game(IViewSimulationFactory playerViewSimulationFactory, IPositionView positionView)
+        public Game(IViewSimulationFactory playerViewSimulationFactory, IViewSimulationFactory enemyViewSimulationFactory, IPositionView positionView)
         {
+            _enemyViewSimulationFactory = enemyViewSimulationFactory;
             _cameraPositionView = positionView;
             _playerViewSimulationFactory = playerViewSimulationFactory;
         }
@@ -25,11 +28,16 @@ namespace Model
             _player = new Player(new CompositePositionView(positionView, _cameraPositionView));
             _movementSimulation = playerSimulation.AddSimulation(_player.CharacterMovement);
             _positionViews.Add(positionView);
+
+            IViewSimulation enemySimulation = _enemyViewSimulationFactory.Create();
+            IPositionView enemyPositionView = enemySimulation.AddView<IPositionView>();
+            _enemy = new Enemy(enemyPositionView, _player.Transform);
         }
 
         public void Update(float deltaTime)
         {
             _movementSimulation.UpdatePassedTime(deltaTime);
+            _enemy.FollowTarget.Follow(deltaTime);
         }
     }
 

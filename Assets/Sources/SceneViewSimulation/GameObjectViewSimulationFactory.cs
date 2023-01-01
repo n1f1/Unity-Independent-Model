@@ -4,12 +4,12 @@ using View;
 
 namespace SceneViewSimulation
 {
-    internal class PlayerViewSimulationFactory : IViewSimulationFactory
+    internal class GameObjectViewSimulationFactory : IViewSimulationFactory
     {
-        private readonly GameObjectFactory<Player> _gameObjectFactory;
+        private readonly GameObjectFactory _gameObjectFactory;
         private GameObject _gameObject;
 
-        public PlayerViewSimulationFactory(GameObjectFactory<Player> gameObjectFactory)
+        public GameObjectViewSimulationFactory(GameObjectFactory gameObjectFactory)
         {
             _gameObjectFactory = gameObjectFactory;
         }

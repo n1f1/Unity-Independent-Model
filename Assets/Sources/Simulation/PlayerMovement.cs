@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace Simulation
 {
-    internal class PlayerMovement : MonoBehaviour, ISimulation
+    internal class PlayerMovement : MonoBehaviour, ISimulation<IMovable>
     {
         private IMovable _characterMovement;
         private IMovementInput _movementInput;

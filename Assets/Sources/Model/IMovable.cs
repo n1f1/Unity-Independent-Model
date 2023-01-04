@@ -1,4 +1,4 @@
-﻿namespace Simulation
+﻿namespace Model
 {
     public interface IMovable
     {

@@ -1,10 +1,7 @@
 using System.Threading.Tasks;
-using Model;
-using SceneViewSimulation;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using Utility.GameLoop;
-using View;
 
 public static class Program
 {
@@ -24,20 +21,12 @@ public static class Program
             await Task.Yield();
 #endif
 
-        LevelConfigsList levelConfigsList = Resources.Load<LevelConfigsList>("LevelConfigsList");
-        IPositionView cameraView = Camera.main.GetComponentInParent<PositionView>();
-
-        Game game = new Game(
-            new GameObjectViewSimulationFactory(new GameObjectFactory(levelConfigsList.PlayerTemplate)),
-            new GameObjectViewSimulationFactory(new GameObjectFactory(levelConfigsList.EnemyTemplate)), 
-            cameraView);
-
-        //Rip off Update event function from all MonoBehaviours 
+        Game game = new Game();
         game.Start();
         
+        //Rip Update event function out of all MonoBehaviours 
         UnityUpdateReplace unityUpdateReplace = new UnityUpdateReplace();
         unityUpdateReplace.Replace(() => game.Update(Time.deltaTime));
-
 
         Application.quitting += () => unityUpdateReplace.Dispose();
     }

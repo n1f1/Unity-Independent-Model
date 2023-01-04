@@ -4,7 +4,7 @@ namespace Model
 {
     public class Transform
     {
-        private IPositionView _positionView;
+        private readonly IPositionView _positionView;
 
         public Transform(IPositionView positionView)
         {
@@ -16,7 +16,12 @@ namespace Model
 
         public void SetPosition(float x, float z)
         {
-            Position = new Vector3(x, 0, z);
+            SetPosition(new Vector3(x, 0, z));
+        }
+
+        public void SetPosition(Vector3 position)
+        {
+            Position = position;
             _positionView.UpdatePosition(Position);
         }
     }

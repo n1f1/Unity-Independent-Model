@@ -2,10 +2,10 @@
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace SceneViewSimulation
+namespace View
 {
     [RequireComponent(typeof(Slider))]
-    internal class HealthBar : MonoBehaviour, IHealthView
+    internal class HealthBarView : MonoBehaviour, IHealthView
     {
         private Slider _slider;
 

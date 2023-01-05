@@ -47,8 +47,14 @@ namespace Simulation.Common
             return simulatedPair;
         }
 
-        public void Add(TObject tObject, GameObject gameObject)
+        public void AddNew(TObject tObject, GameObject gameObject)
         {
+            if (tObject == null)
+                throw new ArgumentException();
+
+            if (gameObject == null)
+                throw new ArgumentException();
+            
             _inactive.Push(new SimulatedPair
             {
                 TObject = tObject, GameObject = gameObject

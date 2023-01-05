@@ -1,5 +1,4 @@
 ﻿using System;
-using Model;
 using Model.Characters.Shooting.Bullets;
 using Simulation.Common;
 

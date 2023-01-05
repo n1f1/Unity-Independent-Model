@@ -60,6 +60,6 @@ public class PooledBulletFactory : IBulletFactory<DefaultBullet>
 
         physicsHandler.Initialize(new BulletCollisionEnter(defaultBullet));
 
-        _objectPool.Add(defaultBullet, bullet);
+        _objectPool.AddNew(defaultBullet, bullet);
     }
 }

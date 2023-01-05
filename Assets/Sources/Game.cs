@@ -1,23 +1,30 @@
-﻿using Model;
-using Simulation;
+﻿using Model.Characters;
+using Model.Characters.CharacterHealth;
+using Model.Characters.Enemy;
+using Model.Characters.Shooting;
+using Model.Characters.Shooting.Bullets;
+using Model.SpatialObject;
+using Simulation.Common;
+using Simulation.Movement;
+using Simulation.Physics;
+using Simulation.Shooting;
 using UnityEngine;
 using View;
+using View.Factories;
 
 public class Game
 {
-    private readonly BulletsContainer _bulletsContainer = new();
-
     private Player _player;
     private Enemy _enemy;
-    private readonly UpdatablesContainer _updatablesContainer = new UpdatablesContainer();
+    private readonly UpdatableContainer _updatableContainer = new();
 
     public void Start()
     {
         LevelConfigsList levelConfigsList = Resources.Load<LevelConfigsList>("LevelConfigsList");
         IPositionView cameraView = Camera.main.GetComponentInParent<PositionView>();
 
-        ISimulationFactory<PlayerMovement, IMovable> movementFactory = new CharacterMovementFactory();
-        ISimulationFactory<PlayerShooter, CharacterShooter> shooterFactory = new ShooterFactory();
+        ISimulationFactory<IMovable> movementFactory = new CharacterMovementFactory();
+        ISimulationFactory<CharacterShooter> shooterFactory = new ShooterFactory();
 
         IViewFactory<IPositionView> positionViewFactory = new PositionViewFactory();
         IViewFactory<IForwardAimView> aimViewFactory = new ForwardAimViewFactory();
@@ -29,28 +36,29 @@ public class Game
         IAimView aimView = aimViewFactory.Create(player);
 
         PooledBulletFactory bulletFactory =
-            new PooledBulletFactory(positionViewFactory, levelConfigsList.BulletTemplate, _bulletsContainer,
-                new SimulatedObjectPool<DefaultBullet>(128), _updatablesContainer);
+            new PooledBulletFactory(positionViewFactory, levelConfigsList.BulletTemplate,
+                new SimulatedObjectPool<DefaultBullet>(128), _updatableContainer);
+
         bulletFactory.PopulatePool();
-        
+
         _player = new Player(new CompositePositionView(positionView, cameraView), healthView,
             new ForwardAim(aimView), bulletFactory);
 
-        _updatablesContainer.Add(movementFactory.Create(_player.CharacterMovement, player));
-        _updatablesContainer.Add(shooterFactory.Create(_player.CharacterShooter, player));
+        _updatableContainer.QueryAdd(_player);
+        _updatableContainer.QueryAdd(movementFactory.Create(_player.CharacterMovement, player));
+        _updatableContainer.QueryAdd(shooterFactory.Create(_player.CharacterShooter, player));
 
         GameObject enemy = Object.Instantiate(levelConfigsList.EnemyTemplate);
         IPositionView enemyPositionView = positionViewFactory.Create(enemy);
         healthViewFactory.Create(enemy);
         Health health = new Health(healthViewFactory.Create(enemy));
         _enemy = new Enemy(health, enemyPositionView, _player.Transform, _player.Health);
-        enemy.AddComponent<DamageableCollidable>().Initialize(health);
+        enemy.AddComponent<DamageablePhysicsInteractableHolder>().Initialize(health);
     }
 
     public void Update(float deltaTime)
     {
-        _updatablesContainer.Update(deltaTime);
+        _updatableContainer.Update(deltaTime);
         _enemy.Update(deltaTime);
-        _bulletsContainer.UpdateBullets(deltaTime);
     }
 }

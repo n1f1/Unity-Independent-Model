@@ -1,5 +1,8 @@
-﻿using Model;
+﻿using Model.Characters.CharacterHealth;
 
-internal class DamageableCollisionEnter : CollisionEnter<IDamageable>
+namespace Simulation.Physics
 {
+    internal class DamageableCollisionEnter : CollisionEnter<IDamageable>
+    {
+    }
 }

@@ -2,7 +2,7 @@
 
 namespace Utility.GameLoop
 {
-    public class GameLoopUtility
+    public static class GameLoopUtility
     {
         public static bool ReplaceSystem<T>(ref PlayerLoopSystem system, PlayerLoopSystem replacement)
         {
@@ -12,14 +12,15 @@ namespace Utility.GameLoop
                 return true;
             }
 
-            if (system.subSystemList == null) 
+            if (system.subSystemList == null)
                 return false;
-            
+
             for (var i = 0; i < system.subSystemList.Length; i++)
             {
                 if (ReplaceSystem<T>(ref system.subSystemList[i], replacement))
                     return true;
             }
+
             return false;
         }
     }

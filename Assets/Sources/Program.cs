@@ -23,7 +23,7 @@ public static class Program
 
         Game game = new Game();
         game.Start();
-        
+
         //Rip Update event function out of all MonoBehaviours 
         UnityUpdateReplace unityUpdateReplace = new UnityUpdateReplace();
         unityUpdateReplace.Replace(() => game.Update(Time.deltaTime));

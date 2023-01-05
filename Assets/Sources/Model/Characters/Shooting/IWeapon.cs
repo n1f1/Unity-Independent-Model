@@ -4,5 +4,6 @@
     {
         public IAim Aim { get; }
         public void Shoot();
+        bool CanShoot();
     }
 }

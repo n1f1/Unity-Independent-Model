@@ -22,7 +22,7 @@ namespace Model.Characters.Shooting
 
         public void Shoot()
         {
-            if (_weapon.Aim.Aiming)
+            if (_weapon.CanShoot())
                 _weapon.Shoot();
         }
 

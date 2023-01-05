@@ -44,6 +44,7 @@ public class Game
         _player = new Player(new CompositePositionView(positionView, cameraView), healthView,
             new ForwardAim(aimView), bulletFactory);
 
+        _updatableContainer.QueryAdd(_player);
         _updatableContainer.QueryAdd(movementFactory.Create(_player.CharacterMovement, player));
         _updatableContainer.QueryAdd(shooterFactory.Create(_player.CharacterShooter, player));
 

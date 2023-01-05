@@ -15,15 +15,7 @@ namespace Model.Characters
             _speed = speed;
         }
 
-        public void Move(float x, float z)
-        {
-            Vector3 transformPosition = _transform.Position;
-            _transform.SetPosition(transformPosition.X + x * _speed, transformPosition.Z + z * _speed);
-        }
-
-        public void Move(Vector3 moveDelta)
-        {
+        public void Move(Vector3 moveDelta) => 
             _transform.SetPosition(_transform.Position + moveDelta * _speed);
-        }
     }
 }

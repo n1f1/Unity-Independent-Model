@@ -10,9 +10,9 @@ namespace Utility.GameLoop
 
         public UnityUpdateReplace()
         {
-            _defaultSystems = PlayerLoop.GetDefaultPlayerLoop();    
+            _defaultSystems = PlayerLoop.GetDefaultPlayerLoop();
         }
-        
+
         public void Replace(PlayerLoopSystem.UpdateFunction update)
         {
             PlayerLoopSystem customUpdate = new PlayerLoopSystem()

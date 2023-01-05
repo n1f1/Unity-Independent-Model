@@ -1,4 +1,5 @@
 ﻿using Model;
+using Model.Characters.Shooting;
 using UnityEngine;
 using Utility;
 using Vector3 = System.Numerics.Vector3;
@@ -9,7 +10,7 @@ namespace View
     {
         [SerializeField] private float _distance;
         [SerializeField] private LineRenderer _lineRenderer;
-        
+
         public void Aim(Vector3 position, Vector3 aimPosition)
         {
             _lineRenderer.enabled = true;

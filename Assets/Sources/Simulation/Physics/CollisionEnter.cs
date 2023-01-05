@@ -1,10 +1,13 @@
 ﻿using Model.Physics;
 
-internal class CollisionEnter<TCollisionObject> : PhysicsHandler<Collision<TCollisionObject>>
+namespace Simulation.Physics
 {
-    private void OnCollisionEnter(UnityEngine.Collision other)
+    internal class CollisionEnter<TCollisionObject> : PhysicsInteractionHandler<Collision<TCollisionObject>>
     {
-        if (other.gameObject.TryGetComponent(out Collidable<TCollisionObject> type))
-            PhysicsInteraction.Invoke(new Collision<TCollisionObject> {CollisionObject = type.CollidableObject});
+        private void OnCollisionEnter(UnityEngine.Collision other)
+        {
+            if (other.gameObject.TryGetComponent(out PhysicsInteractableHolder<TCollisionObject> type))
+                PhysicsInteraction.Invoke(new Collision<TCollisionObject> {CollisionObject = type.InteractableObject});
+        }
     }
 }

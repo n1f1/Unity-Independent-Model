@@ -1,4 +1,5 @@
-﻿using Model.Characters.CharacterHealth;
+﻿using System;
+using Model.Characters.CharacterHealth;
 using Model.Characters.Shooting;
 using Model.Characters.Shooting.Bullets;
 using Model.SpatialObject;
@@ -15,9 +16,13 @@ namespace Model.Characters
         public Player(IPositionView positionView, IHealthView healthView, ForwardAim forwardAim,
             IBulletFactory<IBullet> bulletFactory)
         {
-            _health = new Health(healthView);
-            _transform = new Transform(positionView);
-            _shooter = new CharacterShooter(new DefaultGun(forwardAim, bulletFactory), _transform);
+            _health = new Health(healthView ?? throw new ArgumentException());
+            _transform = new Transform(positionView ?? throw new ArgumentException());
+            
+            _shooter = new CharacterShooter(
+                new DefaultGun(forwardAim ?? throw new ArgumentException(),
+                    bulletFactory ?? throw new ArgumentException()), _transform);
+            
             _characterMovement = new CharacterMovement(_transform, 5f);
         }
 

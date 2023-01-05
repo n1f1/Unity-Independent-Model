@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 
 namespace Simulation.Physics
 {
@@ -8,7 +9,7 @@ namespace Simulation.Physics
 
         public void Initialize(T tObject)
         {
-            InteractableObject = tObject;
+            InteractableObject = tObject ?? throw new ArgumentException();
         }
     }
 }

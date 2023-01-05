@@ -1,4 +1,5 @@
-﻿using Model.Characters.CharacterHealth;
+﻿using System;
+using Model.Characters.CharacterHealth;
 using Model.SpatialObject;
 
 namespace Model.Characters.Enemy
@@ -12,7 +13,7 @@ namespace Model.Characters.Enemy
 
         public Enemy(Health health, IPositionView positionView, Transform followTarget, IDamageable target)
         {
-            _health = health;
+            _health = health ?? throw new ArgumentException();
             Transform transform = new Transform(positionView);
             transform.SetPosition(5, 5);
             _cooldownAttack = new CooldownAttack(3f, new DistanceAttack(followTarget, transform, new DefaultAttack()));

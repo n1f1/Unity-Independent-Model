@@ -1,4 +1,5 @@
-﻿using Model;
+﻿using System;
+using Model;
 using Model.Characters.Shooting.Bullets;
 using UnityEngine;
 
@@ -11,8 +12,8 @@ namespace Simulation.Shooting
 
         public void Initialize(DefaultBullet defaultBullet, IBulletDestroyer destroyer)
         {
-            _defaultBullet = defaultBullet;
-            _destroyer = destroyer;
+            _defaultBullet = defaultBullet ?? throw new ArgumentException();
+            _destroyer = destroyer ?? throw new ArgumentException();
         }
 
         public void UpdatePassedTime(float deltaTime)

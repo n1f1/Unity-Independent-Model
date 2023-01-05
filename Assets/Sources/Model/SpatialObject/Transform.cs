@@ -1,4 +1,5 @@
-﻿using System.Numerics;
+﻿using System;
+using System.Numerics;
 
 namespace Model.SpatialObject
 {
@@ -8,7 +9,7 @@ namespace Model.SpatialObject
 
         public Transform(IPositionView positionView)
         {
-            _positionView = positionView;
+            _positionView = positionView ?? throw new ArgumentException();
         }
 
         public Vector3 Position { get; private set; }

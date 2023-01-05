@@ -10,7 +10,7 @@ namespace Model.Characters.CharacterHealth
 
         public Health(IHealthView healthView)
         {
-            _healthView = healthView;
+            _healthView = healthView ?? throw new ArgumentException();
         }
 
         private float Amount { get; set; } = MaxHealth;

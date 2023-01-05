@@ -1,4 +1,5 @@
-﻿using Model;
+﻿using System;
+using Model;
 using Model.Characters;
 using Simulation.Input;
 using UnityEngine;
@@ -13,8 +14,9 @@ namespace Simulation.Movement
 
         public PlayerMovement Initialize(IMovable characterMovement, IMovementInput movementInput)
         {
-            _movementInput = movementInput;
-            _characterMovement = characterMovement;
+            _movementInput = movementInput ?? throw new ArgumentException();
+            _characterMovement = characterMovement ?? throw new ArgumentException();
+
             return this;
         }
 

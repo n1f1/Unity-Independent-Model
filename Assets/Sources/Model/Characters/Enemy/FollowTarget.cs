@@ -13,9 +13,9 @@ namespace Model.Characters.Enemy
 
         public FollowTarget(Transform target, Transform transform, CharacterMovement characterMovement)
         {
-            _transform = transform;
-            _characterMovement = characterMovement;
-            _target = target;
+            _transform = transform ?? throw new ArgumentException();
+            _characterMovement = characterMovement ?? throw new ArgumentException();
+            _target = target ?? throw new ArgumentException();
         }
 
         public void Follow(float deltaTime)

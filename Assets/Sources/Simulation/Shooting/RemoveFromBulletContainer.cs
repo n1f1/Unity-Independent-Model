@@ -1,4 +1,5 @@
-﻿using Model.Characters.Shooting.Bullets;
+﻿using System;
+using Model.Characters.Shooting.Bullets;
 using Simulation.Common;
 
 namespace Simulation.Shooting
@@ -10,8 +11,8 @@ namespace Simulation.Shooting
 
         public RemoveFromBulletContainer(UpdatableContainer updatableContainer, IBulletDestroyer bulletDestroyer)
         {
-            _updatableContainer = updatableContainer;
-            _bulletDestroyer = bulletDestroyer;
+            _updatableContainer = updatableContainer ?? throw new ArgumentException();
+            _bulletDestroyer = bulletDestroyer ?? throw new ArgumentException();
         }
 
         public void Destroy(IBullet bullet)

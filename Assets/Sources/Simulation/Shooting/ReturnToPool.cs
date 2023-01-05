@@ -11,7 +11,7 @@ namespace Simulation.Shooting
 
         public ReturnToPool(SimulatedObjectPool<TBullet> simulatedObjectPool)
         {
-            _simulatedObjectPool = simulatedObjectPool;
+            _simulatedObjectPool = simulatedObjectPool ?? throw new ArgumentException();
         }
 
         public void Destroy(IBullet bullet)

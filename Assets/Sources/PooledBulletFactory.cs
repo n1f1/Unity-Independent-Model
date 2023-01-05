@@ -1,4 +1,5 @@
-﻿using Model.Characters.CharacterHealth;
+﻿using System;
+using Model.Characters.CharacterHealth;
 using Model.Characters.Shooting;
 using Model.Characters.Shooting.Bullets;
 using Model.SpatialObject;
@@ -21,10 +22,10 @@ public class PooledBulletFactory : IBulletFactory<DefaultBullet>
         SimulatedObjectPool<DefaultBullet> objectPool,
         UpdatableContainer updatableContainer)
     {
-        _updatableContainer = updatableContainer;
-        _bulletTemplate = bulletTemplate;
-        _viewFactory = viewFactory;
-        _objectPool = objectPool;
+        _updatableContainer = updatableContainer ?? throw new ArgumentException();
+        _viewFactory = viewFactory ?? throw new ArgumentException();
+        _objectPool = objectPool ?? throw new ArgumentException();
+        _bulletTemplate = bulletTemplate ? bulletTemplate : throw new ArgumentException();
     }
 
     public void PopulatePool()

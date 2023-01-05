@@ -1,4 +1,5 @@
-﻿using Model.Characters.Shooting.Bullets;
+﻿using System;
+using Model.Characters.Shooting.Bullets;
 
 namespace Model.Characters.Shooting
 {
@@ -8,8 +9,8 @@ namespace Model.Characters.Shooting
 
         public DefaultGun(IAim aim, IBulletFactory<IBullet> bulletFactory)
         {
-            _bulletFactory = bulletFactory;
-            Aim = aim;
+            _bulletFactory = bulletFactory ?? throw new ArgumentException();
+            Aim = aim ?? throw new ArgumentException();
         }
 
         public IAim Aim { get; }

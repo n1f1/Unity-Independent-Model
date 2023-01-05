@@ -1,4 +1,5 @@
-﻿using System.Numerics;
+﻿using System;
+using System.Numerics;
 
 namespace Model.SpatialObject
 {
@@ -8,7 +9,7 @@ namespace Model.SpatialObject
 
         public CompositePositionView(params IPositionView[] views)
         {
-            _positionViews = views;
+            _positionViews = views ?? throw new ArgumentException();
         }
 
         public void UpdatePosition(Vector3 position)

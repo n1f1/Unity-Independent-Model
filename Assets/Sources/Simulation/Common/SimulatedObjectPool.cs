@@ -9,8 +9,11 @@ namespace Simulation.Common
         private readonly Dictionary<TObject, GameObject> _active;
         private readonly Stack<SimulatedPair> _inactive;
 
-        public SimulatedObjectPool(int capacity)
+        public SimulatedObjectPool(int capacity = 4)
         {
+            if (capacity <= 0)
+                throw new ArgumentException();
+            
             Capacity = capacity;
             _active = new Dictionary<TObject, GameObject>(capacity);
             _inactive = new Stack<SimulatedPair>(capacity);

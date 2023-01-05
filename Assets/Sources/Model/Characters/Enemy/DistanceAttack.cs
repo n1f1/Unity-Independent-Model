@@ -1,4 +1,5 @@
-﻿using System.Numerics;
+﻿using System;
+using System.Numerics;
 using Model.Characters.CharacterHealth;
 using Model.SpatialObject;
 
@@ -13,20 +14,16 @@ namespace Model.Characters.Enemy
 
         public DistanceAttack(Transform followTarget, Transform transform, IAttacker attacker)
         {
-            _transform = transform;
-            _followTarget = followTarget;
-            _attacker = attacker;
+            _transform = transform ?? throw new ArgumentException();
+            _followTarget = followTarget ?? throw new ArgumentException();
+            _attacker = attacker ?? throw new ArgumentException();
         }
 
-        public bool CanAttack()
-        {
-            return IsDistanceValid() && _attacker.CanAttack();
-        }
+        public bool CanAttack() => 
+            IsDistanceValid() && _attacker.CanAttack();
 
-        private bool IsDistanceValid()
-        {
-            return Vector3.DistanceSquared(_followTarget.Position, _transform.Position) < _attackRange * _attackRange;
-        }
+        private bool IsDistanceValid() => 
+            Vector3.DistanceSquared(_followTarget.Position, _transform.Position) < _attackRange * _attackRange;
 
         public void Attack(IDamageable damageable, float baseDamage)
         {

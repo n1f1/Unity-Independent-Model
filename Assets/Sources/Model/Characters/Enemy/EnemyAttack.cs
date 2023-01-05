@@ -1,4 +1,5 @@
-﻿using Model.Characters.CharacterHealth;
+﻿using System;
+using Model.Characters.CharacterHealth;
 
 namespace Model.Characters.Enemy
 {
@@ -10,8 +11,8 @@ namespace Model.Characters.Enemy
 
         public EnemyAttack(IDamageable target, IAttacker attacker)
         {
-            _target = target;
-            _attacker = attacker;
+            _target = target?? throw new ArgumentException();
+            _attacker = attacker?? throw new ArgumentException();
         }
 
         public void Attack()

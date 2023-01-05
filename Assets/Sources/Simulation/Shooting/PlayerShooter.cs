@@ -1,4 +1,5 @@
-﻿using Model;
+﻿using System;
+using Model;
 using Model.Characters.Shooting;
 using UnityEngine;
 using Utility;
@@ -16,7 +17,7 @@ namespace Simulation.Shooting
 
         public ISimulation Initialize(CharacterShooter simulation)
         {
-            _simulation = simulation;
+            _simulation = simulation ?? throw new ArgumentException();
             _camera = Camera.main;
 
             return this;

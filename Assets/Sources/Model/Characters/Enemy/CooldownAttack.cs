@@ -1,4 +1,5 @@
-﻿using Model.Characters.CharacterHealth;
+﻿using System;
+using Model.Characters.CharacterHealth;
 
 namespace Model.Characters.Enemy
 {
@@ -10,14 +11,12 @@ namespace Model.Characters.Enemy
 
         public CooldownAttack(float cooldown, IAttacker attacker)
         {
+            _attacker = attacker?? throw new ArgumentException();
             _cooldown = cooldown;
-            _attacker = attacker;
         }
 
-        public bool CanAttack()
-        {
-            return _time >= _cooldown && _attacker.CanAttack();
-        }
+        public bool CanAttack() => 
+            _time >= _cooldown && _attacker.CanAttack();
 
         public void Attack(IDamageable damageable, float baseDamage)
         {

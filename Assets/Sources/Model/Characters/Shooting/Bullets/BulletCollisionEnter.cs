@@ -1,4 +1,5 @@
-﻿using Model.Characters.CharacterHealth;
+﻿using System;
+using Model.Characters.CharacterHealth;
 using Model.Physics;
 
 namespace Model.Characters.Shooting.Bullets
@@ -9,7 +10,7 @@ namespace Model.Characters.Shooting.Bullets
 
         public BulletCollisionEnter(IBullet bullet)
         {
-            _bullet = bullet;
+            _bullet = bullet ?? throw new ArgumentException();
         }
 
         public void Invoke(Collision<IDamageable> collision)

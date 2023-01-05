@@ -16,9 +16,9 @@ namespace Model.Characters.Shooting.Bullets
 
         public DefaultBullet(Transform transform, ITrajectory trajectory, float speed, int damage)
         {
+            _transform = transform ?? throw new ArgumentException();
             _speed = speed;
             _trajectory = trajectory;
-            _transform = transform;
             _damage = damage;
 
             if (_trajectory != null)
@@ -30,7 +30,7 @@ namespace Model.Characters.Shooting.Bullets
         public void Reset(ITrajectory trajectory, float speed, int damage)
         {
             _passedTime = 0;
-            _trajectory = trajectory;
+            _trajectory = trajectory ?? throw new ArgumentException();
             _distance = trajectory.Distance;
             _speed = speed;
             _damage = damage;
@@ -48,7 +48,7 @@ namespace Model.Characters.Shooting.Bullets
                 ShouldBeDestroyed = true;
         }
 
-        private void UpdatePosition(float ratio) => 
+        private void UpdatePosition(float ratio) =>
             _transform.SetPosition(_trajectory.Evaluate(ratio));
 
         public void Hit(IDamageable damageable)

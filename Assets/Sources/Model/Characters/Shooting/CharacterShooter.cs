@@ -1,4 +1,5 @@
-﻿using System.Numerics;
+﻿using System;
+using System.Numerics;
 using Model.SpatialObject;
 
 namespace Model.Characters.Shooting
@@ -10,8 +11,8 @@ namespace Model.Characters.Shooting
 
         public CharacterShooter(IWeapon weapon, Transform character)
         {
-            _weapon = weapon;
-            _character = character;
+            _weapon = weapon ?? throw new ArgumentException();
+            _character = character ?? throw new ArgumentException();
         }
 
         public void Aim(Vector3 aimPosition)

@@ -1,4 +1,5 @@
-﻿using Model.Physics;
+﻿using System;
+using Model.Physics;
 using UnityEngine;
 
 namespace Simulation.Physics
@@ -9,7 +10,7 @@ namespace Simulation.Physics
 
         public void Initialize(PhysicsInteraction<TType> physicsInteraction)
         {
-            PhysicsInteraction = physicsInteraction;
+            PhysicsInteraction = physicsInteraction ?? throw new ArgumentException();
         }
     }
 }

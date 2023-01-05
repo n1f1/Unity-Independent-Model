@@ -27,7 +27,9 @@ namespace Simulation
             
             if (Physics.Raycast(ray, out RaycastHit hit, 999f, _layerMask))
                 _simulation.Aim(hit.point.Convert());
-            
+            else
+                _simulation.StopAiming();
+
             if(Input.GetMouseButtonDown(0))
                 _simulation.Shoot();
         }

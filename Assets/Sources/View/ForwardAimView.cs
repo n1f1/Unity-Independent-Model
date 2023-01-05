@@ -12,8 +12,14 @@ namespace View
         
         public void Aim(Vector3 position, Vector3 aimPosition)
         {
+            _lineRenderer.enabled = true;
             _lineRenderer.SetPosition(0, position.Convert());
             _lineRenderer.SetPosition(1, (position + Vector3.Normalize(aimPosition - position) * _distance).Convert());
+        }
+
+        public void Stop()
+        {
+            _lineRenderer.enabled = false;
         }
     }
 }

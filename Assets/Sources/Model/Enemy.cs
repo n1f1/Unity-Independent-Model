@@ -5,9 +5,11 @@
         private readonly FollowTarget _followTarget;
         private readonly EnemyAttack _enemyAttack;
         private readonly CooldownAttack _cooldownAttack;
+        private Health _health;
 
-        public Enemy(IPositionView positionView, Transform followTarget, IDamageable target)
+        public Enemy(Health health, IPositionView positionView, Transform followTarget, IDamageable target)
         {
+            _health = health;
             Transform transform = new Transform(positionView);
             transform.SetPosition(5, 5);
             _cooldownAttack = new CooldownAttack(3f, new DistanceAttack(followTarget, transform, new DefaultAttack()));

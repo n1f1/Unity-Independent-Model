@@ -3,10 +3,13 @@ using Model;
 
 public class BulletsContainer
 {
-    private readonly List<IBullet> _bullets = new();
+    private readonly LinkedList<IBullet> _bullets = new();
 
     public void Add(IBullet bullet) => 
-        _bullets.Add(bullet);
+        _bullets.AddLast(bullet);
+
+    public void Remove(IBullet bullet) => 
+        _bullets.Remove(bullet);
 
     public void UpdateBullets(float deltaTime)
     {

@@ -1,5 +1,4 @@
-﻿using Model;
-using Model.Characters.CharacterHealth;
+﻿using Model.Characters.CharacterHealth;
 using UnityEngine;
 using UnityEngine.UI;
 

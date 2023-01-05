@@ -24,8 +24,13 @@ namespace Model.Characters.Enemy
                 throw new ArgumentException();
 
             Vector3 stopOffset = -_stoppingDistance * Vector3.Normalize(_target.Position - _transform.Position);
-            Vector3 direction = Vector3.Normalize(_target.Position + stopOffset - _transform.Position) * deltaTime;
-            _characterMovement.Move(direction.X, direction.Z);
+            Vector3 direction = _target.Position + stopOffset - _transform.Position;
+
+            if (direction == Vector3.Zero)
+                return;
+
+            Vector3 moveDelta = Vector3.Normalize(direction) * deltaTime;
+            _characterMovement.Move(moveDelta.X, moveDelta.Z);
         }
     }
 }

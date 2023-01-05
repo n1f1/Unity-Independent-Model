@@ -2,9 +2,8 @@
 
 namespace Model.Characters.Shooting.Bullets
 {
-    public interface IBullet
+    public interface IBullet : IUpdatable
     {
-        void AddPassedTime(float deltaTime);
         void Hit(IDamageable damageable);
     }
 }

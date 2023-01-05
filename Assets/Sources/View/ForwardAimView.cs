@@ -1,5 +1,4 @@
-﻿using Model;
-using Model.Characters.Shooting;
+﻿using Model.Characters.Shooting;
 using UnityEngine;
 using Utility;
 using Vector3 = System.Numerics.Vector3;

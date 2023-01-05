@@ -14,16 +14,14 @@ public class PooledBulletFactory : IBulletFactory<DefaultBullet>
 {
     private readonly IViewFactory<IPositionView> _viewFactory;
     private readonly GameObject _bulletTemplate;
-    private readonly BulletsContainer _bulletsContainer;
     private readonly SimulatedObjectPool<DefaultBullet> _objectPool;
     private readonly UpdatableContainer _updatableContainer;
 
     public PooledBulletFactory(IViewFactory<IPositionView> viewFactory, GameObject bulletTemplate,
-        BulletsContainer bulletsContainer, SimulatedObjectPool<DefaultBullet> objectPool,
+        SimulatedObjectPool<DefaultBullet> objectPool,
         UpdatableContainer updatableContainer)
     {
         _updatableContainer = updatableContainer;
-        _bulletsContainer = bulletsContainer;
         _bulletTemplate = bulletTemplate;
         _viewFactory = viewFactory;
         _objectPool = objectPool;
@@ -43,8 +41,7 @@ public class PooledBulletFactory : IBulletFactory<DefaultBullet>
         SimulatedObjectPool<DefaultBullet>.SimulatedPair simulatedPair = _objectPool.Get();
         DefaultBullet defaultBullet = simulatedPair.TObject;
         defaultBullet.Reset(trajectory, speed, damage);
-
-        _bulletsContainer.Add(defaultBullet);
+        _updatableContainer.QueryAdd(defaultBullet);
 
         return defaultBullet;
     }
@@ -56,8 +53,8 @@ public class PooledBulletFactory : IBulletFactory<DefaultBullet>
         CollisionEnter<IDamageable> physicsHandler = bullet.AddComponent<DamageableCollisionEnter>();
         DefaultBullet defaultBullet = new DefaultBullet(new Transform(positionView), null, 0, 0);
         BulletDestroyer bulletDestroyer = bullet.AddComponent<BulletDestroyer>();
-        bulletDestroyer.Initialize(defaultBullet, new RemoveFromBulletContainer(_bulletsContainer,
-            new ReturnToPool<DefaultBullet>(_objectPool)));
+        bulletDestroyer.Initialize(defaultBullet,
+            new RemoveFromBulletContainer(_updatableContainer, new ReturnToPool<DefaultBullet>(_objectPool)));
         _updatableContainer.QueryAdd(bulletDestroyer);
 
         physicsHandler.Initialize(new BulletCollisionEnter(defaultBullet));

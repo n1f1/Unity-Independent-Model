@@ -14,8 +14,6 @@ using View.Factories;
 
 public class Game
 {
-    private readonly BulletsContainer _bulletsContainer = new();
-
     private Player _player;
     private Enemy _enemy;
     private readonly UpdatableContainer _updatableContainer = new();
@@ -38,7 +36,7 @@ public class Game
         IAimView aimView = aimViewFactory.Create(player);
 
         PooledBulletFactory bulletFactory =
-            new PooledBulletFactory(positionViewFactory, levelConfigsList.BulletTemplate, _bulletsContainer,
+            new PooledBulletFactory(positionViewFactory, levelConfigsList.BulletTemplate,
                 new SimulatedObjectPool<DefaultBullet>(128), _updatableContainer);
 
         bulletFactory.PopulatePool();
@@ -61,6 +59,5 @@ public class Game
     {
         _updatableContainer.Update(deltaTime);
         _enemy.Update(deltaTime);
-        _bulletsContainer.UpdateBullets(deltaTime);
     }
 }

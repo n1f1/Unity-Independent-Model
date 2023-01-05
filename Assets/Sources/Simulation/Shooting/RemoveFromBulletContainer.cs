@@ -1,23 +1,23 @@
-﻿using Model;
-using Model.Characters.Shooting.Bullets;
+﻿using Model.Characters.Shooting.Bullets;
+using Simulation.Common;
 
 namespace Simulation.Shooting
 {
     internal class RemoveFromBulletContainer : IBulletDestroyer
     {
-        private readonly BulletsContainer _bulletsContainer;
         private readonly IBulletDestroyer _bulletDestroyer;
+        private readonly UpdatableContainer _updatableContainer;
 
-        public RemoveFromBulletContainer(BulletsContainer bulletsContainer, IBulletDestroyer bulletDestroyer)
+        public RemoveFromBulletContainer(UpdatableContainer updatableContainer, IBulletDestroyer bulletDestroyer)
         {
+            _updatableContainer = updatableContainer;
             _bulletDestroyer = bulletDestroyer;
-            _bulletsContainer = bulletsContainer;
         }
 
         public void Destroy(IBullet bullet)
         {
+            _updatableContainer.QueryRemove(bullet);
             _bulletDestroyer.Destroy(bullet);
-            _bulletsContainer.Remove(bullet);
         }
     }
 }

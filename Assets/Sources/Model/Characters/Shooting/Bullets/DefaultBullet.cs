@@ -35,17 +35,21 @@ namespace Model.Characters.Shooting.Bullets
             _speed = speed;
             _damage = damage;
             ShouldBeDestroyed = false;
+            UpdatePosition(0);
         }
 
-        public void AddPassedTime(float deltaTime)
+        public void UpdatePassedTime(float deltaTime)
         {
             _passedTime += deltaTime;
             float ratio = Math.Clamp(_passedTime * _speed / _distance, 0, 1);
-            _transform.SetPosition(_trajectory.Evaluate(ratio));
+            UpdatePosition(ratio);
 
             if (ratio >= 1)
                 ShouldBeDestroyed = true;
         }
+
+        private void UpdatePosition(float ratio) => 
+            _transform.SetPosition(_trajectory.Evaluate(ratio));
 
         public void Hit(IDamageable damageable)
         {

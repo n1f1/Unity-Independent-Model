@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Model;
 
 namespace Simulation.Common
@@ -13,22 +14,23 @@ namespace Simulation.Common
 
         public void Update(float deltaTime)
         {
+            if (deltaTime < 0)
+                throw new ArgumentException();
+            
             _updating = true;
 
-            foreach (IUpdatable simulation in _simulations)
-                simulation.UpdatePassedTime(deltaTime);
+            UpdateList(deltaTime);
 
             _updating = false;
 
-            for (int i = 0; i < _removeQueue.Count; i++)
-                QueryRemove(_removeQueue.Dequeue());
-
-            for (int i = 0; i < _addQueue.Count; i++)
-                QueryAdd(_addQueue.Dequeue());
+            ProcessQueued();
         }
 
         public void QueryAdd(IUpdatable updatable)
         {
+            if (updatable == null)
+                throw new ArgumentException();
+            
             if (_updating == false)
                 _simulations.AddLast(updatable);
             else
@@ -37,10 +39,28 @@ namespace Simulation.Common
 
         public void QueryRemove(IUpdatable updatable)
         {
+            if (updatable == null)
+                throw new ArgumentException();
+
             if (_updating == false)
                 _simulations.Remove(updatable);
             else
                 _removeQueue.Enqueue(updatable);
+        }
+
+        private void UpdateList(float deltaTime)
+        {
+            foreach (IUpdatable simulation in _simulations)
+                simulation.UpdatePassedTime(deltaTime);
+        }
+
+        private void ProcessQueued()
+        {
+            for (int i = 0; i < _removeQueue.Count; i++)
+                QueryRemove(_removeQueue.Dequeue());
+
+            for (int i = 0; i < _addQueue.Count; i++)
+                QueryAdd(_addQueue.Dequeue());
         }
     }
 }

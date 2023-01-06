@@ -12,6 +12,10 @@ namespace Model.Characters
         public CharacterMovement(Transform transform, float speed)
         {
             _transform = transform ?? throw new ArgumentException();
+            
+            if (_speed < 0)
+                throw new ArgumentException();
+            
             _speed = speed;
         }
 

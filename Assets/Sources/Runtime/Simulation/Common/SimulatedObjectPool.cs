@@ -24,7 +24,7 @@ namespace Simulation.Common
 
         public void Return(TObject tObject)
         {
-            if (_active.ContainsKey(tObject) == false)
+            if (tObject == null || _active.ContainsKey(tObject) == false)
                 throw new ArgumentException();
 
             GameObject gameObject = _active[tObject];
@@ -40,6 +40,9 @@ namespace Simulation.Common
 
         public SimulatedPair Get()
         {
+            if (CanGet() == false)
+                throw new InvalidOperationException();
+            
             SimulatedPair simulatedPair = _inactive.Pop();
             simulatedPair.GameObject.SetActive(true);
             _active.Add(simulatedPair.TObject, simulatedPair.GameObject);

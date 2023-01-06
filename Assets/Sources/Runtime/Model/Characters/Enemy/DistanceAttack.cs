@@ -19,8 +19,8 @@ namespace Model.Characters.Enemy
             _attacker = attacker ?? throw new ArgumentException();
         }
 
-        public bool CanAttack() => 
-            IsDistanceValid() && _attacker.CanAttack();
+        public bool CanAttack(IDamageable damageable) => 
+            IsDistanceValid() && _attacker.CanAttack(damageable);
 
         private bool IsDistanceValid() => 
             Vector3.DistanceSquared(_followTarget.Position, _transform.Position) < _attackRange * _attackRange;

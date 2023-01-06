@@ -53,7 +53,9 @@ namespace Model.Characters.Shooting.Bullets
 
         public void Hit(IDamageable damageable)
         {
-            damageable.TakeDamage(_damage);
+            if(damageable.CanTakeDamage())
+                damageable.TakeDamage(_damage);
+            
             ShouldBeDestroyed = true;
         }
     }

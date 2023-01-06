@@ -51,7 +51,7 @@ public class Game
         GameObject enemy = Object.Instantiate(levelConfigsList.EnemyTemplate);
         IPositionView enemyPositionView = positionViewFactory.Create(enemy);
         healthViewFactory.Create(enemy);
-        Health health = new Health(healthViewFactory.Create(enemy));
+        Health health = new Health(100f, healthViewFactory.Create(enemy), new Death());
         _enemy = new Enemy(health, enemyPositionView, _player.Transform, _player.Health);
         enemy.AddComponent<DamageablePhysicsInteractableHolder>().Initialize(health);
     }

@@ -4,24 +4,51 @@ namespace Model.Characters.CharacterHealth
 {
     public class Health : IDamageable
     {
-        private const float MaxHealth = 100f;
-
         private readonly IHealthView _healthView;
+        private readonly IDeath _death;
+        private readonly float _maxHealth;
+        private float _amount;
 
-        public Health(IHealthView healthView)
+        public Health(float maxHealth, IHealthView healthView, IDeath death)
         {
-            _healthView = healthView ?? throw new ArgumentException();
+            if (maxHealth <= 0)
+                throw new ArgumentOutOfRangeException();
+
+            _maxHealth = maxHealth;
+            _amount = maxHealth;
+            _healthView = healthView ?? throw new ArgumentNullException();
+            _death = death ?? throw new ArgumentNullException();
         }
 
-        private float Amount { get; set; } = MaxHealth;
+        public bool CanTakeDamage() => 
+            _amount > 0;
 
         public void TakeDamage(float damage)
         {
             if (damage < 0)
-                throw new ArgumentException();
+                throw new ArgumentOutOfRangeException();
+            
+            if (CanTakeDamage() == false)
+                throw new InvalidOperationException();
 
-            Amount = Math.Clamp(Amount - damage, 0, Amount);
-            _healthView.Display(Amount / MaxHealth);
+            _amount = Math.Clamp(_amount - damage, 0, _amount);
+            _healthView.Display(_amount / _maxHealth);
+
+            if (_amount == 0)
+                _death.Die();
+        }
+    }
+
+    public interface IDeath
+    {
+        void Die();
+    }
+    
+    public class Death : IDeath
+    {
+        public void Die()
+        {
+            
         }
     }
 }

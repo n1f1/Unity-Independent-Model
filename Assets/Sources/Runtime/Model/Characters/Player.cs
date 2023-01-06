@@ -17,7 +17,7 @@ namespace Model.Characters
         public Player(IPositionView positionView, IHealthView healthView, ForwardAim forwardAim,
             IBulletFactory<IBullet> bulletFactory)
         {
-            _health = new Health(healthView ?? throw new ArgumentException());
+            _health = new Health(100, healthView ?? throw new ArgumentException(), new Death());
             _transform = new Transform(positionView ?? throw new ArgumentException());
 
             _cooldown = new Cooldown(0.1f);

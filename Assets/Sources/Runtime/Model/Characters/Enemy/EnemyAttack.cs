@@ -17,7 +17,7 @@ namespace Model.Characters.Enemy
 
         public void Attack()
         {
-            if (_attacker.CanAttack())
+            if (_attacker.CanAttack(_target))
                 _attacker.Attack(_target, _baseDamage);
         }
     }

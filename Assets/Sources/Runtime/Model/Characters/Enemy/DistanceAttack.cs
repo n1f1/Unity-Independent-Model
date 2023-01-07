@@ -5,7 +5,7 @@ using Model.SpatialObject;
 
 namespace Model.Characters.Enemy
 {
-    class DistanceAttack : IAttacker
+    public class DistanceAttack : IAttacker
     {
         private readonly IAttacker _attacker;
         private readonly Transform _followTarget;

@@ -4,7 +4,7 @@ using Model.Physics;
 
 namespace Model.Characters.Shooting.Bullets
 {
-    public class BulletCollisionEnter : PhysicsInteraction<Collision<IDamageable>>
+    public class BulletCollisionEnter : PhysicsInteraction<Trigger<IDamageable>>
     {
         private readonly IBullet _bullet;
 
@@ -13,9 +13,9 @@ namespace Model.Characters.Shooting.Bullets
             _bullet = bullet ?? throw new ArgumentException();
         }
 
-        public void Invoke(Collision<IDamageable> collision)
+        public void Invoke(Trigger<IDamageable> collision)
         {
-            _bullet.Hit(collision.CollisionObject);
+            _bullet.Hit(collision.Other);
         }
     }
 }

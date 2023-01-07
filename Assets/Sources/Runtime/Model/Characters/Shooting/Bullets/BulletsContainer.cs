@@ -1,39 +1,41 @@
 using System.Collections.Generic;
-using Model.Characters.Shooting.Bullets;
 
-public class BulletsContainer
+namespace Model.Characters.Shooting.Bullets
 {
-    private readonly LinkedList<IBullet> _bullets = new();
-    private readonly IBulletDestroyer _bulletDestroyer;
-
-    public BulletsContainer(IBulletDestroyer bulletDestroyer)
+    public class BulletsContainer
     {
-        _bulletDestroyer = bulletDestroyer;
-    }
+        private readonly LinkedList<IBullet> _bullets = new();
+        private readonly IBulletDestroyer _bulletDestroyer;
 
-    public void Add(IBullet bullet)
-    {
-        _bullets.AddLast(bullet);
-    }
-
-    public void Update(float deltaTime)
-    {
-        Stack<IBullet> collidedBullets = new Stack<IBullet>(16);
-        
-        for (LinkedListNode<IBullet> node = _bullets.First; node != null; node = node.Next)
+        public BulletsContainer(IBulletDestroyer bulletDestroyer)
         {
-            IBullet bullet = node.Value;
-                
-            bullet.UpdatePassedTime(deltaTime);
-
-            if (bullet.Collided)
-            {
-                collidedBullets.Push(bullet);
-                _bullets.Remove(node);
-            }
+            _bulletDestroyer = bulletDestroyer;
         }
 
-        while (collidedBullets.Count > 0) 
-            _bulletDestroyer.Destroy(collidedBullets.Pop());
+        public void Add(IBullet bullet)
+        {
+            _bullets.AddLast(bullet);
+        }
+
+        public void Update(float deltaTime)
+        {
+            Stack<IBullet> collidedBullets = new Stack<IBullet>(16);
+        
+            for (LinkedListNode<IBullet> node = _bullets.First; node != null; node = node.Next)
+            {
+                IBullet bullet = node.Value;
+                
+                bullet.UpdatePassedTime(deltaTime);
+
+                if (bullet.Collided)
+                {
+                    collidedBullets.Push(bullet);
+                    _bullets.Remove(node);
+                }
+            }
+
+            while (collidedBullets.Count > 0) 
+                _bulletDestroyer.Destroy(collidedBullets.Pop());
+        }
     }
 }

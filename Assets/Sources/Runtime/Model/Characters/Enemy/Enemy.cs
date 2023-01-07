@@ -7,33 +7,38 @@ namespace Model.Characters.Enemy
 {
     public class Enemy : IUpdatable
     {
-        private readonly FollowTarget _followTarget;
+        private readonly IDeath _death;
+        private readonly Health _health;
         private readonly EnemyAttack _enemyAttack;
+        private readonly FollowTarget _followTarget;
         private readonly Cooldown _cooldown;
-        private Health _health;
-        private IDeath _death;
 
-        public Enemy(Transform enemyTransform, Health health, IDeath death, Transform followTarget, IDamageable target)
+        public Enemy(Transform transform, IDeath death, Health health, Player player)
         {
-            _death = death;
-            _health = health ?? throw new ArgumentException();
-            Transform transform = enemyTransform;
+            if (transform == null)
+                throw new ArgumentNullException();
+            
+            if (player == null)
+                throw new ArgumentNullException();
+            
+            _death = death ?? throw new ArgumentNullException();
+            _health = health ?? throw new ArgumentNullException();
+            _cooldown = new Cooldown(1);
 
-            _cooldown = new Cooldown(1f);
-            CooldownAttack cooldownAttack = new CooldownAttack(_cooldown,
-                new DistanceAttack(followTarget, transform, new DefaultAttack()));
+            _enemyAttack = new EnemyAttack(player.Health, new CooldownAttack(new Cooldown(1),
+                new DistanceAttack(player.Transform, transform, new DefaultAttack())));
 
-            _enemyAttack = new EnemyAttack(target, cooldownAttack);
-            _followTarget = new FollowTarget(followTarget, transform, new CharacterMovement(transform, 4f));
+            _followTarget = new FollowTarget(player.Transform, transform, new CharacterMovement(transform, 4f));
         }
 
+        public Health Health => _health;
         public bool Dead => _death.Dead;
 
         public void UpdatePassedTime(float deltaTime)
         {
             _followTarget.Follow(deltaTime);
             _cooldown.ReduceTime(deltaTime);
-            _enemyAttack.Attack();   
+            _enemyAttack.Attack();
         }
     }
 }

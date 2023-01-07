@@ -5,9 +5,11 @@ using Model.Characters.Enemy;
 using Model.Characters.Shooting;
 using Model.Characters.Shooting.Bullets;
 using Model.SpatialObject;
+using ObjectComposition;
 using Simulation.Common;
 using Simulation.Movement;
 using Simulation.Shooting;
+using SimulationObject;
 using UnityEngine;
 using View;
 using View.Factories;
@@ -39,9 +41,9 @@ public class Game
         simulation.Add(healthViewFactory.Create(player));
         simulation.Add(aimViewFactory.Create(player));
 
+        GameObject bulletTemplate = levelConfigsList.BulletTemplate;
         PooledBulletFactory bulletFactory =
-            new PooledBulletFactory(positionViewFactory, levelConfigsList.BulletTemplate,
-                new SimulatedSimulationPool<DefaultBullet>(128));
+            new PooledBulletFactory(new SimulatedSimulationPool<DefaultBullet>(128), new BulletSimulationProvider(bulletTemplate, positionViewFactory));
 
         bulletFactory.PopulatePool();
 
@@ -56,14 +58,15 @@ public class Game
         movableSimulation.Initialize(_player.CharacterMovement);
         ISimulation<CharacterShooter> characterShooter = simulation.GetSimulation<CharacterShooter>();
         characterShooter.Initialize(_player.CharacterShooter);
-        
+
         _updatableContainer.QueryAdd(_player);
         _updatableContainer.QueryAdd(movableSimulation);
         _updatableContainer.QueryAdd(characterShooter);
 
         _enemyContainer = new EnemyContainer();
         EnemySpawner spawner = new EnemySpawner(30, _enemyContainer,
-            new EnemyFactory(levelConfigsList.EnemyTemplate, _player, healthViewFactory, positionViewFactory));
+            new EnemyFactory(_player,
+                new EnemySimulationProvider(levelConfigsList.EnemyTemplate, healthViewFactory, positionViewFactory)));
 
         _enemySpawner = spawner;
         _enemySpawner.Start();

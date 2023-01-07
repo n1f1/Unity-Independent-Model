@@ -2,27 +2,24 @@
 using Model.Characters.CharacterHealth;
 using Model.Characters.Shooting;
 using Model.Characters.Shooting.Bullets;
+using Model.Physics;
 using Model.SpatialObject;
 using Simulation.Common;
 using Simulation.Physics;
-using Simulation.Shooting;
 using UnityEngine;
 using View.Factories;
 using Object = UnityEngine.Object;
 using Transform = Model.SpatialObject.Transform;
 
-public class PooledBulletFactory : IBulletFactory<DefaultBullet>
+public class PooledBulletFactory : IBulletFactory<DefaultBullet>, IBulletDestroyer
 {
     private readonly IViewFactory<IPositionView> _viewFactory;
     private readonly GameObject _bulletTemplate;
-    private readonly SimulatedObjectPool<DefaultBullet> _objectPool;
-    private readonly UpdatableContainer _updatableContainer;
+    private readonly SimulatedSimulationPool<DefaultBullet> _objectPool;
 
     public PooledBulletFactory(IViewFactory<IPositionView> viewFactory, GameObject bulletTemplate,
-        SimulatedObjectPool<DefaultBullet> objectPool,
-        UpdatableContainer updatableContainer)
+        SimulatedSimulationPool<DefaultBullet> objectPool)
     {
-        _updatableContainer = updatableContainer ?? throw new ArgumentException();
         _viewFactory = viewFactory ?? throw new ArgumentException();
         _objectPool = objectPool ?? throw new ArgumentException();
         _bulletTemplate = bulletTemplate ? bulletTemplate : throw new ArgumentException();
@@ -39,27 +36,39 @@ public class PooledBulletFactory : IBulletFactory<DefaultBullet>
         if (!_objectPool.CanGet())
             AddNewToObjectPool();
 
-        SimulatedObjectPool<DefaultBullet>.SimulatedPair simulatedPair = _objectPool.Get();
+        SimulatedSimulationPool<DefaultBullet>.SimulatedPair simulatedPair = _objectPool.Get();
         DefaultBullet defaultBullet = simulatedPair.TObject;
         defaultBullet.Reset(trajectory, speed, damage);
-        _updatableContainer.QueryAdd(defaultBullet);
 
         return defaultBullet;
     }
 
     private void AddNewToObjectPool()
     {
+        SimulationObject<DefaultBullet> simulation = CreateSimulationObject();
+
+        DefaultBullet defaultBullet = new DefaultBullet(new Transform(simulation.GetView<IPositionView>()), null, 0, 0);
+
+        simulation.GetSimulation<PhysicsInteraction<Collision<IDamageable>>>()
+            .Initialize(new BulletCollisionEnter(defaultBullet));
+
+        _objectPool.AddNew(defaultBullet, simulation);
+    }
+
+    private SimulationObject<DefaultBullet> CreateSimulationObject()
+    {
         GameObject bullet = Object.Instantiate(_bulletTemplate);
-        IPositionView positionView = _viewFactory.Create(bullet);
+        SimulationObject<DefaultBullet> simulation = new SimulationObject<DefaultBullet>(bullet);
+        simulation.Add(_viewFactory.Create(bullet));
         CollisionEnter<IDamageable> physicsHandler = bullet.AddComponent<DamageableCollisionEnter>();
-        DefaultBullet defaultBullet = new DefaultBullet(new Transform(positionView), null, 0, 0);
-        BulletDestroyer bulletDestroyer = bullet.AddComponent<BulletDestroyer>();
-        bulletDestroyer.Initialize(defaultBullet,
-            new RemoveFromBulletContainer(_updatableContainer, new ReturnToPool<DefaultBullet>(_objectPool)));
-        _updatableContainer.QueryAdd(bulletDestroyer);
+        simulation.AddSimulation(physicsHandler);
 
-        physicsHandler.Initialize(new BulletCollisionEnter(defaultBullet));
+        return simulation;
+    }
 
-        _objectPool.AddNew(defaultBullet, bullet);
+    public void Destroy(IBullet bullet)
+    {
+        if(bullet is DefaultBullet defaultBullet)
+            _objectPool.Return(defaultBullet);
     }
 }

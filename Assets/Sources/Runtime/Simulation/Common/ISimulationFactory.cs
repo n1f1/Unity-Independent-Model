@@ -3,8 +3,8 @@ using UnityEngine;
 
 namespace Simulation.Common
 {
-    public interface ISimulationFactory<in TSimulated>
+    public interface ISimulationFactory<TSimulated>
     {
-        public IUpdatable Create(TSimulated simulated, GameObject gameObject);
+        public ISimulation<TSimulated> Create(TSimulated simulated, GameObject gameObject);
     }
 }

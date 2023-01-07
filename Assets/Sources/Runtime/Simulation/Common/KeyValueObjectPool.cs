@@ -1,21 +1,20 @@
 ﻿using System;
 using System.Collections.Generic;
-using UnityEngine;
 
 namespace Simulation.Common
 {
-    public class SimulatedObjectPool<TObject>
+    public class KeyValueObjectPool<TObject, TPoolable> where TPoolable : IPoolable
     {
-        private readonly Dictionary<TObject, GameObject> _active;
+        private readonly Dictionary<TObject, TPoolable> _active;
         private readonly Stack<SimulatedPair> _inactive;
 
-        public SimulatedObjectPool(int capacity = 4)
+        public KeyValueObjectPool(int capacity = 4)
         {
             if (capacity <= 0)
                 throw new ArgumentException();
             
             Capacity = capacity;
-            _active = new Dictionary<TObject, GameObject>(capacity);
+            _active = new Dictionary<TObject, TPoolable>(capacity);
             _inactive = new Stack<SimulatedPair>(capacity);
         }
 
@@ -27,12 +26,12 @@ namespace Simulation.Common
             if (tObject == null || _active.ContainsKey(tObject) == false)
                 throw new ArgumentException();
 
-            GameObject gameObject = _active[tObject];
-            gameObject.SetActive(false);
+            TPoolable poolable = _active[tObject];
+            poolable.Disable();
 
             _inactive.Push(new SimulatedPair
             {
-                TObject = tObject, GameObject = gameObject
+                TObject = tObject, Poolable = poolable
             });
 
             _active.Remove(tObject);
@@ -44,32 +43,42 @@ namespace Simulation.Common
                 throw new InvalidOperationException();
             
             SimulatedPair simulatedPair = _inactive.Pop();
-            simulatedPair.GameObject.SetActive(true);
-            _active.Add(simulatedPair.TObject, simulatedPair.GameObject);
+            simulatedPair.Poolable.Enable();
+            _active.Add(simulatedPair.TObject, simulatedPair.Poolable);
 
             return simulatedPair;
         }
 
-        public void AddNew(TObject tObject, GameObject gameObject)
+        public void AddNew(TObject tObject, TPoolable poolable)
         {
             if (tObject == null)
                 throw new ArgumentException();
 
-            if (gameObject == null)
+            if (poolable == null)
                 throw new ArgumentException();
             
             _inactive.Push(new SimulatedPair
             {
-                TObject = tObject, GameObject = gameObject
+                TObject = tObject, Poolable = poolable
             });
 
-            gameObject.SetActive(false);
+            poolable.Disable();
+        }
+        
+        public void Replace(TObject replaced, TObject newObject)
+        {
+            if (_active.ContainsKey(replaced) == false)
+                throw new ArgumentNullException();
+
+            TPoolable poolable = _active[replaced];
+            _active.Remove(replaced);
+            _active.Add(newObject, poolable);
         }
 
         public class SimulatedPair
         {
             public TObject TObject;
-            public GameObject GameObject;
+            public TPoolable Poolable;
         }
     }
 }

@@ -42,13 +42,16 @@ namespace Model.Characters.CharacterHealth
     public interface IDeath
     {
         void Die();
+        bool Dead { get; }
     }
     
     public class Death : IDeath
     {
         public void Die()
         {
-            
+            Dead = true;
         }
+
+        public bool Dead { get; private set; }
     }
 }

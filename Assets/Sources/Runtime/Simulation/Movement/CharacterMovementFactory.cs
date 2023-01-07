@@ -8,10 +8,10 @@ namespace Simulation.Movement
 {
     internal class CharacterMovementFactory : ISimulationFactory<IMovable>
     {
-        public IUpdatable Create(IMovable simulated, GameObject gameObject)
+        public ISimulation<IMovable> Create(IMovable simulated, GameObject gameObject)
         {
             return gameObject.AddComponent<PlayerMovement>()
-                .Initialize(simulated, new AxisInput());
+                .Initialize(new AxisInput());
         }
     }
 }

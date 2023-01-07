@@ -7,10 +7,9 @@ namespace Simulation.Shooting
 {
     internal class ShooterFactory : ISimulationFactory<CharacterShooter>
     {
-        public IUpdatable Create(CharacterShooter simulated, GameObject gameObject)
+        public ISimulation<CharacterShooter> Create(CharacterShooter simulated, GameObject gameObject)
         {
-            return gameObject.AddComponent<PlayerShooter>()
-                .Initialize(simulated);
+            return gameObject.AddComponent<PlayerShooter>();
         }
     }
 }

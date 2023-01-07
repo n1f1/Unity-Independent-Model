@@ -7,19 +7,22 @@ namespace Model.Characters.Shooting
     {
         private readonly IBulletFactory<IBullet> _bulletFactory;
         private readonly Cooldown _cooldown;
+        private readonly BulletsContainer _bulletsContainer;
 
-        public DefaultGun(IAim aim, IBulletFactory<IBullet> bulletFactory, Cooldown cooldown)
+        public DefaultGun(IAim aim, IBulletFactory<IBullet> bulletFactory, Cooldown cooldown, BulletsContainer bulletsContainer)
         {
-            _cooldown = cooldown ?? throw new ArgumentException();
-            _bulletFactory = bulletFactory ?? throw new ArgumentException();
-            Aim = aim ?? throw new ArgumentException();
+            _cooldown = cooldown ?? throw new ArgumentNullException();
+            _bulletFactory = bulletFactory ?? throw new ArgumentNullException();
+            Aim = aim ?? throw new ArgumentNullException();
+            _bulletsContainer = bulletsContainer ?? throw new ArgumentNullException();
         }
 
         public IAim Aim { get; }
 
         public void Shoot()
         {
-            _bulletFactory.CreateBullet(Aim.Trajectory, 10f, 5);
+            IBullet bullet = _bulletFactory.CreateBullet(Aim.Trajectory, 10f, 5);
+            _bulletsContainer.Add(bullet);
             _cooldown.Reset();
         }
 

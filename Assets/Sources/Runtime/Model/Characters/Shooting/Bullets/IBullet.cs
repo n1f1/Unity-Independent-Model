@@ -5,5 +5,6 @@ namespace Model.Characters.Shooting.Bullets
     public interface IBullet : IUpdatable
     {
         void Hit(IDamageable damageable);
+        bool Collided { get; }
     }
 }

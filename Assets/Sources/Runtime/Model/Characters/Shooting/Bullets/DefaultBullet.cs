@@ -24,8 +24,8 @@ namespace Model.Characters.Shooting.Bullets
             if (_trajectory != null)
                 _distance = trajectory.Distance;
         }
-
-        public bool ShouldBeDestroyed { get; private set; }
+        
+        public bool Collided { get; private set; }
 
         public void Reset(ITrajectory trajectory, float speed, int damage)
         {
@@ -34,7 +34,7 @@ namespace Model.Characters.Shooting.Bullets
             _distance = trajectory.Distance;
             _speed = speed;
             _damage = damage;
-            ShouldBeDestroyed = false;
+            Collided = false;
             UpdatePosition(0);
         }
 
@@ -45,7 +45,7 @@ namespace Model.Characters.Shooting.Bullets
             UpdatePosition(ratio);
 
             if (ratio >= 1)
-                ShouldBeDestroyed = true;
+                Collided = true;
         }
 
         private void UpdatePosition(float ratio) =>
@@ -56,7 +56,7 @@ namespace Model.Characters.Shooting.Bullets
             if(damageable.CanTakeDamage())
                 damageable.TakeDamage(_damage);
             
-            ShouldBeDestroyed = true;
+            Collided = true;
         }
     }
 }

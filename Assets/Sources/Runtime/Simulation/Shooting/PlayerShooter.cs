@@ -6,7 +6,7 @@ using Utility;
 
 namespace Simulation.Shooting
 {
-    internal class PlayerShooter : MonoBehaviour, ISimulation
+    internal class PlayerShooter : MonoBehaviour, ISimulation<CharacterShooter>
     {
         private LayerMask _layerMask;
         private CharacterShooter _simulation;
@@ -15,12 +15,10 @@ namespace Simulation.Shooting
         private void Awake() =>
             _layerMask = LayerMask.GetMask("AimPlane");
 
-        public ISimulation Initialize(CharacterShooter simulation)
+        public void Initialize(CharacterShooter simulation)
         {
             _simulation = simulation ?? throw new ArgumentException();
             _camera = Camera.main;
-
-            return this;
         }
 
         public void UpdatePassedTime(float deltaTime)

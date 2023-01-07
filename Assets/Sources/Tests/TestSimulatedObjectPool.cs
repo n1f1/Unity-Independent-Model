@@ -1,7 +1,6 @@
 ﻿using System;
 using NUnit.Framework;
 using Simulation.Common;
-using UnityEngine;
 
 namespace Tests
 {
@@ -10,35 +9,35 @@ namespace Tests
         [Test]
         public void Test_AddNewValid()
         {
-            SimulatedObjectPool<TestPoolObject> objectPool = new();
-            GameObject gameObject = new GameObject();
-            objectPool.AddNew(new TestPoolObject(), gameObject);
-            Assert.False(gameObject.activeSelf);
+            KeyValueObjectPool<TestPoolableType, TestPoolable> objectPool = new();
+            TestPoolable poolable = new TestPoolable();
+            objectPool.AddNew(new TestPoolableType(), poolable);
+            Assert.False(poolable.Enabled);
             Assert.True(objectPool.CanGet());
         }
         
         [Test]
         public void Test_GetValid()
         {
-            SimulatedObjectPool<TestPoolObject> objectPool = new();
-            GameObject gameObject = new GameObject();
-            TestPoolObject testPoolObject = new TestPoolObject();
-            objectPool.AddNew(testPoolObject, gameObject);
-            SimulatedObjectPool<TestPoolObject>.SimulatedPair simulatedPair = objectPool.Get();
+            KeyValueObjectPool<TestPoolableType, TestPoolable>objectPool = new();
+            TestPoolableType testPoolableType = new TestPoolableType();
+            TestPoolable poolable = new TestPoolable();
+            objectPool.AddNew(testPoolableType, poolable);
+            KeyValueObjectPool<TestPoolableType, TestPoolable>.SimulatedPair simulatedPair = objectPool.Get();
             
-            Assert.True(simulatedPair.GameObject == gameObject);
-            Assert.True(simulatedPair.GameObject.activeSelf);
-            Assert.True(simulatedPair.TObject == testPoolObject);
+            Assert.True(simulatedPair.Poolable == poolable);
+            Assert.True(poolable.Enabled);
+            Assert.True(simulatedPair.TObject == testPoolableType);
         }
         
         [Test]
         public void Test_CanGet()
         {
-            SimulatedObjectPool<TestPoolObject> objectPool = new();
+            KeyValueObjectPool<TestPoolableType, TestPoolable> objectPool = new();
 
             Assert.False(objectPool.CanGet());
 
-            objectPool.AddNew(new TestPoolObject(), new GameObject());
+            objectPool.AddNew(new TestPoolableType(), new TestPoolable());
             
             Assert.True(objectPool.CanGet());
         }
@@ -46,7 +45,7 @@ namespace Tests
         [Test]
         public void Test_CannotGetFail()
         {
-            SimulatedObjectPool<TestPoolObject> objectPool = new();
+            KeyValueObjectPool<TestPoolableType, TestPoolable>objectPool = new();
 
             Assert.Throws<InvalidOperationException>(() => objectPool.Get());
         }
@@ -54,32 +53,47 @@ namespace Tests
         [Test]
         public void Test_AddNewInvalid()
         {
-            SimulatedObjectPool<TestPoolObject> objectPool = new();
+            KeyValueObjectPool<TestPoolableType, TestPoolable> objectPool = new();
 
-            Assert.Throws<ArgumentException>(() => objectPool.AddNew(new TestPoolObject(), null));
-            Assert.Throws<ArgumentException>(() => objectPool.AddNew(null, new GameObject()));
+            Assert.Throws<ArgumentException>(() => objectPool.AddNew(new TestPoolableType(), null));
+            Assert.Throws<ArgumentException>(() => objectPool.AddNew(null, new TestPoolable()));
         }
         
         [Test]
         public void Test_Return()
         {
-            SimulatedObjectPool<TestPoolObject> objectPool = new();
-            TestPoolObject poolObject = new TestPoolObject();
-            GameObject gameObject = new GameObject();
-            objectPool.AddNew(poolObject, gameObject);
+            KeyValueObjectPool<TestPoolableType, TestPoolable> objectPool = new();
+            TestPoolableType poolableType = new TestPoolableType();
+            TestPoolable poolable = new TestPoolable();
+            objectPool.AddNew(poolableType, poolable);
             objectPool.Get();
 
             Assert.Throws<ArgumentException>(()=> objectPool.Return(null));
-            Assert.Throws<ArgumentException>(()=> objectPool.Return(new TestPoolObject()));
+            Assert.Throws<ArgumentException>(()=> objectPool.Return(new TestPoolableType()));
             
-            objectPool.Return(poolObject);
+            objectPool.Return(poolableType);
             
             Assert.True(objectPool.CanGet());
-            Assert.False(gameObject.activeSelf);
+            Assert.False(poolable.Enabled);
         }
     }
 
-    public class TestPoolObject
+    public class TestPoolable : IPoolable
+    {
+        public bool Enabled { get; private set; }
+
+        public void Enable()
+        {
+            Enabled = true;
+        }
+
+        public void Disable()
+        {
+            Enabled = false;
+        }
+    }
+
+    public class TestPoolableType
     {
     }
 }

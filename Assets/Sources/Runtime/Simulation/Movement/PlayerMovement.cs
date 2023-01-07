@@ -7,17 +7,21 @@ using Vector3 = System.Numerics.Vector3;
 
 namespace Simulation.Movement
 {
-    internal class PlayerMovement : MonoBehaviour, ISimulation
+    internal class PlayerMovement : MonoBehaviour, ISimulation<IMovable>
     {
-        private IMovable _characterMovement;
+        private IMovable _movable;
         private IMovementInput _movementInput;
 
-        public PlayerMovement Initialize(IMovable characterMovement, IMovementInput movementInput)
+        public PlayerMovement Initialize(IMovementInput movementInput)
         {
-            _movementInput = movementInput ?? throw new ArgumentException();
-            _characterMovement = characterMovement ?? throw new ArgumentException();
+            _movementInput = movementInput ?? throw new ArgumentNullException();
 
             return this;
+        }
+
+        public void Initialize(IMovable movable)
+        {
+            _movable = movable ?? throw new ArgumentNullException();
         }
 
         public void UpdatePassedTime(float deltaTime)
@@ -25,7 +29,7 @@ namespace Simulation.Movement
             Vector3 input = new Vector3(_movementInput.X, 0, _movementInput.Y);
 
             if (input != Vector3.Zero)
-                _characterMovement.Move(Vector3.Normalize(input) * deltaTime);
+                _movable.Move(Vector3.Normalize(input) * deltaTime);
         }
     }
 }

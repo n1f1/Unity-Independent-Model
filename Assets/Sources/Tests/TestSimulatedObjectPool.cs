@@ -68,13 +68,29 @@ namespace Tests
             objectPool.AddNew(poolableType, poolable);
             objectPool.Get();
 
-            Assert.Throws<ArgumentException>(()=> objectPool.Return(null));
-            Assert.Throws<ArgumentException>(()=> objectPool.Return(new TestPoolableType()));
+            Assert.Throws<ArgumentNullException>(()=> objectPool.Return(null));
+            Assert.Throws<InvalidOperationException>(()=> objectPool.Return(new TestPoolableType()));
             
             objectPool.Return(poolableType);
             
             Assert.True(objectPool.CanGet());
             Assert.False(poolable.Enabled);
+        }
+        
+        [Test]
+        public void Test_Replace()
+        {
+            KeyValueObjectPool<TestPoolableType, TestPoolable> objectPool = new();
+            TestPoolableType poolableType = new TestPoolableType();
+            TestPoolable poolable = new TestPoolable();
+            objectPool.AddNew(poolableType, poolable);
+            objectPool.Get();
+            
+            TestPoolableType second = new TestPoolableType();
+            objectPool.Replace(poolableType, second);
+
+            Assert.Throws<InvalidOperationException>(() => objectPool.Return(poolableType));
+            Assert.DoesNotThrow(() => objectPool.Return(second));
         }
     }
 

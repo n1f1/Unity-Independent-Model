@@ -23,9 +23,12 @@ namespace Simulation.Common
 
         public void Return(TObject tObject)
         {
-            if (tObject == null || _active.ContainsKey(tObject) == false)
-                throw new ArgumentException();
+            if (tObject == null)
+                throw new ArgumentNullException();
 
+            if (_active.ContainsKey(tObject) == false)
+                throw new InvalidOperationException();
+            
             TPoolable poolable = _active[tObject];
             poolable.Disable();
 

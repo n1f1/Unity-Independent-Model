@@ -36,12 +36,14 @@ public class PooledBulletFactory : IBulletFactory<DefaultBullet>, IBulletDestroy
         if (!_objectPool.CanGet())
             AddNewToObjectPool();
 
-        SimulatedSimulationPool<DefaultBullet>.SimulatedPair simulatedPair = _objectPool.Get();
-        DefaultBullet defaultBullet = simulatedPair.TObject;
+        DefaultBullet defaultBullet = GetFromPool();
         defaultBullet.Reset(trajectory, speed, damage);
 
         return defaultBullet;
     }
+
+    private DefaultBullet GetFromPool() =>
+        _objectPool.Get().TObject;
 
     private void AddNewToObjectPool()
     {
@@ -68,7 +70,7 @@ public class PooledBulletFactory : IBulletFactory<DefaultBullet>, IBulletDestroy
 
     public void Destroy(IBullet bullet)
     {
-        if(bullet is DefaultBullet defaultBullet)
+        if (bullet is DefaultBullet defaultBullet)
             _objectPool.Return(defaultBullet);
     }
 }

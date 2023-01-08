@@ -38,7 +38,7 @@ namespace Model.Characters.Shooting.Bullets
             UpdatePosition(0);
         }
 
-        public void UpdatePassedTime(float deltaTime)
+        public void UpdateTime(float deltaTime)
         {
             _passedTime += deltaTime;
             float ratio = Math.Clamp(_passedTime * _speed / _distance, 0, 1);

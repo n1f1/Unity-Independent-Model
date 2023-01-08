@@ -6,10 +6,11 @@ using UnityEngine;
 
 namespace SimulationObject
 {
-    public class SimulationObject<T> : IPoolable
+    public class SimulationObject<T> : IPoolable, IUpdatable
     {
         private readonly Dictionary<Type, object> _simulations = new();
         private readonly Dictionary<Type, IView> _views = new();
+        private readonly List<IUpdatable> _updatableList = new();
         private readonly GameObject _gameObject;
 
         private T _simulated;
@@ -18,6 +19,8 @@ namespace SimulationObject
         {
             _gameObject = gameObject;
         }
+
+        public GameObject GameObject => _gameObject;
 
         public void Add<TView>(TView view) where TView : IView
         {
@@ -35,14 +38,27 @@ namespace SimulationObject
         public ISimulation<T1> GetSimulation<T1>() => 
             _simulations[typeof(T1)] as ISimulation<T1>;
 
-        public void Enable()
-        {
+        public void Enable() => 
             _gameObject.SetActive(true);
+
+        public void Disable() => 
+            _gameObject.SetActive(false);
+
+        public void RegisterUpdatable<TSimulatable>(ISimulation<TSimulatable> simulation)
+        {
+            if (_updatableList.Contains(simulation))
+                throw new ArgumentException();
+            
+            _updatableList.Add(simulation);
         }
 
-        public void Disable()
+        public void UpdateTime(float deltaTime)
         {
-            _gameObject.SetActive(false);
+            if(_gameObject.activeSelf == false)
+                return;
+            
+            foreach (IUpdatable updatable in _updatableList) 
+                updatable.UpdateTime(deltaTime);
         }
     }
 }

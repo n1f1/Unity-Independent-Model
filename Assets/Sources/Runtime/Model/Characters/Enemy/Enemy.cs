@@ -34,7 +34,7 @@ namespace Model.Characters.Enemy
         public Health Health => _health;
         public bool Dead => _death.Dead;
 
-        public void UpdatePassedTime(float deltaTime)
+        public void UpdateTime(float deltaTime)
         {
             _followTarget.Follow(deltaTime);
             _cooldown.ReduceTime(deltaTime);

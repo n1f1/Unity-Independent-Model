@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 
 [CreateAssetMenu(menuName = "Create LevelConfigsList", fileName = "LevelConfigsList", order = 0)]
-public class LevelConfigsList : ScriptableObject
+public class LevelConfig : ScriptableObject
 {
     [SerializeField] private GameObject _playerTemplate;
     [SerializeField] private GameObject _enemyTemplate;

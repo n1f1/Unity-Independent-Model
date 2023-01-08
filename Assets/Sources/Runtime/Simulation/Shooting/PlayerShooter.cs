@@ -21,7 +21,7 @@ namespace Simulation.Shooting
             _camera = Camera.main;
         }
 
-        public void UpdatePassedTime(float deltaTime)
+        public void UpdateTime(float deltaTime)
         {
             ProcessAiming();
             ProcessShooting();

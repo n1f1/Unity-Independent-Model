@@ -25,7 +25,7 @@ namespace Model.Characters.Shooting.Bullets
             {
                 IBullet bullet = node.Value;
                 
-                bullet.UpdatePassedTime(deltaTime);
+                bullet.UpdateTime(deltaTime);
 
                 if (bullet.Collided)
                 {

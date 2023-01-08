@@ -4,7 +4,7 @@ using Model;
 
 namespace Simulation.Common
 {
-    public class UpdatableContainer
+    public class UpdatableContainer : IUpdatable
     {
         private readonly LinkedList<IUpdatable> _simulations = new();
         private readonly Queue<IUpdatable> _removeQueue = new();
@@ -12,7 +12,7 @@ namespace Simulation.Common
 
         private bool _updating;
 
-        public void Update(float deltaTime)
+        public void UpdateTime(float deltaTime)
         {
             if (deltaTime < 0)
                 throw new ArgumentException();
@@ -51,7 +51,7 @@ namespace Simulation.Common
         private void UpdateList(float deltaTime)
         {
             foreach (IUpdatable simulation in _simulations)
-                simulation.UpdatePassedTime(deltaTime);
+                simulation.UpdateTime(deltaTime);
         }
 
         private void ProcessQueued()

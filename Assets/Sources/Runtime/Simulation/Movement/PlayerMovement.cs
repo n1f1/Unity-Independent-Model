@@ -24,7 +24,7 @@ namespace Simulation.Movement
             _movable = movable ?? throw new ArgumentNullException();
         }
 
-        public void UpdatePassedTime(float deltaTime)
+        public void UpdateTime(float deltaTime)
         {
             Vector3 input = new Vector3(_movementInput.X, 0, _movementInput.Y);
 

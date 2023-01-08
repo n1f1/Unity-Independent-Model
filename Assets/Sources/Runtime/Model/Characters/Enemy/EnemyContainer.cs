@@ -2,7 +2,7 @@ using System.Collections.Generic;
 
 namespace Model.Characters.Enemy
 {
-    public class EnemyContainer
+    public class EnemyContainer : IUpdatable
     {
         private readonly LinkedList<Enemy> _enemies = new();
         private readonly Stack<Enemy> _deadEnemies = new();
@@ -14,13 +14,13 @@ namespace Model.Characters.Enemy
             _enemies.AddLast(enemy);
         }
 
-        public void Update(float deltaTime)
+        public void UpdateTime(float deltaTime)
         {
             for (LinkedListNode<Enemy> node = _enemies.First; node != null; node = node.Next)
             {
                 Enemy enemy = node.Value;
                 
-                enemy.UpdatePassedTime(deltaTime);
+                enemy.UpdateTime(deltaTime);
 
                 if (enemy.Dead)
                 {

@@ -11,7 +11,7 @@ namespace Tests
         public void Test_UpdateFail()
         {
             UpdatableContainer container = new UpdatableContainer();
-            Assert.Throws<ArgumentException>(() => container.Update(-1));
+            Assert.Throws<ArgumentException>(() => container.UpdateTime(-1));
         }
         
         [Test]
@@ -21,7 +21,7 @@ namespace Tests
             UpdatableWithStatus updatable = new UpdatableWithStatus();
             container.QueryAdd(updatable);
             Assert.False(updatable.Updated);
-            container.Update(1f);
+            container.UpdateTime(1f);
             Assert.True(updatable.Updated);
         }
         
@@ -43,7 +43,7 @@ namespace Tests
             UpdatableWithStatus updatableWithStatus = new UpdatableWithStatus();
             UpdatableAddingOnUpdate updatable = new UpdatableAddingOnUpdate(container, updatableWithStatus);
             container.QueryAdd(updatable);
-            Assert.DoesNotThrow(() => container.Update(1f));
+            Assert.DoesNotThrow(() => container.UpdateTime(1f));
             Assert.DoesNotThrow(() => container.QueryRemove(updatableWithStatus));
         }
 
@@ -58,7 +58,7 @@ namespace Tests
                 _container = container;
             }
 
-            public void UpdatePassedTime(float deltaTime)
+            public void UpdateTime(float deltaTime)
             {
                 _container.QueryAdd(_updatableWithStatus);
             }
@@ -68,7 +68,7 @@ namespace Tests
         {
             public bool Updated { get; private set; }
 
-            public void UpdatePassedTime(float deltaTime)
+            public void UpdateTime(float deltaTime)
             {
                 Updated = true;
             }

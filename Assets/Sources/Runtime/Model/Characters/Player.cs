@@ -36,7 +36,7 @@ namespace Model.Characters
         public IDamageable Health => _health;
         public CharacterShooter CharacterShooter => _shooter;
 
-        public void UpdatePassedTime(float deltaTime)
+        public void UpdateTime(float deltaTime)
         {
             _cooldown.ReduceTime(deltaTime);
             _bulletsContainer.Update(deltaTime);

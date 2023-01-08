@@ -2,7 +2,7 @@
 {
     public interface IUpdatable
     {
-        void UpdatePassedTime(float deltaTime)
+        void UpdateTime(float deltaTime)
         {
         }
     }

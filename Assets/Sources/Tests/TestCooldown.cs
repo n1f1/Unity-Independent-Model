@@ -10,7 +10,7 @@ namespace Tests
         public void Test_Construction()
         {
             Assert.DoesNotThrow(() => new Cooldown(1f));
-            Assert.Throws<ArgumentException>(() => new Cooldown(-1f));
+            Assert.Throws<ArgumentOutOfRangeException>(() => new Cooldown(-1f));
         }
         
         [Test]
@@ -37,7 +37,7 @@ namespace Tests
         public void Test_ReduceTimeValid()
         {
             Cooldown cooldown = new Cooldown(1f);
-            Assert.Throws<ArgumentException>(() => cooldown.ReduceTime(-1f));
+            Assert.Throws<ArgumentOutOfRangeException>(() => cooldown.ReduceTime(-1f));
             cooldown.ReduceTime(0.5f);
             Assert.IsFalse(cooldown.IsReady);
             cooldown.ReduceTime(0.5f);

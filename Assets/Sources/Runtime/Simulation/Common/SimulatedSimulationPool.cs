@@ -6,7 +6,6 @@ namespace Simulation.Common
     {
         public SimulatedSimulationPool(int capacity) : base(capacity)
         {
-            
         }
     }
 }

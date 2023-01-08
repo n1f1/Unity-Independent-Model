@@ -11,15 +11,15 @@ namespace Model.Characters
 
         public CharacterMovement(Transform transform, float speed)
         {
-            _transform = transform ?? throw new ArgumentException();
-            
+            _transform = transform ?? throw new ArgumentNullException();
+
             if (_speed < 0)
-                throw new ArgumentException();
-            
+                throw new ArgumentOutOfRangeException();
+
             _speed = speed;
         }
 
-        public void Move(Vector3 moveDelta) => 
+        public void Move(Vector3 moveDelta) =>
             _transform.SetPosition(_transform.Position + moveDelta * _speed);
     }
 }

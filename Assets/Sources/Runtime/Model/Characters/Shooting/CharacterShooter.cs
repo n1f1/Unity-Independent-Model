@@ -11,8 +11,8 @@ namespace Model.Characters.Shooting
 
         public CharacterShooter(IWeapon weapon, Transform character)
         {
-            _weapon = weapon ?? throw new ArgumentException();
-            _character = character ?? throw new ArgumentException();
+            _weapon = weapon ?? throw new ArgumentNullException();
+            _character = character ?? throw new ArgumentNullException();
         }
 
         public void Aim(Vector3 aimPosition)

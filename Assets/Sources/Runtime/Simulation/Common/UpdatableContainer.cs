@@ -16,7 +16,7 @@ namespace Simulation.Common
         {
             if (deltaTime < 0)
                 throw new ArgumentException();
-            
+
             _updating = true;
 
             UpdateList(deltaTime);
@@ -30,7 +30,7 @@ namespace Simulation.Common
         {
             if (updatable == null)
                 throw new ArgumentException();
-            
+
             if (_updating == false)
                 _simulations.AddLast(updatable);
             else

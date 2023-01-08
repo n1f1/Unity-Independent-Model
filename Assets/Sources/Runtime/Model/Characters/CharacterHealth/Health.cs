@@ -21,14 +21,14 @@ namespace Model.Characters.CharacterHealth
             _healthView.Display(1);
         }
 
-        public bool CanTakeDamage() => 
+        public bool CanTakeDamage() =>
             _amount > 0;
 
         public void TakeDamage(float damage)
         {
             if (damage < 0)
                 throw new ArgumentOutOfRangeException();
-            
+
             if (CanTakeDamage() == false)
                 throw new InvalidOperationException();
 
@@ -38,21 +38,5 @@ namespace Model.Characters.CharacterHealth
             if (_amount == 0)
                 _death.Die();
         }
-    }
-
-    public interface IDeath
-    {
-        void Die();
-        bool Dead { get; }
-    }
-    
-    public class Death : IDeath
-    {
-        public void Die()
-        {
-            Dead = true;
-        }
-
-        public bool Dead { get; private set; }
     }
 }

@@ -10,11 +10,11 @@ using View.Factories;
 
 public class Game
 {
-    private Player _player;
-    private Enemy _enemy;
+    private SimulationObject<Player> _playerSimulation;
     private EnemyContainer _enemyContainer;
     private EnemySpawner _enemySpawner;
-    private SimulationObject<Player> _playerSimulation;
+    private Player _player;
+    private Enemy _enemy;
 
     public void Start()
     {
@@ -33,7 +33,9 @@ public class Game
         EnemySimulationProvider enemySimulationProvider =
             new EnemySimulationProvider(levelConfig.EnemyTemplate, healthViewFactory, positionViewFactory);
 
-        _enemySpawner = new EnemySpawner(3, _enemyContainer, new EnemyFactory(_player, enemySimulationProvider), _player.Transform);
+        _enemySpawner = new EnemySpawner(3, _enemyContainer, new EnemyFactory(_player, enemySimulationProvider),
+            _player.Transform);
+        
         _enemySpawner.Start();
     }
 

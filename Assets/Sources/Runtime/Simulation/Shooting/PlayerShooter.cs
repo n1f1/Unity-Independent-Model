@@ -17,7 +17,7 @@ namespace Simulation.Shooting
 
         public void Initialize(CharacterShooter simulation)
         {
-            _simulation = simulation ?? throw new ArgumentException();
+            _simulation = simulation ?? throw new ArgumentNullException();
             _camera = Camera.main;
         }
 

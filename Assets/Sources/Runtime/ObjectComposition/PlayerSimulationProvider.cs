@@ -1,4 +1,5 @@
-﻿using Model;
+﻿using System;
+using Model;
 using Model.Characters;
 using Model.Characters.CharacterHealth;
 using Model.Characters.Shooting;
@@ -9,6 +10,7 @@ using Simulation.Shooting;
 using SimulationObject;
 using UnityEngine;
 using View.Factories;
+using Object = UnityEngine.Object;
 
 namespace ObjectComposition
 {
@@ -21,9 +23,9 @@ namespace ObjectComposition
         public PlayerSimulationProvider(GameObject playerTemplate, IViewFactory<IPositionView> positionViewFactory,
             IViewFactory<IHealthView> healthViewFactory)
         {
-            _healthViewFactory = healthViewFactory;
-            _positionViewFactory = positionViewFactory;
-            _playerTemplate = playerTemplate;
+            _playerTemplate = playerTemplate ? playerTemplate : throw new ArgumentNullException();
+            _healthViewFactory = healthViewFactory ?? throw new ArgumentNullException();
+            _positionViewFactory = positionViewFactory ?? throw new ArgumentNullException();
         }
 
         public SimulationObject<Player> CreateSimulationObject()
@@ -41,7 +43,7 @@ namespace ObjectComposition
         {
             simulation.AddSimulation(simulation.GameObject.AddComponent<PlayerMovement>()
                 .Initialize(new AxisInput()));
-            
+
             simulation.AddSimulation(simulation.GameObject.AddComponent<PlayerShooter>());
 
             ISimulation<IMovable> movableSimulation = simulation.GetSimulation<IMovable>();

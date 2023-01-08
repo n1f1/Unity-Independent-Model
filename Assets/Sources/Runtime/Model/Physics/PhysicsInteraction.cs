@@ -1,7 +1,7 @@
 ﻿namespace Model.Physics
 {
-    public interface PhysicsInteraction<in TType>
+    public interface PhysicsInteraction<in TInteractionType>
     {
-        void Invoke(TType collision);
+        void Invoke(TInteractionType collision);
     }
 }

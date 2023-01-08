@@ -4,6 +4,7 @@
     {
         void UpdateTime(float deltaTime)
         {
+            
         }
     }
 }

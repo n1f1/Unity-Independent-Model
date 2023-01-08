@@ -19,8 +19,8 @@ namespace Model.Characters.Shooting
         public Vector3 Evaluate(float ratio)
         {
             if (ratio is < 0 or > 1)
-                throw new ArgumentException();
-            
+                throw new ArgumentOutOfRangeException();
+
             return Vector3.Lerp(_start, _finish, ratio);
         }
     }

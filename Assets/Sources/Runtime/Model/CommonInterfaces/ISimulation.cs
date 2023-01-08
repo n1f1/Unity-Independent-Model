@@ -1,7 +1,7 @@
 ﻿namespace Model
 {
-    public interface ISimulation<T> : IUpdatable
+    public interface ISimulation<in TSimulated> : IUpdatable
     {
-        void Initialize(T tObject);
+        void Initialize(TSimulated tObject);
     }
 }

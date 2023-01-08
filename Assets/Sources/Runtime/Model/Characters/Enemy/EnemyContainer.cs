@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 
 namespace Model.Characters.Enemy
@@ -6,12 +7,12 @@ namespace Model.Characters.Enemy
     {
         private readonly LinkedList<Enemy> _enemies = new();
         private readonly Stack<Enemy> _deadEnemies = new();
-        
+
         public bool HasDead => _deadEnemies.Count > 0;
 
         public void Add(Enemy enemy)
         {
-            _enemies.AddLast(enemy);
+            _enemies.AddLast(enemy ?? throw new ArgumentNullException());
         }
 
         public void UpdateTime(float deltaTime)
@@ -19,7 +20,7 @@ namespace Model.Characters.Enemy
             for (LinkedListNode<Enemy> node = _enemies.First; node != null; node = node.Next)
             {
                 Enemy enemy = node.Value;
-                
+
                 enemy.UpdateTime(deltaTime);
 
                 if (enemy.Dead)
@@ -34,7 +35,7 @@ namespace Model.Characters.Enemy
         {
             for (int i = 0; i < _deadEnemies.Count; i++)
                 yield return _deadEnemies.Pop();
-            
+
             _deadEnemies.Clear();
         }
     }

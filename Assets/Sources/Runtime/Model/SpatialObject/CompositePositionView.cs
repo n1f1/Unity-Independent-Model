@@ -9,7 +9,7 @@ namespace Model.SpatialObject
 
         public CompositePositionView(params IPositionView[] views)
         {
-            _positionViews = views ?? throw new ArgumentException();
+            _positionViews = views ?? throw new ArgumentNullException();
         }
 
         public void UpdatePosition(Vector3 position)

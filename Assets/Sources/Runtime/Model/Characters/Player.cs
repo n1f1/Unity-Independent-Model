@@ -8,6 +8,10 @@ namespace Model.Characters
 {
     public class Player : IUpdatable
     {
+        private const int MAXHealth = 100;
+        private const float ShootingCooldown = 0.1f;
+        private const float CharacterSpeed = 5f;
+
         private readonly CharacterMovement _characterMovement;
         private readonly Transform _transform;
         private readonly IDamageable _health;
@@ -18,17 +22,17 @@ namespace Model.Characters
         public Player(IPositionView positionView, IHealthView healthView, ForwardAim forwardAim,
             IBulletDestroyer bulletDestroyer, IBulletFactory<IBullet> bulletFactory)
         {
-            _health = new Health(100, healthView ?? throw new ArgumentException(), new Death());
+            _health = new Health(MAXHealth, healthView ?? throw new ArgumentException(), new Death());
             _transform = new Transform(positionView ?? throw new ArgumentException());
 
-            _cooldown = new Cooldown(0.1f);
+            _cooldown = new Cooldown(ShootingCooldown);
             _bulletsContainer = new BulletsContainer(bulletDestroyer);
             _shooter = new CharacterShooter(
                 new DefaultGun(forwardAim ?? throw new ArgumentException(),
                     bulletFactory ?? throw new ArgumentException(), _cooldown, _bulletsContainer),
                 _transform);
 
-            _characterMovement = new CharacterMovement(_transform, 5f);
+            _characterMovement = new CharacterMovement(_transform, CharacterSpeed);
         }
 
         public CharacterMovement CharacterMovement => _characterMovement;

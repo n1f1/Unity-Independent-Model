@@ -11,11 +11,11 @@ namespace Model.Characters.Enemy
 
         public CooldownAttack(Cooldown cooldown, IAttacker attacker)
         {
-            _attacker = attacker ?? throw new ArgumentException();
-            _cooldown = cooldown ?? throw new ArgumentException();
+            _attacker = attacker ?? throw new ArgumentNullException();
+            _cooldown = cooldown ?? throw new ArgumentNullException();
         }
 
-        public bool CanAttack(IDamageable damageable) => 
+        public bool CanAttack(IDamageable damageable) =>
             _cooldown.IsReady && _attacker.CanAttack(damageable);
 
         public void Attack(IDamageable damageable, float baseDamage)

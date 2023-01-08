@@ -25,8 +25,8 @@ namespace Tests
         public void Test_EvaluateFail()
         {
             ForwardTrajectory trajectory = new ForwardTrajectory(Vector3.Zero, Vector3.One);
-            Assert.Throws<ArgumentException>(() => trajectory.Evaluate(-1));
-            Assert.Throws<ArgumentException>(() => trajectory.Evaluate(2));
+            Assert.Throws<ArgumentOutOfRangeException>(() => trajectory.Evaluate(-1));
+            Assert.Throws<ArgumentOutOfRangeException>(() => trajectory.Evaluate(2));
         }
     }
 }

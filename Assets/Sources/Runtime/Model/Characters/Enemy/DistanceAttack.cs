@@ -14,15 +14,15 @@ namespace Model.Characters.Enemy
 
         public DistanceAttack(Transform followTarget, Transform transform, IAttacker attacker)
         {
-            _transform = transform ?? throw new ArgumentException();
-            _followTarget = followTarget ?? throw new ArgumentException();
-            _attacker = attacker ?? throw new ArgumentException();
+            _transform = transform ?? throw new ArgumentNullException();
+            _followTarget = followTarget ?? throw new ArgumentNullException();
+            _attacker = attacker ?? throw new ArgumentNullException();
         }
 
-        public bool CanAttack(IDamageable damageable) => 
+        public bool CanAttack(IDamageable damageable) =>
             IsDistanceValid() && _attacker.CanAttack(damageable);
 
-        private bool IsDistanceValid() => 
+        private bool IsDistanceValid() =>
             Vector3.DistanceSquared(_followTarget.Position, _transform.Position) < _attackRange * _attackRange;
 
         public void Attack(IDamageable damageable, float baseDamage)

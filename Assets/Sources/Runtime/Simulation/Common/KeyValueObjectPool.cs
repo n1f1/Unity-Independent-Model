@@ -12,7 +12,7 @@ namespace Simulation.Common
         {
             if (capacity <= 0)
                 throw new ArgumentException();
-            
+
             Capacity = capacity;
             _active = new Dictionary<TObject, TPoolable>(capacity);
             _inactive = new Stack<SimulatedPair>(capacity);
@@ -28,7 +28,7 @@ namespace Simulation.Common
 
             if (_active.ContainsKey(tObject) == false)
                 throw new InvalidOperationException();
-            
+
             TPoolable poolable = _active[tObject];
             poolable.Disable();
 
@@ -44,7 +44,7 @@ namespace Simulation.Common
         {
             if (CanGet() == false)
                 throw new InvalidOperationException();
-            
+
             SimulatedPair simulatedPair = _inactive.Pop();
             simulatedPair.Poolable.Enable();
             _active.Add(simulatedPair.TObject, simulatedPair.Poolable);
@@ -59,7 +59,7 @@ namespace Simulation.Common
 
             if (poolable == null)
                 throw new ArgumentException();
-            
+
             _inactive.Push(new SimulatedPair
             {
                 TObject = tObject, Poolable = poolable
@@ -67,7 +67,7 @@ namespace Simulation.Common
 
             poolable.Disable();
         }
-        
+
         public void Replace(TObject replaced, TObject newObject)
         {
             if (_active.ContainsKey(replaced) == false)

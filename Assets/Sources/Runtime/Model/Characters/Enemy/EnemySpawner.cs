@@ -20,7 +20,7 @@ namespace Model.Characters.Enemy
             _enemyContainer = enemyContainer ?? throw new ArgumentNullException();
 
             if (enemyCount < 0)
-                throw new ArgumentException();
+                throw new ArgumentOutOfRangeException();
 
             _enemyCount = enemyCount;
         }
@@ -29,10 +29,8 @@ namespace Model.Characters.Enemy
         {
             Random random = new Random();
 
-            for (int i = 0; i < _enemyCount; i++)
-            {
+            for (int i = 0; i < _enemyCount; i++) 
                 CreateEnemy(random);
-            }
         }
 
         public void Update()

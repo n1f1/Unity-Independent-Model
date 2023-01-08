@@ -19,7 +19,7 @@ namespace ObjectComposition
         public EnemyFactory(Player player, EnemySimulationProvider enemySimulationProvider)
         {
             _player = player ?? throw new ArgumentNullException();
-            _simulationProvider = enemySimulationProvider;
+            _simulationProvider = enemySimulationProvider ?? throw new ArgumentNullException();
         }
 
         public Enemy Create(Vector3 position)
@@ -32,6 +32,11 @@ namespace ObjectComposition
             _objectPool.Replace(simulatedPair.TObject, enemy);
 
             return enemy;
+        }
+
+        public void Destroy(Enemy enemy)
+        {
+            _objectPool.Return(enemy);
         }
 
         private void AddNewToObjectPool(Vector3 position)
@@ -52,11 +57,6 @@ namespace ObjectComposition
             _simulationProvider.InitializeSimulation(simulation, enemy);
         
             return enemy;
-        }
-
-        public void Destroy(Enemy enemy)
-        {
-            _objectPool.Return(enemy);
         }
     }
 }

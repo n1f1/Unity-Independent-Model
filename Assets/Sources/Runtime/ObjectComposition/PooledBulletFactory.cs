@@ -17,7 +17,7 @@ namespace ObjectComposition
             BulletSimulationProvider bulletSimulationProvider)
         {
             _objectPool = objectPool ?? throw new ArgumentException();
-            _bulletSimulationProvider = bulletSimulationProvider;
+            _bulletSimulationProvider = bulletSimulationProvider ?? throw new ArgumentNullException();
         }
 
         public void PopulatePool()
@@ -37,6 +37,12 @@ namespace ObjectComposition
             return defaultBullet;
         }
 
+        public void Destroy(IBullet bullet)
+        {
+            if (bullet is DefaultBullet defaultBullet)
+                _objectPool.Return(defaultBullet);
+        }
+
         private DefaultBullet GetFromPool() =>
             _objectPool.Get().TObject;
 
@@ -44,16 +50,11 @@ namespace ObjectComposition
         {
             SimulationObject<DefaultBullet> simulation = _bulletSimulationProvider.CreateSimulationObject();
 
-            DefaultBullet defaultBullet = new DefaultBullet(new Transform(simulation.GetView<IPositionView>()), null, 0, 0);
+            DefaultBullet defaultBullet =
+                new DefaultBullet(new Transform(simulation.GetView<IPositionView>()), new NullTrajectory());
 
             _bulletSimulationProvider.InitializeSimulation(simulation, defaultBullet);
             _objectPool.AddNew(defaultBullet, simulation);
-        }
-
-        public void Destroy(IBullet bullet)
-        {
-            if (bullet is DefaultBullet defaultBullet)
-                _objectPool.Return(defaultBullet);
         }
     }
 }

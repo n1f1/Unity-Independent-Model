@@ -1,7 +1,7 @@
 namespace Model.Physics
 {
-    public class Trigger<T>
+    public class Trigger<TObject>
     {
-        public T Other { get; set; }
+        public TObject Other { get; set; }
     }
 }

@@ -10,7 +10,7 @@ namespace Model.Characters.Shooting
         public Cooldown(float cooldown)
         {
             if (cooldown < 0)
-                throw new ArgumentException();
+                throw new ArgumentOutOfRangeException();
 
             _cooldown = cooldown;
             _currentTime = _cooldown;
@@ -21,7 +21,7 @@ namespace Model.Characters.Shooting
         public void ReduceTime(float deltaTime)
         {
             if (deltaTime < 0)
-                throw new ArgumentException();
+                throw new ArgumentOutOfRangeException();
 
             _currentTime = Math.Clamp(_currentTime - deltaTime, 0, _cooldown);
         }

@@ -1,4 +1,5 @@
-﻿using Model.Characters;
+﻿using System;
+using Model.Characters;
 using Model.Characters.CharacterHealth;
 using Model.Characters.Shooting;
 using Model.Characters.Shooting.Bullets;
@@ -19,8 +20,10 @@ namespace ObjectComposition
         public PlayerFactory(LevelConfig levelConfig, IViewFactory<IPositionView> positionViewFactory,
             IViewFactory<IHealthView> healthViewFactory)
         {
-            _levelConfig = levelConfig;
-            _positionViewFactory = positionViewFactory;
+            _levelConfig = levelConfig ? levelConfig : throw new ArgumentNullException();
+            _positionViewFactory = positionViewFactory ?? throw new ArgumentNullException();
+            healthViewFactory = healthViewFactory ?? throw new ArgumentNullException();
+
             _playerSimulationProvider =
                 new PlayerSimulationProvider(levelConfig.PlayerTemplate, _positionViewFactory, healthViewFactory);
         }
@@ -30,20 +33,28 @@ namespace ObjectComposition
 
         public Player CreatePlayer(SimulationObject<Player> playerSimulation, IPositionView cameraView)
         {
-            GameObject bulletTemplate = _levelConfig.BulletTemplate;
-            PooledBulletFactory bulletFactory =
-                new PooledBulletFactory(new SimulatedSimulationPool<DefaultBullet>(128),
-                    new BulletSimulationProvider(bulletTemplate, _positionViewFactory));
+            PooledBulletFactory bulletFactory = CreatePooledBulletFactory();
 
-            bulletFactory.PopulatePool();
-
-            var player = new Player(new CompositePositionView(playerSimulation.GetView<IPositionView>(), cameraView),
+            Player player = new Player(new CompositePositionView(playerSimulation.GetView<IPositionView>(), cameraView),
                 playerSimulation.GetView<IHealthView>(),
                 new ForwardAim(playerSimulation.GetView<IForwardAimView>()), bulletFactory, bulletFactory);
 
             _playerSimulationProvider.InitializeSimulation(playerSimulation, player);
 
             return player;
+        }
+
+        private PooledBulletFactory CreatePooledBulletFactory()
+        {
+            GameObject bulletTemplate = _levelConfig.BulletTemplate;
+
+            PooledBulletFactory bulletFactory =
+                new PooledBulletFactory(new SimulatedSimulationPool<DefaultBullet>(128),
+                    new BulletSimulationProvider(bulletTemplate, _positionViewFactory));
+
+            bulletFactory.PopulatePool();
+
+            return bulletFactory;
         }
     }
 }

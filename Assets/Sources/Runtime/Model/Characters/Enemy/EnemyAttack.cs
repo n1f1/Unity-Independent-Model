@@ -11,8 +11,8 @@ namespace Model.Characters.Enemy
 
         public EnemyAttack(IDamageable target, IAttacker attacker)
         {
-            _target = target?? throw new ArgumentException();
-            _attacker = attacker?? throw new ArgumentException();
+            _target = target ?? throw new ArgumentNullException();
+            _attacker = attacker ?? throw new ArgumentNullException();
         }
 
         public void Attack()

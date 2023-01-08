@@ -10,7 +10,7 @@ namespace Model.Characters.Shooting.Bullets
 
         public BulletCollisionEnter(IBullet bullet)
         {
-            _bullet = bullet ?? throw new ArgumentException();
+            _bullet = bullet ?? throw new ArgumentNullException();
         }
 
         public void Invoke(Trigger<IDamageable> collision)

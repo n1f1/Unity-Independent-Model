@@ -4,11 +4,11 @@ using UnityEngine;
 
 namespace Simulation.Physics
 {
-    internal class PhysicsInteractableHolder<T> : MonoBehaviour, ISimulation<T>
+    internal class PhysicsInteractableHolder<TSimulated> : MonoBehaviour, ISimulation<TSimulated>
     {
-        public T InteractableObject { get; private set; }
+        public TSimulated InteractableObject { get; private set; }
 
-        public void Initialize(T tObject)
+        public void Initialize(TSimulated tObject)
         {
             InteractableObject = tObject ?? throw new ArgumentException();
         }

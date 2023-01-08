@@ -9,6 +9,7 @@ namespace Model.Characters.Shooting
         private Vector3 _position;
         private Vector3 _aimPosition;
         private float _aimHeight = 1f;
+        private float _trajectoryDistance = 50f;
 
         public ForwardAim(IAimView aimView)
         {
@@ -26,7 +27,14 @@ namespace Model.Characters.Shooting
         }
 
         public ITrajectory Trajectory =>
-            new ForwardTrajectory(_position, _position + Vector3.Normalize(_aimPosition - _position) * 50f);
+            GetTrajectory();
+
+        private ForwardTrajectory GetTrajectory()
+        {
+            Vector3 direction = Vector3.Normalize(_aimPosition - _position);
+
+            return new ForwardTrajectory(_position, _position + direction * _trajectoryDistance);
+        }
 
         public bool Aiming { get; private set; }
 

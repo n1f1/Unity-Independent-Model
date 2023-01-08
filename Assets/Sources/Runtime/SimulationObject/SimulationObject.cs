@@ -17,7 +17,7 @@ namespace SimulationObject
 
         public SimulationObject(GameObject gameObject)
         {
-            _gameObject = gameObject;
+            _gameObject = gameObject ? gameObject : throw new ArgumentNullException();
         }
 
         public GameObject GameObject => _gameObject;

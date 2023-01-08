@@ -17,10 +17,10 @@ namespace Model.Characters.Enemy
         {
             if (transform == null)
                 throw new ArgumentNullException();
-            
+
             if (player == null)
                 throw new ArgumentNullException();
-            
+
             _death = death ?? throw new ArgumentNullException();
             _health = health ?? throw new ArgumentNullException();
             _cooldown = new Cooldown(1);

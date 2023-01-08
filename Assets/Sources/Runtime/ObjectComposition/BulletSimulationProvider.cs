@@ -1,4 +1,5 @@
-﻿using Model.Characters.CharacterHealth;
+﻿using System;
+using Model.Characters.CharacterHealth;
 using Model.Characters.Shooting.Bullets;
 using Model.Physics;
 using Model.SpatialObject;
@@ -6,6 +7,7 @@ using Simulation.Physics;
 using SimulationObject;
 using UnityEngine;
 using View.Factories;
+using Object = UnityEngine.Object;
 
 namespace ObjectComposition
 {
@@ -16,8 +18,8 @@ namespace ObjectComposition
 
         public BulletSimulationProvider(GameObject bulletTemplate, IViewFactory<IPositionView> viewFactory)
         {
-            _viewFactory = viewFactory;
-            _bulletTemplate = bulletTemplate;
+            _viewFactory = viewFactory ?? throw new ArgumentNullException();
+            _bulletTemplate = bulletTemplate ? bulletTemplate : throw new ArgumentException();
         }
 
         public SimulationObject<DefaultBullet> CreateSimulationObject()
@@ -34,7 +36,7 @@ namespace ObjectComposition
         public void InitializeSimulation(SimulationObject<DefaultBullet> simulation, DefaultBullet simulated)
         {
             simulation.GetSimulation<PhysicsInteraction<Trigger<IDamageable>>>()
-                .Initialize(new BulletCollisionEnter(simulated));   
+                .Initialize(new BulletCollisionEnter(simulated));
         }
     }
 }

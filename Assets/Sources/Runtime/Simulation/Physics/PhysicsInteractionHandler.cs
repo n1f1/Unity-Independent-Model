@@ -5,11 +5,12 @@ using UnityEngine;
 
 namespace Simulation.Physics
 {
-    public abstract class PhysicsInteractionHandler<TType> : MonoBehaviour, ISimulation<PhysicsInteraction<TType>>
+    public abstract class PhysicsInteractionHandler<TInteractionType> : MonoBehaviour,
+        ISimulation<PhysicsInteraction<TInteractionType>>
     {
-        protected PhysicsInteraction<TType> PhysicsInteraction;
+        protected PhysicsInteraction<TInteractionType> PhysicsInteraction;
 
-        public void Initialize(PhysicsInteraction<TType> physicsInteraction)
+        public void Initialize(PhysicsInteraction<TInteractionType> physicsInteraction)
         {
             PhysicsInteraction = physicsInteraction ?? throw new ArgumentException();
         }

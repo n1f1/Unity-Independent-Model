@@ -18,6 +18,7 @@ namespace Model.Characters.CharacterHealth
             _amount = maxHealth;
             _healthView = healthView ?? throw new ArgumentNullException();
             _death = death ?? throw new ArgumentNullException();
+            _healthView.Display(1);
         }
 
         public bool CanTakeDamage() => 

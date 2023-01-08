@@ -15,7 +15,7 @@ namespace Model.Characters.Enemy
             _cooldown = cooldown ?? throw new ArgumentException();
         }
 
-        public bool CanAttack(IDamageable damageable) =>
+        public bool CanAttack(IDamageable damageable) => 
             _cooldown.IsReady && _attacker.CanAttack(damageable);
 
         public void Attack(IDamageable damageable, float baseDamage)

@@ -23,6 +23,9 @@ namespace Model.Characters.Enemy
             if (deltaTime <= 0)
                 throw new ArgumentException();
 
+            if(_target.Position == _transform.Position)
+                return;
+            
             Vector3 stopOffset = -_stoppingDistance * Vector3.Normalize(_target.Position - _transform.Position);
             Vector3 direction = _target.Position + stopOffset - _transform.Position;
 

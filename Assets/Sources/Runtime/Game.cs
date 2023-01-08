@@ -33,7 +33,7 @@ public class Game
         EnemySimulationProvider enemySimulationProvider =
             new EnemySimulationProvider(levelConfig.EnemyTemplate, healthViewFactory, positionViewFactory);
 
-        _enemySpawner = new EnemySpawner(30, _enemyContainer, new EnemyFactory(_player, enemySimulationProvider));
+        _enemySpawner = new EnemySpawner(3, _enemyContainer, new EnemyFactory(_player, enemySimulationProvider), _player.Transform);
         _enemySpawner.Start();
     }
 

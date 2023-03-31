@@ -44,7 +44,7 @@ namespace ObjectComposition
         }
 
         private DefaultBullet GetFromPool() =>
-            _objectPool.Get().TObject;
+            _objectPool.GetFree().TObject;
 
         private void AddNewToObjectPool()
         {
@@ -54,7 +54,7 @@ namespace ObjectComposition
                 new DefaultBullet(new Transform(simulation.GetView<IPositionView>()), new NullTrajectory());
 
             _bulletSimulationProvider.InitializeSimulation(simulation, defaultBullet);
-            _objectPool.AddNew(defaultBullet, simulation);
+            _objectPool.AddNewPair(defaultBullet, simulation);
         }
     }
 }

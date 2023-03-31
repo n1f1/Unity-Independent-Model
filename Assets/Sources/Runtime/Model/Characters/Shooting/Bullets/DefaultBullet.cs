@@ -60,7 +60,7 @@ namespace Model.Characters.Shooting.Bullets
             Math.Clamp(passedTime * _speed / _distance, 0, 1);
 
         private void UpdatePosition(float ratio) =>
-            _transform.SetPosition(_trajectory.Evaluate(ratio));
+            _transform.SetPosition(_trajectory.EvaluateForNormalizedRatio(ratio));
 
         public void Hit(IDamageable damageable)
         {

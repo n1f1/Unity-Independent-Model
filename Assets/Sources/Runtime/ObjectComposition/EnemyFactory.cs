@@ -27,9 +27,9 @@ namespace ObjectComposition
             if (!_objectPool.CanGet())
                 AddNewToObjectPool(position);
 
-            SimulatedSimulationPool<Enemy>.SimulatedPair simulatedPair = _objectPool.Get();
-            Enemy enemy = CreateNewEnemy(position, simulatedPair.Poolable);
-            _objectPool.Replace(simulatedPair.TObject, enemy);
+            SimulatedSimulationPool<Enemy>.PooledPair pooledPair = _objectPool.GetFree();
+            Enemy enemy = CreateNewEnemy(position, pooledPair.Poolable);
+            _objectPool.ReplaceKey(pooledPair.TObject, enemy);
 
             return enemy;
         }
@@ -43,7 +43,7 @@ namespace ObjectComposition
         {
             SimulationObject<Enemy> simulation = _simulationProvider.CreateSimulationObject();
             Enemy enemy = CreateNewEnemy(position, simulation);
-            _objectPool.AddNew(enemy, simulation);
+            _objectPool.AddNewPair(enemy, simulation);
         }
 
         private Enemy CreateNewEnemy(Vector3 position, SimulationObject<Enemy> simulation)

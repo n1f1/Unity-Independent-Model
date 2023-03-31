@@ -4,7 +4,7 @@ namespace Model.Characters.Shooting
 {
     public interface ITrajectory
     {
-        Vector3 Evaluate(float ratio);
+        Vector3 EvaluateForNormalizedRatio(float ratio);
         float Distance { get; }
     }
 }

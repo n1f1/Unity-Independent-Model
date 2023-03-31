@@ -29,19 +29,19 @@ namespace Model.Characters.Shooting
         public ITrajectory Trajectory =>
             GetTrajectory();
 
-        private ForwardTrajectory GetTrajectory()
-        {
-            Vector3 direction = Vector3.Normalize(_aimPosition - _position);
-
-            return new ForwardTrajectory(_position, _position + direction * _trajectoryDistance);
-        }
-
         public bool Aiming { get; private set; }
 
         public void Stop()
         {
             _aimView.Stop();
             Aiming = false;
+        }
+
+        private ForwardTrajectory GetTrajectory()
+        {
+            Vector3 direction = Vector3.Normalize(_aimPosition - _position);
+
+            return new ForwardTrajectory(_position, _position + direction * _trajectoryDistance);
         }
     }
 }

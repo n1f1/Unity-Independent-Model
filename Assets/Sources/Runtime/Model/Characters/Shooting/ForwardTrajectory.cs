@@ -16,7 +16,7 @@ namespace Model.Characters.Shooting
 
         public float Distance => Vector3.Distance(_start, _finish);
 
-        public Vector3 Evaluate(float ratio)
+        public Vector3 EvaluateForNormalizedRatio(float ratio)
         {
             if (ratio is < 0 or > 1)
                 throw new ArgumentOutOfRangeException();

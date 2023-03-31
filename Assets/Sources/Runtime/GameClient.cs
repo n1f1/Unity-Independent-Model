@@ -22,7 +22,7 @@ class GameClient
     public static ObjectSender ObjectSender;
     private readonly IInputStream _inputStream;
     private readonly IOutputStream _outputStream;
-    private static Replicator _replicator;
+    private static IReplicationPacketRead _replicationPacketRead;
     private static NetworkStream _networkStream;
 
     public GameClient(IInputStream inputStream, IOutputStream outputStream)
@@ -37,7 +37,7 @@ class GameClient
         Dictionary<Type, IDeserialization<object>> deserialization = new();
         deserialization.PopulateDictionary(deserializationValues);
 
-        _replicator = new Replicator(new CreationReplicator(typeId, deserialization,
+        _replicationPacketRead = new ReplicationPacketRead(new CreationReplicator(typeId, deserialization,
             new ReceivedReplicatedObjectMatcher(receivers)));
 
         Debug.Log("Create replicator");
@@ -71,7 +71,7 @@ class GameClient
         switch (packetType)
         {
             case PacketType.ReplicationData:
-                _replicator.ProcessReplicationPacket(_inputStream);
+                _replicationPacketRead.ProcessReplicationPacket(_inputStream);
                 break;
             case PacketType.Handshake:
                 GetHandshake(_inputStream);

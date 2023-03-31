@@ -1,13 +1,14 @@
 ﻿using System;
 using Model.Characters.CharacterHealth;
 using NUnit.Framework;
+using Tests.Model.Characters.CharacterHealth.Support;
 
-namespace Tests
+namespace Tests.Model.Characters.CharacterHealth
 {
     public class TestHealth
     {
         [Test]
-        public void Test_Construction()
+        public void CanNotInitializeInInvalidState()
         {
             Health health = new Health(100, new NullHealthVew(), new Death());
             Assert.True(health.CanTakeDamage());
@@ -15,7 +16,7 @@ namespace Tests
         }
 
         [Test]
-        public void Test_TakeDamage()
+        public void CanTakeOnlyValidDamage()
         {
             Health health = new Health(100, new NullHealthVew(), new Death());
             health.TakeDamage(50);
@@ -27,7 +28,7 @@ namespace Tests
         }
         
         [Test]
-        public void Test_DieWhenZeroHealth()
+        public void DiesInTime()
         {
             TestDeathStatus testDeathStatus = new TestDeathStatus();
             Health health = new Health(100, new NullHealthVew(), testDeathStatus);
@@ -35,24 +36,6 @@ namespace Tests
             Assert.False(testDeathStatus.Dead);
             health.TakeDamage(50);
             Assert.True(testDeathStatus.Dead);
-        }
-
-        private class TestDeathStatus : IDeath
-        {
-            public bool Dead { get; private set; }
-
-            public void Die()
-            {
-                Dead = true;
-            }
-        }
-
-        private class NullHealthVew : IHealthView
-        {
-            public void Display(float normalizedHealth)
-            {
-            
-            }
         }
     }
 }

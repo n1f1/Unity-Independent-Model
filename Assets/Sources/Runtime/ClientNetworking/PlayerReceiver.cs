@@ -8,11 +8,11 @@ namespace ClientNetworking
     public class PlayerReceiver : IReplicatedObjectReceiver<Player>
     {
         private bool _received;
-        private Game _game;
+        private Game _gameLevel;
 
-        public PlayerReceiver(Game game)
+        public PlayerReceiver(Game gameLevel)
         {
-            _game = game;
+            _gameLevel = gameLevel;
         }
 
         public void Receive(Player player)
@@ -21,7 +21,7 @@ namespace ClientNetworking
                 return;
             
             _received = true;
-            _game.Add(player);
+            _gameLevel.Add(player);
             Debug.Log("Receive " + player + "!");
         }
     }

@@ -1,13 +1,14 @@
 ﻿using System.Numerics;
 using Model.Characters.Shooting;
 using NUnit.Framework;
+using Tests.Model.Characters.Shooting.Support;
 
-namespace Tests
+namespace Tests.Model.Characters.Shooting
 {
-    public class TestForwardAim
+    public class ForwardAimTests
     {
         [Test]
-        public void Test_AimingUpdate()
+        public void StopsAiming()
         {
             ForwardAim forwardAim = new ForwardAim(new NullAimView());
             Assert.False(forwardAim.Aiming);
@@ -15,17 +16,6 @@ namespace Tests
             Assert.True(forwardAim.Aiming);
             forwardAim.Stop();
             Assert.False(forwardAim.Aiming);
-        }
-
-        private class NullAimView : IAimView
-        {
-            public void Aim(Vector3 position, Vector3 aimPosition)
-            {
-            }
-
-            public void Stop()
-            {
-            }
         }
     }
 }

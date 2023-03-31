@@ -3,10 +3,15 @@ using System.Collections.Generic;
 
 namespace Simulation.Common
 {
-    public class KeyValueObjectPool<TObject, TPoolable> where TPoolable : IPoolable
+    /// <summary>
+    /// Object Pool that stores pooled object with it's key.
+    /// </summary>
+    /// <typeparam name="TKeyObject"></typeparam>
+    /// <typeparam name="TPoolable"></typeparam>
+    public class KeyValueObjectPool<TKeyObject, TPoolable> where TPoolable : IPoolable
     {
-        private readonly Dictionary<TObject, TPoolable> _active;
-        private readonly Stack<SimulatedPair> _inactive;
+        private readonly Dictionary<TKeyObject, TPoolable> _active;
+        private readonly Stack<PooledPair> _inactive;
 
         public KeyValueObjectPool(int capacity = 4)
         {
@@ -14,14 +19,14 @@ namespace Simulation.Common
                 throw new ArgumentException();
 
             Capacity = capacity;
-            _active = new Dictionary<TObject, TPoolable>(capacity);
-            _inactive = new Stack<SimulatedPair>(capacity);
+            _active = new Dictionary<TKeyObject, TPoolable>(capacity);
+            _inactive = new Stack<PooledPair>(capacity);
         }
 
         public int Capacity { get; }
         public bool CanGet() => _inactive.Count > 0;
 
-        public void Return(TObject tObject)
+        public void Return(TKeyObject tObject)
         {
             if (tObject == null)
                 throw new ArgumentNullException();
@@ -32,7 +37,7 @@ namespace Simulation.Common
             TPoolable poolable = _active[tObject];
             poolable.Disable();
 
-            _inactive.Push(new SimulatedPair
+            _inactive.Push(new PooledPair
             {
                 TObject = tObject, Poolable = poolable
             });
@@ -40,19 +45,19 @@ namespace Simulation.Common
             _active.Remove(tObject);
         }
 
-        public SimulatedPair Get()
+        public PooledPair GetFree()
         {
             if (CanGet() == false)
                 throw new InvalidOperationException();
 
-            SimulatedPair simulatedPair = _inactive.Pop();
-            simulatedPair.Poolable.Enable();
-            _active.Add(simulatedPair.TObject, simulatedPair.Poolable);
+            PooledPair pooledPair = _inactive.Pop();
+            pooledPair.Poolable.Enable();
+            _active.Add(pooledPair.TObject, pooledPair.Poolable);
 
-            return simulatedPair;
+            return pooledPair;
         }
 
-        public void AddNew(TObject tObject, TPoolable poolable)
+        public void AddNewPair(TKeyObject tObject, TPoolable poolable)
         {
             if (tObject == null)
                 throw new ArgumentException();
@@ -60,7 +65,7 @@ namespace Simulation.Common
             if (poolable == null)
                 throw new ArgumentException();
 
-            _inactive.Push(new SimulatedPair
+            _inactive.Push(new PooledPair
             {
                 TObject = tObject, Poolable = poolable
             });
@@ -68,7 +73,7 @@ namespace Simulation.Common
             poolable.Disable();
         }
 
-        public void Replace(TObject replaced, TObject newObject)
+        public void ReplaceKey(TKeyObject replaced, TKeyObject newObject)
         {
             if (_active.ContainsKey(replaced) == false)
                 throw new ArgumentNullException();
@@ -78,9 +83,9 @@ namespace Simulation.Common
             _active.Add(newObject, poolable);
         }
 
-        public class SimulatedPair
+        public class PooledPair
         {
-            public TObject TObject;
+            public TKeyObject TObject;
             public TPoolable Poolable;
         }
     }

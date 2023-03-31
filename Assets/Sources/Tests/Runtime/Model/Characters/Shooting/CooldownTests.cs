@@ -2,19 +2,18 @@
 using Model.Characters.Shooting;
 using NUnit.Framework;
 
-namespace Tests
+namespace Tests.Model.Characters.Shooting
 {
-    public class TestCooldown
+    public class CooldownTest
     {
         [Test]
-        public void Test_Construction()
+        public void CanNotInitializeWithInvalidValue()
         {
-            Assert.DoesNotThrow(() => new Cooldown(1f));
             Assert.Throws<ArgumentOutOfRangeException>(() => new Cooldown(-1f));
         }
         
         [Test]
-        public void Test_IsReady()
+        public void CooldownElapsesInRightTime()
         {
             Cooldown cooldown = new Cooldown(1f);
             Assert.IsFalse(cooldown.IsReady);
@@ -23,7 +22,7 @@ namespace Tests
         }
         
         [Test]
-        public void Test_Reset()
+        public void ResetsToValidState()
         {
             Cooldown cooldown = new Cooldown(1f);
             cooldown.ReduceTime(1f);
@@ -34,7 +33,7 @@ namespace Tests
         }
         
         [Test]
-        public void Test_ReduceTimeValid()
+        public void ReducesOnlyValidRanges()
         {
             Cooldown cooldown = new Cooldown(1f);
             Assert.Throws<ArgumentOutOfRangeException>(() => cooldown.ReduceTime(-1f));

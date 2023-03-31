@@ -22,7 +22,7 @@ namespace Server
         {
             foreach (Client client in _room.Clients)
             {
-                if (client.Disconnected)
+                if (client.IsConnected == false)
                     continue;
 
                 Type replicatingObject = command.GetType();

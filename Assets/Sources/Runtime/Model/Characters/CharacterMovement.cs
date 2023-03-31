@@ -19,6 +19,8 @@ namespace Model.Characters
             _speed = speed;
         }
 
+        public Vector3 Position => _transform.Position;
+
         public void Move(Vector3 moveDelta) =>
             _transform.SetPosition(_transform.Position + moveDelta * _speed);
     }

@@ -10,40 +10,51 @@ using View.Factories;
 
 public class Game
 {
-    private SimulationObject<Player> _playerSimulation;
     private EnemyContainer _enemyContainer;
     private EnemySpawner _enemySpawner;
-    private Player _player;
     private Enemy _enemy;
+    private Player _player;
+    private LevelConfig _levelConfig;
+    private IPositionView _cameraView;
+    private IViewFactory<IPositionView> _positionViewFactory;
+    private IViewFactory<IHealthView> _healthViewFactory;
+    public PlayerFactory PlayerFactory { get; private set; }
 
     public void Start()
     {
-        LevelConfig levelConfig = Resources.Load<LevelConfig>("LevelConfigsList");
-        IPositionView cameraView = Camera.main.GetComponentInParent<PositionView>();
+        _levelConfig = Resources.Load<LevelConfig>("LevelConfigsList");
+        _cameraView = Camera.main.GetComponentInParent<PositionView>();
 
-        IViewFactory<IPositionView> positionViewFactory = new PositionViewFactory();
-        IViewFactory<IHealthView> healthViewFactory = new HealthViewFactory();
-
-        PlayerFactory playerFactory = new PlayerFactory(levelConfig, positionViewFactory, healthViewFactory);
-        _playerSimulation = playerFactory.CreateSimulation();
-        _player = playerFactory.CreatePlayer(_playerSimulation, cameraView);
+        _positionViewFactory = new PositionViewFactory();
+        _healthViewFactory = new HealthViewFactory();
 
         _enemyContainer = new EnemyContainer();
 
         EnemySimulationProvider enemySimulationProvider =
-            new EnemySimulationProvider(levelConfig.EnemyTemplate, healthViewFactory, positionViewFactory);
+            new EnemySimulationProvider(_levelConfig.EnemyTemplate, _healthViewFactory, _positionViewFactory);
 
-        _enemySpawner = new EnemySpawner(3, _enemyContainer, new EnemyFactory(_player, enemySimulationProvider),
+        /*_enemySpawner = new EnemySpawner(3, _enemyContainer, new EnemyFactory(_player, enemySimulationProvider),
             _player.Transform);
-        
-        _enemySpawner.Start();
+
+        _enemySpawner.Start();*/
+    }
+
+    public void CreatePlayerSimulation(ObjectSender objectSender)
+    {
+        PlayerFactory = new PlayerFactory(_levelConfig, _positionViewFactory, _healthViewFactory, _cameraView,
+            objectSender);
     }
 
     public void Update(float deltaTime)
     {
-        _playerSimulation.UpdateTime(deltaTime);
-        _player.UpdateTime(deltaTime);
         _enemyContainer.UpdateTime(deltaTime);
-        _enemySpawner.Update();
+        //_enemySpawner.Update();
+        _player?.UpdateTime(deltaTime);
+        PlayerFactory?.Update(deltaTime);
+    }
+
+    public void Add(Player player)
+    {
+        _player = player;
     }
 }

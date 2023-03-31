@@ -1,4 +1,5 @@
 ﻿using System;
+using ClientNetworking;
 using Model;
 using Model.Characters;
 using Model.Characters.CharacterHealth;
@@ -14,7 +15,7 @@ using Object = UnityEngine.Object;
 
 namespace ObjectComposition
 {
-    public class PlayerSimulationProvider : ISimulationProvider<Player>
+    public class PlayerSimulationProvider
     {
         private readonly IViewFactory<IPositionView> _positionViewFactory;
         private readonly IViewFactory<IHealthView> _healthViewFactory;
@@ -39,7 +40,7 @@ namespace ObjectComposition
             return simulation;
         }
 
-        public void InitializeSimulation(SimulationObject<Player> simulation, Player simulated)
+        public void InitializeSimulation(SimulationObject<Player> simulation, Player simulated, IMovable movable)
         {
             simulation.AddSimulation(simulation.GameObject.AddComponent<PlayerMovement>()
                 .Initialize(new AxisInput()));
@@ -47,7 +48,7 @@ namespace ObjectComposition
             simulation.AddSimulation(simulation.GameObject.AddComponent<PlayerShooter>());
 
             ISimulation<IMovable> movableSimulation = simulation.GetSimulation<IMovable>();
-            movableSimulation.Initialize(simulated.CharacterMovement);
+            movableSimulation.Initialize(movable);
             simulation.RegisterUpdatable(movableSimulation);
 
             ISimulation<CharacterShooter> characterShooter = simulation.GetSimulation<CharacterShooter>();

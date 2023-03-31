@@ -1,3 +1,6 @@
 [submodule "networking"]
 	path = networking
 	url = https://github.com/n1f1/SimpleGameNetworking
+[submodule "Assets/networking"]
+	path = Assets/networking
+	url = https://github.com/n1f1/SimpleGameNetworking

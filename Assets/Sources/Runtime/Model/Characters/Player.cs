@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Numerics;
 using Model.Characters.CharacterHealth;
 using Model.Characters.Shooting;
 using Model.Characters.Shooting.Bullets;
@@ -10,7 +11,7 @@ namespace Model.Characters
     {
         private const int MAXHealth = 100;
         private const float ShootingCooldown = 0.1f;
-        private const float CharacterSpeed = 5f;
+        public const float CharacterSpeed = 5f;
 
         private readonly CharacterMovement _characterMovement;
         private readonly Transform _transform;
@@ -20,10 +21,10 @@ namespace Model.Characters
         private readonly BulletsContainer _bulletsContainer;
 
         public Player(IPositionView positionView, IHealthView healthView, ForwardAim forwardAim,
-            IBulletDestroyer bulletDestroyer, IBulletFactory<IBullet> bulletFactory)
+            IBulletDestroyer bulletDestroyer, IBulletFactory<IBullet> bulletFactory, Vector3 position)
         {
             _health = new Health(MAXHealth, healthView ?? throw new ArgumentException(), new Death());
-            _transform = new Transform(positionView ?? throw new ArgumentException());
+            _transform = new Transform(positionView ?? throw new ArgumentException(), position);
 
             _cooldown = new Cooldown(ShootingCooldown);
             _bulletsContainer = new BulletsContainer(bulletDestroyer);

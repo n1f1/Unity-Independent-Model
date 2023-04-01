@@ -6,6 +6,7 @@ using ClientNetworking;
 using ClientNetworking.NetworkingTypesConfigurations;
 using Model.Characters;
 using Networking.ObjectsHashing;
+using Networking.Replication.ObjectCreationReplication;
 using Networking.Replication.Serialization;
 using Networking.StreamIO;
 using ObjectComposition;

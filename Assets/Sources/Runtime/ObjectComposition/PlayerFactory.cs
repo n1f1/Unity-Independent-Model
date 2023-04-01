@@ -7,7 +7,7 @@ using Model.Characters.CharacterHealth;
 using Model.Characters.Shooting;
 using Model.Characters.Shooting.Bullets;
 using Model.SpatialObject;
-using Simulation.Common;
+using Simulation.Pool;
 using SimulationObject;
 using UnityEngine;
 using View.Factories;
@@ -71,7 +71,7 @@ namespace ObjectComposition
 
             PooledBulletFactory bulletFactory =
                 new PooledBulletFactory(
-                    new SimulatedSimulationPool<DefaultBullet, SimulationObject<DefaultBullet>>(64),
+                    new KeyPooledObjectPool<DefaultBullet, SimulationObject<DefaultBullet>>(64),
                     new BulletSimulationProvider(bulletTemplate, _positionViewFactory));
 
             bulletFactory.PopulatePool();

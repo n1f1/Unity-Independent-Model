@@ -4,7 +4,7 @@ using Model.Characters;
 using Model.Characters.CharacterHealth;
 using Model.Characters.Enemy;
 using Model.SpatialObject;
-using Simulation.Common;
+using Simulation.Pool;
 using SimulationObject;
 using Transform = Model.SpatialObject.Transform;
 using Vector3 = System.Numerics.Vector3;
@@ -13,7 +13,7 @@ namespace ObjectComposition
 {
     public class EnemyFactory : IEnemyFactory
     {
-        private readonly SimulatedSimulationPool<Enemy, SimulationObject<Enemy>> _objectPool = new();
+        private readonly KeyPooledObjectPool<Enemy, SimulationObject<Enemy>> _objectPool = new();
 
         private readonly ISimulationProvider<Enemy> _simulationProvider;
         private readonly Player _player;
@@ -35,7 +35,7 @@ namespace ObjectComposition
 
         public void Destroy(Enemy enemy)
         {
-            _freeSimulation = _objectPool.Remove(enemy);
+            _freeSimulation = _objectPool.RemoveActive(enemy);
         }
 
         private void AddNewToObjectPool(Vector3 position)

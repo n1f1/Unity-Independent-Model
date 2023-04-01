@@ -1,4 +1,4 @@
-﻿namespace Simulation.Common
+﻿namespace Simulation.Pool
 {
     public interface IObjectPool<TPoolable> where TPoolable : IPoolable
     {

@@ -2,7 +2,7 @@
 using Model.Characters.Shooting;
 using Model.Characters.Shooting.Bullets;
 using Model.SpatialObject;
-using Simulation.Common;
+using Simulation.Pool;
 using SimulationObject;
 using Transform = Model.SpatialObject.Transform;
 
@@ -11,9 +11,9 @@ namespace ObjectComposition
     public class PooledBulletFactory : IBulletFactory<DefaultBullet>, IBulletDestroyer
     {
         private readonly ISimulationProvider<DefaultBullet> _bulletSimulationProvider;
-        private readonly SimulatedSimulationPool<DefaultBullet, SimulationObject<DefaultBullet>> _objectPool;
+        private readonly KeyPooledObjectPool<DefaultBullet, SimulationObject<DefaultBullet>> _objectPool;
 
-        public PooledBulletFactory(SimulatedSimulationPool<DefaultBullet, SimulationObject<DefaultBullet>> objectPool,
+        public PooledBulletFactory(KeyPooledObjectPool<DefaultBullet, SimulationObject<DefaultBullet>> objectPool,
             BulletSimulationProvider bulletSimulationProvider)
         {
             _objectPool = objectPool ?? throw new ArgumentException();
@@ -40,7 +40,7 @@ namespace ObjectComposition
         public void Destroy(IBullet bullet)
         {
             if (bullet is DefaultBullet defaultBullet)
-                _objectPool.Return(defaultBullet);
+                _objectPool.ReturnInactive(defaultBullet);
         }
 
         private DefaultBullet GetFromPool() =>

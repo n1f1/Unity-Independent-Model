@@ -2,14 +2,19 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace Simulation.Common
+namespace Simulation.Pool
 {
-    public class SimulatedSimulationPool<TKey, TPooled> where TPooled : IPoolable
+    /// <summary>
+    /// Object pool that binds pooled object to key-object and enables default pooling operations via key-object.
+    /// </summary>
+    /// <typeparam name="TKey">key bound to pooled object</typeparam>
+    /// <typeparam name="TPooled">pooled object</typeparam>
+    public class KeyPooledObjectPool<TKey, TPooled> where TPooled : IPoolable
     {
         private readonly Dictionary<TKey, TPooled> _keyToActiveInPool = new();
         private readonly Dictionary<TKey, TPooled> _keysOfInactiveInPool = new();
 
-        public SimulatedSimulationPool(int capacity = 4)
+        public KeyPooledObjectPool(int capacity = 4)
         {
             Capacity = capacity;
         }
@@ -20,11 +25,10 @@ namespace Simulation.Common
 
         public TKey GetFreeByKey()
         {
-            TKey key = _keysOfInactiveInPool.FirstOrDefault().Key;
-
-            if (key == null)
+            if (_keysOfInactiveInPool.Count == 0)
                 throw new InvalidOperationException();
 
+            TKey key = _keysOfInactiveInPool.FirstOrDefault().Key;
             TPooled pooled = _keysOfInactiveInPool[key];
             pooled.Enable();
             _keysOfInactiveInPool.Remove(key);
@@ -35,11 +39,17 @@ namespace Simulation.Common
 
         public void AddNew(TKey key, TPooled poolable)
         {
+            if (_keysOfInactiveInPool.ContainsKey(key))
+                throw new InvalidOperationException();
+            
+            if (_keyToActiveInPool.ContainsKey(key))
+                throw new InvalidOperationException();
+            
             _keysOfInactiveInPool.Add(key, poolable);
             poolable.Disable();
         }
 
-        public void Return(TKey key)
+        public void ReturnInactive(TKey key)
         {
             TPooled pooled = _keyToActiveInPool[key];
             pooled.Disable();
@@ -47,7 +57,7 @@ namespace Simulation.Common
             _keysOfInactiveInPool.Add(key, pooled);
         }
 
-        public TPooled Remove(TKey key)
+        public TPooled RemoveActive(TKey key)
         {
             TPooled pooled = _keyToActiveInPool[key];
             pooled.Disable();

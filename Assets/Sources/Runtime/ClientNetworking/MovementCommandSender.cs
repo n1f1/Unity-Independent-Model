@@ -8,9 +8,9 @@ namespace ClientNetworking
     public class MovementCommandSender : IMovable
     {
         private readonly CharacterMovement _movement;
-        private readonly ObjectSender _objectSender;
+        private readonly IObjectSender _objectSender;
 
-        public MovementCommandSender(CharacterMovement movement, ObjectSender objectSender)
+        public MovementCommandSender(CharacterMovement movement, IObjectSender objectSender)
         {
             _movement = movement ?? throw new ArgumentNullException(nameof(movement));
             _objectSender = objectSender ?? throw new ArgumentNullException(nameof(objectSender));

@@ -1,4 +1,5 @@
 ﻿using System;
+using Model;
 using Model.Characters;
 using Model.Characters.CharacterHealth;
 using Model.Characters.Enemy;
@@ -12,9 +13,11 @@ namespace ObjectComposition
 {
     public class EnemyFactory : IEnemyFactory
     {
-        private readonly SimulatedSimulationPool<Enemy> _objectPool = new(16);
+        private readonly SimulatedSimulationPool<Enemy, SimulationObject<Enemy>> _objectPool = new();
+
         private readonly ISimulationProvider<Enemy> _simulationProvider;
         private readonly Player _player;
+        private SimulationObject<Enemy> _freeSimulation;
 
         public EnemyFactory(Player player, EnemySimulationProvider enemySimulationProvider)
         {
@@ -27,23 +30,20 @@ namespace ObjectComposition
             if (!_objectPool.CanGet())
                 AddNewToObjectPool(position);
 
-            SimulatedSimulationPool<Enemy>.PooledPair pooledPair = _objectPool.GetFree();
-            Enemy enemy = CreateNewEnemy(position, pooledPair.Poolable);
-            _objectPool.ReplaceKey(pooledPair.TObject, enemy);
-
-            return enemy;
+            return _objectPool.GetFreeByKey();
         }
 
         public void Destroy(Enemy enemy)
         {
-            _objectPool.Return(enemy);
+            _freeSimulation = _objectPool.Remove(enemy);
         }
 
         private void AddNewToObjectPool(Vector3 position)
         {
-            SimulationObject<Enemy> simulation = _simulationProvider.CreateSimulationObject();
+            SimulationObject<Enemy> simulation = _freeSimulation ?? _simulationProvider.CreateSimulationObject();
+            _freeSimulation = null;
             Enemy enemy = CreateNewEnemy(position, simulation);
-            _objectPool.AddNewPair(enemy, simulation);
+            _objectPool.AddNew(enemy, simulation);
         }
 
         private Enemy CreateNewEnemy(Vector3 position, SimulationObject<Enemy> simulation)
@@ -55,7 +55,7 @@ namespace ObjectComposition
             Enemy enemy = new Enemy(transform, death, health, _player);
 
             _simulationProvider.InitializeSimulation(simulation, enemy);
-        
+
             return enemy;
         }
     }

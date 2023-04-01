@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace ObjectComposition
 {
-    public class ObjectSender
+    public class ObjectSender : IObjectSender
     {
         private readonly ObjectReplicationPacketFactory _replicationPacketFactory;
         private readonly INetworkPacketSender _networkPacketSender;

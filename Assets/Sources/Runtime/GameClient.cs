@@ -19,7 +19,7 @@ using UnityEngine;
 class GameClient
 {
     private static int _id;
-    public static ObjectSender ObjectSender;
+    public static IObjectSender ObjectSender;
     private readonly IInputStream _inputStream;
     private readonly IOutputStream _outputStream;
     private static IReplicationPacketRead _replicationPacketRead;

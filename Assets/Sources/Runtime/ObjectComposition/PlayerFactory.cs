@@ -8,6 +8,7 @@ using Model.Characters.Shooting;
 using Model.Characters.Shooting.Bullets;
 using Model.SpatialObject;
 using Simulation.Common;
+using SimulationObject;
 using UnityEngine;
 using View.Factories;
 using Vector3 = System.Numerics.Vector3;
@@ -21,10 +22,10 @@ namespace ObjectComposition
         private readonly IPositionView _cameraView;
         private readonly PlayerSimulationProvider _playerSimulationProvider;
         private readonly List<IUpdatable> _simulations = new();
-        private readonly ObjectSender _objectSender;
+        private readonly IObjectSender _objectSender;
 
         public PlayerFactory(LevelConfig levelConfig, IViewFactory<IPositionView> positionViewFactory,
-            IViewFactory<IHealthView> healthViewFactory, IPositionView cameraView, ObjectSender objectSender)
+            IViewFactory<IHealthView> healthViewFactory, IPositionView cameraView, IObjectSender objectSender)
         {
             _objectSender = objectSender ?? throw new ArgumentNullException(nameof(objectSender));
             _cameraView = cameraView ?? throw new ArgumentNullException(nameof(cameraView));
@@ -49,14 +50,17 @@ namespace ObjectComposition
                 playerSimulation.GetView<IHealthView>(),
                 new ForwardAim(playerSimulation.GetView<IForwardAimView>()), bulletFactory, bulletFactory, position);
 
-            //TODO validate client's player
-            IMovable movable = new MovementCommandSender(player.CharacterMovement, _objectSender);
+            IMovable movable = player.CharacterMovement;
+            
+            if(Game.Multiplayer)
+                movable = new MovementCommandSender(player.CharacterMovement, _objectSender);
 
             if (_simulations.Count == 0)
                 _playerSimulationProvider.InitializeSimulation(playerSimulation, player, movable);
 
             playerSimulation.Enable();
             _simulations.Add(playerSimulation);
+            _simulations.Add(player);
 
             return player;
         }
@@ -66,7 +70,8 @@ namespace ObjectComposition
             GameObject bulletTemplate = _levelConfig.BulletTemplate;
 
             PooledBulletFactory bulletFactory =
-                new PooledBulletFactory(new SimulatedSimulationPool<DefaultBullet>(128),
+                new PooledBulletFactory(
+                    new SimulatedSimulationPool<DefaultBullet, SimulationObject<DefaultBullet>>(64),
                     new BulletSimulationProvider(bulletTemplate, _positionViewFactory));
 
             bulletFactory.PopulatePool();

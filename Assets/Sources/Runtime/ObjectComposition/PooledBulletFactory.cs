@@ -11,9 +11,9 @@ namespace ObjectComposition
     public class PooledBulletFactory : IBulletFactory<DefaultBullet>, IBulletDestroyer
     {
         private readonly ISimulationProvider<DefaultBullet> _bulletSimulationProvider;
-        private readonly SimulatedSimulationPool<DefaultBullet> _objectPool;
+        private readonly SimulatedSimulationPool<DefaultBullet, SimulationObject<DefaultBullet>> _objectPool;
 
-        public PooledBulletFactory(SimulatedSimulationPool<DefaultBullet> objectPool,
+        public PooledBulletFactory(SimulatedSimulationPool<DefaultBullet, SimulationObject<DefaultBullet>> objectPool,
             BulletSimulationProvider bulletSimulationProvider)
         {
             _objectPool = objectPool ?? throw new ArgumentException();
@@ -44,7 +44,7 @@ namespace ObjectComposition
         }
 
         private DefaultBullet GetFromPool() =>
-            _objectPool.GetFree().TObject;
+            _objectPool.GetFreeByKey();
 
         private void AddNewToObjectPool()
         {
@@ -54,7 +54,7 @@ namespace ObjectComposition
                 new DefaultBullet(new Transform(simulation.GetView<IPositionView>()), new NullTrajectory());
 
             _bulletSimulationProvider.InitializeSimulation(simulation, defaultBullet);
-            _objectPool.AddNewPair(defaultBullet, simulation);
+            _objectPool.AddNew(defaultBullet, simulation);
         }
     }
 }

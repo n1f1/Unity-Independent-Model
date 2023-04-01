@@ -8,9 +8,11 @@ using Model.Characters;
 using Networking.ObjectsHashing;
 using Networking.Replication.Serialization;
 using Networking.StreamIO;
+using ObjectComposition;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using Utility.GameLoop;
+using Vector3 = System.Numerics.Vector3;
 
 public static class Program
 {
@@ -32,7 +34,12 @@ public static class Program
 
         Application.targetFrameRate = 60;
         Game game = new Game();
+        
+        Game.Multiplayer = false;
         game.Start();
+        game.CreatePlayerSimulation(new NullObjectSender());
+        game.Add(game.PlayerFactory.CreatePlayer(Vector3.Zero));
+        game.CreateEnemySpawner();
 
         //Rip Update event function out of all MonoBehaviours 
         UnityUpdateReplace unityUpdateReplace = new UnityUpdateReplace();
@@ -46,6 +53,9 @@ public static class Program
             quitting = true;
         };
 
+        if(true)
+            return;
+        
         using TcpClient tcpClient = new TcpClient();
 
         await tcpClient.ConnectAsync("192.168.1.87", 55555);
@@ -75,7 +85,6 @@ public static class Program
         };
         gameClient.CreateNetworkSending(serialization, typeIdConversion);
         game.CreatePlayerSimulation(GameClient.ObjectSender);
-
 
         IEnumerable<(Type, object)> deserialization = new List<(Type, object)>
         {

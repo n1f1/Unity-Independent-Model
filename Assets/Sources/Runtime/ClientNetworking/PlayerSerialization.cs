@@ -24,9 +24,9 @@ namespace ClientNetworking
         public void Serialize(Player player, IOutputStream outputStream)
         {
             CharacterMovement movement = player.CharacterMovement;
-            outputStream.Write(HashedObjects.Register(player));
+            outputStream.Write(HashedObjects.RegisterOrGetRegistered(player));
             outputStream.Write(movement.Position);
-            outputStream.Write(HashedObjects.Register(movement));
+            outputStream.Write(HashedObjects.RegisterOrGetRegistered(movement));
         }
 
         public Player Deserialize(IInputStream inputStream)
@@ -38,8 +38,8 @@ namespace ClientNetworking
             Debug.Log(position);
             Player player = _playerFactory.CreatePlayer(position);
 
-            HashedObjects.RegisterNew(player, playerInstanceId);
-            HashedObjects.RegisterNew(player.CharacterMovement, movementInstanceID);
+            HashedObjects.RegisterWithID(player, playerInstanceId);
+            HashedObjects.RegisterWithID(player.CharacterMovement, movementInstanceID);
             Console.Write($" id: {playerInstanceId} position: {player.CharacterMovement.Position}");
 
             return player;

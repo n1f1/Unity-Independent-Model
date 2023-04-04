@@ -1,7 +1,8 @@
 using System;
+using GameMenu;
 using UI;
 
-namespace GameMenu
+namespace SinglePlayer
 {
     public class LaunchSinglePlayer : ICommand
     {

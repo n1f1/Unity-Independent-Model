@@ -1,5 +1,5 @@
 using System;
-using System.Threading.Tasks;
+using GameMenu;
 using Model.Characters;
 using Model.Characters.Enemy;
 using Model.Characters.Shooting.Bullets;
@@ -7,20 +7,18 @@ using Model.SpatialObject;
 using ObjectComposition;
 using Simulation.Pool;
 using SimulationObject;
-using SinglePlayer;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 using View;
 using View.Factories;
 using Vector3 = System.Numerics.Vector3;
 
-namespace GameMenu
+namespace SinglePlayer
 {
     public class SinglePlayerGame : IGame
     {
         private readonly IGameLoader _gameLoader;
-        private readonly GameStatus _gameStatus = new();
-
+        
+        private GameStatus _gameStatus;
         private LevelConfig _levelConfig;
         private EnemySpawner _enemySpawner;
         private EnemyContainer _enemyContainer;
@@ -36,6 +34,11 @@ namespace GameMenu
         {
             _levelConfig = Resources.Load<LevelConfig>(GameResourceConfigurations.LevelConfigsList);
             IPositionView cameraView = Camera.main.GetComponentInParent<PositionView>();
+
+            GamePause pauseStatus = new GamePause();
+            PauseMenu pauseMenu = new PauseMenu(_gameLoader, pauseStatus);
+            pauseMenu.Create();
+            _gameStatus = new GameStatus(pauseStatus);
 
             PooledBulletFactory bulletFactory = CreatePooledBulletFactory();
 
@@ -73,7 +76,7 @@ namespace GameMenu
 
         public void UpdateTime(float deltaTime)
         {
-            if (_gameStatus.Finished)
+            if (_gameStatus.Finished || _gameStatus.Paused)
                 return;
 
             _enemyContainer.UpdateTime(deltaTime);

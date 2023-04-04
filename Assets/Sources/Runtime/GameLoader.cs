@@ -14,7 +14,7 @@ public class GameLoader : IGameLoader
         _gameUpdate = gameUpdate ?? throw new ArgumentNullException(nameof(gameUpdate));
     }
 
-    public async void Load(IGame game)
+    public async Task Load(IGame game)
     {
         _sceneLoadingOperation = SceneManager.LoadSceneAsync(1);
 

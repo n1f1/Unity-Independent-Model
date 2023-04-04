@@ -1,7 +1,7 @@
 ﻿using System;
 using Model.Characters.CharacterHealth;
 
-namespace GameMenu
+namespace SinglePlayer
 {
     public class SetLooseGameStatus : IDeathView
     {

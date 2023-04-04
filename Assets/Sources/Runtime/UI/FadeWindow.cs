@@ -5,28 +5,36 @@ namespace UI
 {
     public class FadeWindow : MonoBehaviour, IWindow
     {
-        private const int TimeToFade = 1;
-        
         [SerializeField] private CanvasGroup _canvasGroup;
-        
-        public void Open() => 
+        [SerializeField] private float _timeToFade = 1;
+
+        public void Open() =>
             StartCoroutine(Fade(true));
 
-        public void Close() => 
+        public void Close() =>
             StartCoroutine(Fade(false));
+
+        public void SetClosed(bool closed)
+        {
+            _canvasGroup.alpha = closed ? 0 : 1;
+            _canvasGroup.interactable = !closed;
+            _canvasGroup.blocksRaycasts = !closed;
+        }
 
         private IEnumerator Fade(bool active)
         {
+            _canvasGroup.interactable = active;
+            _canvasGroup.blocksRaycasts = active;
+
             float time = 0;
 
-            while (time < TimeToFade)
+            do
             {
                 yield return null;
                 time += Time.deltaTime;
-                _canvasGroup.alpha = Mathf.Lerp(0, 1, active ? time : 1 / time);
-            }
-            
-            gameObject.SetActive(active);
+                float fadeProgress = time / _timeToFade;
+                _canvasGroup.alpha = Mathf.Lerp(0, 1, active ? fadeProgress : 1 - fadeProgress);
+            } while (time < _timeToFade);
         }
     }
 }

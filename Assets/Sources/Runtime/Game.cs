@@ -19,11 +19,11 @@ public class Game
     private IViewFactory<IPositionView> _positionViewFactory;
     private IViewFactory<IHealthView> _healthViewFactory;
     public PlayerFactory PlayerFactory { get; private set; }
-    public static bool Multiplayer { get; set; }
+    public static bool Multiplayer { get; set; } = true;
 
     public void Start()
     {
-        _levelConfig = Resources.Load<LevelConfig>("LevelConfigsList");
+        _levelConfig = Resources.Load<LevelConfig>(GameResourceConfigurations.LevelConfigsList);
         _cameraView = Camera.main.GetComponentInParent<PositionView>();
 
         _positionViewFactory = new PositionViewFactory();
@@ -34,8 +34,8 @@ public class Game
 
     public void CreatePlayerSimulation(IObjectSender objectSender)
     {
-        PlayerFactory = new PlayerFactory(_levelConfig, _positionViewFactory, _healthViewFactory, _cameraView,
-            objectSender);
+        /*PlayerFactory = new PlayerFactory(_levelConfig, _positionViewFactory, _healthViewFactory, _cameraView,
+            objectSender);*/
     }
     
     public void CreateEnemySpawner()
@@ -51,10 +51,9 @@ public class Game
 
     public void Update(float deltaTime)
     {
-        _enemyContainer.UpdateTime(deltaTime);
-        _enemySpawner.Update();
+        _enemyContainer?.UpdateTime(deltaTime);
+        _enemySpawner?.Update();
         _player?.UpdateTime(deltaTime);
-        PlayerFactory?.Update(deltaTime);
     }
 
     public void Add(Player player)

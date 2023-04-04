@@ -15,12 +15,12 @@ namespace Model.Characters.Enemy
         public EnemySpawner(int enemyCount, EnemyContainer enemyContainer, IEnemyFactory enemyFactory,
             Transform spawnCenter)
         {
-            _spawnCenter = spawnCenter;
-            _enemyFactory = enemyFactory ?? throw new ArgumentNullException();
-            _enemyContainer = enemyContainer ?? throw new ArgumentNullException();
+            _spawnCenter = spawnCenter ?? throw new ArgumentNullException(nameof(spawnCenter));
+            _enemyFactory = enemyFactory ?? throw new ArgumentNullException(nameof(enemyFactory));
+            _enemyContainer = enemyContainer ?? throw new ArgumentNullException(nameof(enemyContainer));
 
             if (enemyCount < 0)
-                throw new ArgumentOutOfRangeException();
+                throw new ArgumentOutOfRangeException(nameof(enemyCount));
 
             _enemyCount = enemyCount;
         }

@@ -1,6 +1,7 @@
 ﻿using System;
 using Model.Characters.CharacterHealth;
 using NUnit.Framework;
+using ObjectComposition;
 using Tests.Model.Characters.CharacterHealth.Support;
 
 namespace Tests.Model.Characters.CharacterHealth
@@ -10,15 +11,16 @@ namespace Tests.Model.Characters.CharacterHealth
         [Test]
         public void CanNotInitializeInInvalidState()
         {
-            Health health = new Health(100, new NullHealthVew(), new Death());
+            Health health = new Health(100, new NullHealthVew(), new Death(new NullDeathView()));
             Assert.True(health.CanTakeDamage());
-            Assert.Throws<ArgumentOutOfRangeException>(() => new Health(0f, new NullHealthVew(), new Death()));
+            Assert.Throws<ArgumentOutOfRangeException>(() =>
+                new Health(0f, new NullHealthVew(), new Death(new NullDeathView())));
         }
 
         [Test]
         public void CanTakeOnlyValidDamage()
         {
-            Health health = new Health(100, new NullHealthVew(), new Death());
+            Health health = new Health(100, new NullHealthVew(), new Death(new NullDeathView()));
             health.TakeDamage(50);
             Assert.True(health.CanTakeDamage());
             health.TakeDamage(50);
@@ -26,7 +28,7 @@ namespace Tests.Model.Characters.CharacterHealth
             Assert.Throws<InvalidOperationException>(() => health.TakeDamage(50));
             Assert.Throws<ArgumentOutOfRangeException>(() => health.TakeDamage(-50));
         }
-        
+
         [Test]
         public void DiesInTime()
         {

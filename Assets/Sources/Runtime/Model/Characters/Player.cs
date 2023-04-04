@@ -21,9 +21,10 @@ namespace Model.Characters
         private readonly BulletsContainer _bulletsContainer;
 
         public Player(IPositionView positionView, IHealthView healthView, ForwardAim forwardAim,
-            IBulletDestroyer bulletDestroyer, IBulletFactory<IBullet> bulletFactory, Vector3 position)
+            IBulletDestroyer bulletDestroyer, IBulletFactory<IBullet> bulletFactory, Vector3 position,
+            IDeathView deathView)
         {
-            _health = new Health(MAXHealth, healthView ?? throw new ArgumentException(), new Death());
+            _health = new Health(MAXHealth, healthView ?? throw new ArgumentException(), new Death(deathView));
             _transform = new Transform(positionView ?? throw new ArgumentException(), position);
 
             _cooldown = new Cooldown(ShootingCooldown);

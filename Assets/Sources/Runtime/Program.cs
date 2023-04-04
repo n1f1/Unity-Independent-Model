@@ -4,6 +4,7 @@ using System.Net.Sockets;
 using System.Threading.Tasks;
 using ClientNetworking;
 using ClientNetworking.NetworkingTypesConfigurations;
+using GameMenu;
 using Model.Characters;
 using Networking.ObjectsHashing;
 using Networking.Replication.ObjectCreationReplication;
@@ -34,17 +35,16 @@ public static class Program
 #endif
 
         Application.targetFrameRate = 60;
-        Game game = new Game();
-        
-        Game.Multiplayer = false;
-        game.Start();
-        game.CreatePlayerSimulation(new NullObjectSender());
-        game.Add(game.PlayerFactory.CreatePlayer(Vector3.Zero));
-        game.CreateEnemySpawner();
 
-        //Rip Update event function out of all MonoBehaviours 
+        GameUpdate gameUpdate = new GameUpdate();
+
+        //Add callback after built-in Update 
         UnityUpdateReplace unityUpdateReplace = new UnityUpdateReplace();
-        unityUpdateReplace.Replace(() => game.Update(Time.deltaTime));
+        unityUpdateReplace.AddAfterUpdate(() => gameUpdate.Update());
+
+        GameLoader gameLoader = new GameLoader(gameUpdate);
+        MainMenu mainMenu = new MainMenu(gameLoader);
+        mainMenu.Open();
 
         bool quitting = false;
 
@@ -54,9 +54,24 @@ public static class Program
             quitting = true;
         };
 
-        if(true)
+        return;
+
+        Game game = new Game();
+        game.Start();
+
+
+        Game.Multiplayer = true;
+
+        if (Game.Multiplayer == false)
+        {
+            game.CreatePlayerSimulation(new NullObjectSender());
+            game.Add(game.PlayerFactory.CreatePlayer(Vector3.Zero));
+            game.CreateEnemySpawner();
+        }
+
+        if (Game.Multiplayer == false)
             return;
-        
+
         using TcpClient tcpClient = new TcpClient();
 
         await tcpClient.ConnectAsync("192.168.1.87", 55555);

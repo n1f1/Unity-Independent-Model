@@ -1,5 +1,4 @@
 ﻿using System;
-using Model;
 using Model.Characters;
 using Model.Characters.CharacterHealth;
 using Model.Characters.Enemy;
@@ -48,7 +47,7 @@ namespace ObjectComposition
 
         private Enemy CreateNewEnemy(Vector3 position, SimulationObject<Enemy> simulation)
         {
-            IDeath death = new Death();
+            IDeath death = new Death(new NullDeathView());
             Health health = new Health(100f, simulation.GetView<IHealthView>(), death);
             Transform transform = new Transform(simulation.GetView<IPositionView>(), position);
 

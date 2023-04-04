@@ -1,83 +1,41 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Net.Sockets;
-using System.Text;
-using System.Threading.Tasks;
-using ClientNetworking;
-using ClientNetworking.NetworkingTypesConfigurations;
-using JetBrains.Annotations;
+using Networking;
 using Networking.Packets;
-using Networking.PacketSender;
 using Networking.Replication;
-using Networking.Replication.ObjectCreationReplication;
-using Networking.Replication.Serialization;
 using Networking.StreamIO;
-using ObjectComposition;
 using UnityEngine;
 
-
-class GameClient
+class GameClient : INetworkStreamRead
 {
     private static int _id;
-    public static INetworkObjectSender NetworkObjectSender;
-    private readonly IInputStream _inputStream;
-    private readonly IOutputStream _outputStream;
-    private static IReplicationPacketRead _replicationPacketRead;
-    private static NetworkStream _networkStream;
+    private readonly IReplicationPacketRead _packetRead;
 
-    public GameClient(IInputStream inputStream, IOutputStream outputStream)
+    public GameClient(IReplicationPacketRead packetRead)
     {
-        _inputStream = inputStream ?? throw new ArgumentNullException(nameof(inputStream));
-        _outputStream = outputStream ?? throw new ArgumentNullException(nameof(outputStream));
+        _packetRead = packetRead ?? throw new ArgumentNullException(nameof(packetRead));
     }
 
-    public void CreateReplicator(Dictionary<Type, object> receivers,
-        IEnumerable<(Type, object)> deserializationValues, TypeIdConversion typeId)
+    public void ReadNetworkStream(IInputStream inputStream)
     {
-        Dictionary<Type, IDeserialization<object>> deserialization = new();
-        deserialization.PopulateDictionary(deserializationValues);
-
-        _replicationPacketRead = new ReplicationPacketRead(new CreationReplicator(typeId, deserialization,
-            new ReceivedReplicatedObjectMatcher(receivers)));
-
-        Debug.Log("Create replicator");
-    }
-
-    public void CreateNetworkSending(IEnumerable<(Type, object)> serializationValues, TypeIdConversion typeId)
-    {
-        Dictionary<Type, object> serialization = new Dictionary<Type, object>();
-        serialization.PopulateDictionary(serializationValues);
-
-        INetworkPacketSender networkPacketSender = new SendingPacketsDebug(new NetworkPacketSender(_outputStream));
-
-        ObjectReplicationPacketFactory replicationPacketFactory =
-            new ObjectReplicationPacketFactory(serialization, typeId);
-
-        NetworkObjectSender = new NetworkObjectSender(replicationPacketFactory, networkPacketSender);
-        
-        Debug.Log("Create sender");
-    }
-
-    public void ReceivePackets()
-    {
-        if (_inputStream.NotEmpty() == false)
-            return;
-
-        int readInt32 = _inputStream.ReadInt32();
-        PacketType packetType = (PacketType) readInt32;
-
-        Debug.Log("Received " + packetType + " time: " + DateTime.Now.TimeOfDay);
-
-        switch (packetType)
+        Debug.Log(inputStream.NotEmpty());
+        while (inputStream.NotEmpty())
         {
-            case PacketType.ReplicationData:
-                _replicationPacketRead.ProcessReplicationPacket(_inputStream);
-                break;
-            case PacketType.Handshake:
-                GetHandshake(_inputStream);
-                break;
-            default:
-                throw new InvalidOperationException();
+            int readInt32 = inputStream.ReadInt32();
+            PacketType packetType = (PacketType) readInt32;
+
+            Debug.Log("Received " + packetType + " time: " + DateTime.Now.TimeOfDay);
+
+            switch (packetType)
+            {
+                case PacketType.ReplicationData:
+                    _packetRead.ProcessReplicationPacket(inputStream);
+                    break;
+                case PacketType.Handshake:
+                    GetHandshake(inputStream);
+                    break;
+                default:
+                    throw new InvalidOperationException();
+            }
         }
     }
 

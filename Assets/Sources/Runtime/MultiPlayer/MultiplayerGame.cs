@@ -9,7 +9,9 @@ using GameMenu.PauseMenu;
 using Model.Characters;
 using Model.SpatialObject;
 using MultiPlayer.Connection;
+using Networking;
 using Networking.ObjectsHashing;
+using Networking.Replication;
 using Networking.Replication.ObjectCreationReplication;
 using Networking.Replication.Serialization;
 using Networking.StreamIO;
@@ -46,7 +48,6 @@ namespace MultiPlayer
             IInputStream inputStream = new BinaryReaderInputStream(networkStream);
             IOutputStream outputStream = new BinaryWriterOutputStream(networkStream);
 
-            GameClient gameClient = new GameClient(inputStream, outputStream);
 
             HashedObjectsList hashedObjects = new HashedObjectsList();
 
@@ -56,7 +57,7 @@ namespace MultiPlayer
             _objectToSimulationMap = new ObjectToSimulationMap();
             _clientPlayer = new PlayerClient();
 
-            Dictionary<Type, object> dictionary = new Dictionary<Type, object>
+            Dictionary<Type, object> receivers = new Dictionary<Type, object>
             {
                 {typeof(MoveCommand), new CommandsReceiver()},
                 {typeof(Player), new PlayerReceiver(_objectToSimulationMap, _clientPlayer)}
@@ -67,8 +68,8 @@ namespace MultiPlayer
                 (typeof(MoveCommand), new MoveCommandSerialization(hashedObjects, typeIdConversion))
             };
 
-            gameClient.CreateNetworkSending(serialization, typeIdConversion);
-            IPlayerFactory playerFactory = CreatePlayerFactory(GameClient.NetworkObjectSender);
+            INetworkObjectSender objectSender = new StreamObjectSender(serialization, typeIdConversion, outputStream);
+            IPlayerFactory playerFactory = CreatePlayerFactory(objectSender);
 
             IEnumerable<(Type, object)> deserialization = new List<(Type, object)>
             {
@@ -76,14 +77,18 @@ namespace MultiPlayer
                 (typeof(MoveCommand), new MoveCommandSerialization(hashedObjects, typeIdConversion))
             };
 
-            gameClient.CreateReplicator(dictionary, deserialization, typeIdConversion);
+            IReplicationPacketRead packetRead =
+                new SendToReceiversPacketRead(receivers, deserialization, typeIdConversion);
+            
+            GameClient gameClient = new GameClient(packetRead);
+            INetworkStreamRead networkStreamRead = new LatencyDebugTestNetworkStreamRead(gameClient);
 
             bool quitting = false;
             Application.quitting += () => quitting = true;
 
             while (quitting == false)
             {
-                gameClient.ReceivePackets();
+                networkStreamRead.ReadNetworkStream(inputStream);
                 await Task.Yield();
             }
         }

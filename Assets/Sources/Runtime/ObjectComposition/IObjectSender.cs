@@ -2,6 +2,6 @@
 {
     public interface INetworkObjectSender
     {
-        void Send<TType>(TType command);
+        void Send<TType>(TType sent);
     }
 }

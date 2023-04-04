@@ -16,9 +16,9 @@ namespace ObjectComposition
             _networkPacketSender = networkPacketSender ?? throw new ArgumentNullException(nameof(networkPacketSender));
         }
 
-        public void Send<TType>(TType command)
+        public void Send<TType>(TType sent)
         {
-            INetworkPacket packet = _replicationPacketFactory.Create(command);
+            INetworkPacket packet = _replicationPacketFactory.Create(sent);
             Debug.Log(packet);
             _networkPacketSender.SendPacket(packet);
         }

@@ -2,7 +2,7 @@
 {
     public class NullNetworkObjectSender : INetworkObjectSender
     {
-        public void Send<TType>(TType command)
+        public void Send<TType>(TType sent)
         {
         
         }

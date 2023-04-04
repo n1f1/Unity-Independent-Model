@@ -4,7 +4,7 @@ using UI;
 using UnityEngine;
 using Object = UnityEngine.Object;
 
-namespace GameMenu
+namespace GameMenu.PauseMenu
 {
     public class PauseMenu
     {

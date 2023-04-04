@@ -1,26 +1,31 @@
 ﻿using System;
+using System.Numerics;
+using ClientNetworking;
 using GameMenu;
 using Model.Characters;
 using Model.Characters.CharacterHealth;
 using Model.Characters.Shooting;
 using Model.Characters.Shooting.Bullets;
 using Model.SpatialObject;
+using ObjectComposition;
 using View.Factories;
-using Vector3 = System.Numerics.Vector3;
 
-namespace ObjectComposition
+namespace MultiPlayer
 {
-    public class PlayerFactory : IPlayerFactory
+    internal class MultiplayerPlayerFactory : IPlayerFactory
     {
         private readonly IPositionView _cameraView;
         private readonly PlayerSimulationProvider _playerSimulationProvider;
         private readonly IBulletFactory<IBullet> _bulletFactory;
         private readonly IObjectToSimulationMap _objectToSimulationMapping;
         private readonly IDeathView _deathView;
+        private readonly INetworkObjectSender _sender;
+        private int _createdNumber;
 
-        public PlayerFactory(LevelConfig levelConfig, IViewFactory<IPositionView> positionViewFactory,
+        public MultiplayerPlayerFactory(LevelConfig levelConfig, IViewFactory<IPositionView> positionViewFactory,
             IViewFactory<IHealthView> healthViewFactory, IPositionView cameraView,
-            IBulletFactory<IBullet> pooledBulletFactory, IObjectToSimulationMap objectToSimulationMapping, IDeathView deathView)
+            IBulletFactory<IBullet> pooledBulletFactory, IObjectToSimulationMap objectToSimulationMapping,
+            IDeathView deathView, INetworkObjectSender networkObjectSender)
         {
             _deathView = deathView ?? throw new ArgumentNullException(nameof(deathView));
             _objectToSimulationMapping =
@@ -29,6 +34,7 @@ namespace ObjectComposition
             _cameraView = cameraView ?? throw new ArgumentNullException(nameof(cameraView));
             _playerSimulationProvider = new PlayerSimulationProvider(levelConfig.PlayerTemplate, positionViewFactory,
                 healthViewFactory);
+            _sender = networkObjectSender ?? throw new ArgumentNullException(nameof(networkObjectSender));
         }
 
         public Player CreatePlayer(Vector3 position)
@@ -36,20 +42,26 @@ namespace ObjectComposition
             var playerSimulation = _playerSimulationProvider.CreateSimulationObject();
 
             IPositionView positionView = playerSimulation.GetView<IPositionView>();
-            positionView = new CompositePositionView(positionView, _cameraView);
+            IForwardAimView forwardAimView = playerSimulation.GetView<IForwardAimView>();
+            IHealthView healthView = playerSimulation.GetView<IHealthView>();
+
+            if (_createdNumber == 0)
+                positionView = new CompositePositionView(positionView, _cameraView);
 
             Player player = new Player(
                 positionView,
-                playerSimulation.GetView<IHealthView>(),
-                new ForwardAim(playerSimulation.GetView<IForwardAimView>()), _bulletFactory, _bulletFactory, position,
+                healthView,
+                new ForwardAim(forwardAimView), _bulletFactory, _bulletFactory, position,
                 _deathView);
 
-            IMovable movable = player.CharacterMovement;
-            
-            _playerSimulationProvider.InitializeSimulation(playerSimulation, player, movable);
+            IMovable movable = new MovementCommandSender(player.CharacterMovement, _sender);
+
+            if (_createdNumber == 0)
+                _playerSimulationProvider.InitializeSimulation(playerSimulation, player, movable);
 
             playerSimulation.Enable();
             _objectToSimulationMapping.RegisterNew(player, playerSimulation);
+            _createdNumber++;
 
             return player;
         }

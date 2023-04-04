@@ -8,18 +8,18 @@ namespace ClientNetworking
     public class MovementCommandSender : IMovable
     {
         private readonly CharacterMovement _movement;
-        private readonly IObjectSender _objectSender;
+        private readonly INetworkObjectSender _networkObjectSender;
 
-        public MovementCommandSender(CharacterMovement movement, IObjectSender objectSender)
+        public MovementCommandSender(CharacterMovement movement, INetworkObjectSender networkObjectSender)
         {
             _movement = movement ?? throw new ArgumentNullException(nameof(movement));
-            _objectSender = objectSender ?? throw new ArgumentNullException(nameof(objectSender));
+            _networkObjectSender = networkObjectSender ?? throw new ArgumentNullException(nameof(networkObjectSender));
         }
 
         public void Move(Vector3 moveDelta)
         {
             MoveCommand command = new MoveCommand(_movement, moveDelta);
-            _objectSender.Send(command);
+            _networkObjectSender.Send(command);
         }
     }
 }

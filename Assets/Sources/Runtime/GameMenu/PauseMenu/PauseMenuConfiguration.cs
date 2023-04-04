@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-namespace GameMenu
+namespace GameMenu.PauseMenu
 {
     [CreateAssetMenu(menuName = "Create PauseMenuConfiguration", fileName = "PauseMenuConfiguration", order = 0)]
     public class PauseMenuConfiguration : ScriptableObject

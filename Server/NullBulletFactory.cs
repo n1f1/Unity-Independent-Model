@@ -9,5 +9,10 @@ namespace Server
         {
             return new NullBullet();
         }
+
+        public void Destroy(IBullet bullet)
+        {
+            
+        }
     }
 }

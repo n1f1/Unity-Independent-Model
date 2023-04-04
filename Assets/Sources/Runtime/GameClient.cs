@@ -19,7 +19,7 @@ using UnityEngine;
 class GameClient
 {
     private static int _id;
-    public static IObjectSender ObjectSender;
+    public static INetworkObjectSender NetworkObjectSender;
     private readonly IInputStream _inputStream;
     private readonly IOutputStream _outputStream;
     private static IReplicationPacketRead _replicationPacketRead;
@@ -53,7 +53,7 @@ class GameClient
         ObjectReplicationPacketFactory replicationPacketFactory =
             new ObjectReplicationPacketFactory(serialization, typeId);
 
-        ObjectSender = new ObjectSender(replicationPacketFactory, networkPacketSender);
+        NetworkObjectSender = new NetworkObjectSender(replicationPacketFactory, networkPacketSender);
         
         Debug.Log("Create sender");
     }

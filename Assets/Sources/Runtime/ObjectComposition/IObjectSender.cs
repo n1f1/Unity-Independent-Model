@@ -1,6 +1,6 @@
 ﻿namespace ObjectComposition
 {
-    public interface IObjectSender
+    public interface INetworkObjectSender
     {
         void Send<TType>(TType command);
     }

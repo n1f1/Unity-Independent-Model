@@ -2,7 +2,7 @@
 using SinglePlayer;
 using UI;
 
-namespace GameMenu
+namespace GameMenu.PauseMenu
 {
     public class PauseGame : ICommand
     {

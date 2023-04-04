@@ -1,11 +1,10 @@
 using System;
 using GameMenu;
+using GameMenu.PauseMenu;
 using Model.Characters;
 using Model.Characters.Enemy;
-using Model.Characters.Shooting.Bullets;
 using Model.SpatialObject;
 using ObjectComposition;
-using Simulation.Pool;
 using SimulationObject;
 using UnityEngine;
 using View;
@@ -17,17 +16,19 @@ namespace SinglePlayer
     public class SinglePlayerGame : IGame
     {
         private readonly IGameLoader _gameLoader;
-        
+
         private GameStatus _gameStatus;
         private LevelConfig _levelConfig;
         private EnemySpawner _enemySpawner;
         private EnemyContainer _enemyContainer;
         private Player _player;
         private SimulationObject<Player> _playerSimulation;
+        private readonly BulletFactoryCreation _bulletFactoryCreation;
 
         public SinglePlayerGame(IGameLoader gameLoader)
         {
             _gameLoader = gameLoader ?? throw new ArgumentNullException(nameof(gameLoader));
+            _bulletFactoryCreation = new BulletFactoryCreation();
         }
 
         public void Load()
@@ -40,7 +41,8 @@ namespace SinglePlayer
             pauseMenu.Create();
             _gameStatus = new GameStatus(pauseStatus);
 
-            PooledBulletFactory bulletFactory = CreatePooledBulletFactory();
+            PooledBulletFactory bulletFactory =
+                BulletFactoryCreation.CreatePooledBulletFactory(_levelConfig.BulletTemplate);
 
             IObjectToSimulationMap objectToSimulationMap = new ObjectToSimulationMap();
             PlayerFactory playerFactory = new PlayerFactory(_levelConfig, new PositionViewFactory(),
@@ -61,17 +63,6 @@ namespace SinglePlayer
                 _player.Transform);
 
             _enemySpawner.Start();
-        }
-
-        private PooledBulletFactory CreatePooledBulletFactory()
-        {
-            PooledBulletFactory bulletFactory =
-                new PooledBulletFactory(
-                    new KeyPooledObjectPool<DefaultBullet, SimulationObject<DefaultBullet>>(64),
-                    new BulletSimulationProvider(_levelConfig.BulletTemplate, new PositionViewFactory()));
-
-            bulletFactory.PopulatePool();
-            return bulletFactory;
         }
 
         public void UpdateTime(float deltaTime)

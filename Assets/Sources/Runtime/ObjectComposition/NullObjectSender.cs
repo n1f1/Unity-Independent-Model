@@ -1,6 +1,6 @@
 ﻿namespace ObjectComposition
 {
-    public class NullObjectSender : IObjectSender
+    public class NullNetworkObjectSender : INetworkObjectSender
     {
         public void Send<TType>(TType command)
         {

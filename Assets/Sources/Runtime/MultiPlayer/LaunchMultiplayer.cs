@@ -1,11 +1,12 @@
 using System;
+using GameMenu;
 using UI;
 
-namespace GameMenu
+namespace MultiPlayer
 {
     public class LaunchMultiplayer : ICommand
     {
-        private IGameLoader _gameLoader;
+        private readonly IGameLoader _gameLoader;
 
         public LaunchMultiplayer(IGameLoader gameLoader)
         {
@@ -14,6 +15,8 @@ namespace GameMenu
 
         public void Execute()
         {
+            MultiplayerGame multiplayerGame = new MultiplayerGame(_gameLoader);
+            _gameLoader.Load(multiplayerGame);
         }
     }
 }

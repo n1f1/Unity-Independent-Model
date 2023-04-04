@@ -2,7 +2,7 @@
 using UI;
 using UnityEngine;
 
-namespace GameMenu
+namespace GameMenu.PauseMenu
 {
     public class HideObject : ICommand
     {

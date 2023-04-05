@@ -20,14 +20,14 @@ namespace ClientNetworking
             _objectToSimulationMap = objectToSimulation ?? throw new ArgumentNullException(nameof(objectToSimulation));
         }
 
-        public void Receive(Player player)
+        public void Receive(Player createdObject)
         {
             if(_received)
                 return;
             
-            _clientPlayer.SetClientPlayerSimulation(_objectToSimulationMap.Get(player));
+            _clientPlayer.SetClientPlayerSimulation(createdObject, _objectToSimulationMap.Get(createdObject));
             _received = true;
-            Debug.Log("Receive " + player + "!");
+            Debug.Log("Receive " + createdObject + "!");
         }
     }
 }

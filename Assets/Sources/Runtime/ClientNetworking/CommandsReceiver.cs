@@ -4,9 +4,9 @@ namespace ClientNetworking
 {
     public class CommandsReceiver : IReplicatedObjectReceiver<ICommand>
     {
-        public void Receive(ICommand command)
+        public void Receive(ICommand createdObject)
         {
-            command.Execute();
+            createdObject.Execute();
         }
     }
 }

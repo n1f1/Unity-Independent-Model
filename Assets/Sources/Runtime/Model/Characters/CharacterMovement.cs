@@ -23,5 +23,11 @@ namespace Model.Characters
 
         public void Move(Vector3 moveDelta) =>
             _transform.SetPosition(_transform.Position + moveDelta * _speed);
+
+        public Vector3 GetPositionForDelta(Vector3 moveDelta) =>
+            _transform.Position + moveDelta * _speed;
+
+        public void MoveTo(Vector3 position) =>
+            _transform.SetPosition(position);
     }
 }

@@ -6,9 +6,11 @@ namespace MultiPlayer
     public class PlayerClient
     {
         private SimulationObject<Player> _playerSimulation;
+        public Player Player { get; private set; }
 
-        public void SetClientPlayerSimulation(SimulationObject<Player> playerSimulation)
+        public void SetClientPlayerSimulation(Player player, SimulationObject<Player> playerSimulation)
         {
+            Player = player;
             _playerSimulation = playerSimulation;
         }
 

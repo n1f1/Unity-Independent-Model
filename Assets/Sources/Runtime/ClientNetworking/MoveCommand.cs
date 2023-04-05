@@ -6,18 +6,20 @@ namespace ClientNetworking
 {
     public class MoveCommand : ICommand
     {
-        public MoveCommand(CharacterMovement movement, Vector3 moveDelta)
+        public MoveCommand(CharacterMovement movement, Vector3 position, TimeSpan dateCreationTime)
         {
-            MoveDelta = moveDelta;
+            CreationTime = dateCreationTime;
+            Position = position;
             Movement = movement ?? throw new ArgumentNullException(nameof(movement));
         }
-
+        
+        public TimeSpan CreationTime { get; }
         public CharacterMovement Movement { get; }
-        public Vector3 MoveDelta { get; }
+        public Vector3 Position { get; }
 
         public void Execute()
         {
-            Movement.Move(MoveDelta);
+            Movement.MoveTo(Position);
         }
     }
 }

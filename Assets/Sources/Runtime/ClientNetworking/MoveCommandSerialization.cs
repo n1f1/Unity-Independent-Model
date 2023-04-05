@@ -1,10 +1,11 @@
 using System;
-using System.Numerics;
 using Model.Characters;
 using Networking.ObjectsHashing;
 using Networking.Replication.ObjectCreationReplication;
 using Networking.Replication.Serialization;
 using Networking.StreamIO;
+using UnityEngine;
+using Vector3 = System.Numerics.Vector3;
 
 namespace ClientNetworking
 {
@@ -20,17 +21,20 @@ namespace ClientNetworking
         {
             short movementId = HashedObjects.GetID(inObject.Movement);
             outputStream.Write(movementId);
-            outputStream.Write(inObject.MoveDelta);
+            outputStream.Write(inObject.Position);
+            Console.WriteLine(inObject.Position);
+            outputStream.Write(inObject.CreationTime.Ticks);
         }
 
         public MoveCommand Deserialize(IInputStream inputStream)
         {
             short movementInstanceID = inputStream.ReadInt16();
-            CharacterMovement movement = HashedObjects.GetInstance<CharacterMovement>(movementInstanceID);
             Vector3 moveDelta = inputStream.ReadVector3();
+            long timeTicks = inputStream.ReadInt64();
+            CharacterMovement movement = HashedObjects.GetInstance<CharacterMovement>(movementInstanceID);
             Console.Write($"movement id: {movementInstanceID} for {movement.Position}");
 
-            return new MoveCommand(movement, moveDelta);
+            return new MoveCommand(movement, moveDelta, TimeSpan.FromTicks(timeTicks));
         }
     }
 }

@@ -10,7 +10,8 @@ namespace ObjectComposition
         private readonly ObjectReplicationPacketFactory _replicationPacketFactory;
         private readonly INetworkPacketSender _networkPacketSender;
 
-        public NetworkObjectSender(ObjectReplicationPacketFactory packetFactory, INetworkPacketSender networkPacketSender)
+        public NetworkObjectSender(ObjectReplicationPacketFactory packetFactory,
+            INetworkPacketSender networkPacketSender)
         {
             _replicationPacketFactory = packetFactory ?? throw new ArgumentNullException(nameof(packetFactory));
             _networkPacketSender = networkPacketSender ?? throw new ArgumentNullException(nameof(networkPacketSender));
@@ -19,7 +20,6 @@ namespace ObjectComposition
         public void Send<TType>(TType sent)
         {
             INetworkPacket packet = _replicationPacketFactory.Create(sent);
-            Debug.Log(packet);
             _networkPacketSender.SendPacket(packet);
         }
     }

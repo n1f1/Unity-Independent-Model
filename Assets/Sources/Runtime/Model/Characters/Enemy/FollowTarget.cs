@@ -35,7 +35,7 @@ namespace Model.Characters.Enemy
                 return;
 
             Vector3 moveDelta = Vector3.Normalize(direction) * deltaTime;
-            _characterMovement.Move(moveDelta);
+            _characterMovement.Move(_characterMovement.Position + moveDelta);
         }
 
         private Vector3 GetMoveDirection()

@@ -30,6 +30,7 @@ namespace MultiPlayer
         private GameStatus _gameStatus;
         private IObjectToSimulationMap _objectToSimulationMap;
         private PlayerClient _clientPlayer;
+        private NotReconciledMovementCommands _notReconciledMovementCommands;
 
         public MultiplayerGame(IGameLoader gameLoader)
         {
@@ -56,10 +57,11 @@ namespace MultiPlayer
 
             _objectToSimulationMap = new ObjectToSimulationMap();
             _clientPlayer = new PlayerClient();
-
+            _notReconciledMovementCommands = new NotReconciledMovementCommands();
+            
             Dictionary<Type, object> receivers = new Dictionary<Type, object>
             {
-                {typeof(MoveCommand), new CommandsReceiver()},
+                {typeof(MoveCommand), new MoveCommandReceiver(_notReconciledMovementCommands, _clientPlayer)},
                 {typeof(Player), new PlayerReceiver(_objectToSimulationMap, _clientPlayer)}
             };
 
@@ -110,7 +112,7 @@ namespace MultiPlayer
                 new HealthViewFactory(), cameraView, bulletFactory, _objectToSimulationMap,
                 new CompositeDeath(
                     new SetLooseGameStatus(_gameStatus),
-                    new OpenMenuOnDeath(_gameLoader)), networkObjectSender);
+                    new OpenMenuOnDeath(_gameLoader)), networkObjectSender, _notReconciledMovementCommands);
 
             return playerFactory;
         }

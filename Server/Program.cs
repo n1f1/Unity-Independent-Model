@@ -63,17 +63,17 @@ namespace Server
             NewClientsListener newClientsListener = new NewClientsListener(room,
                 new ClientConnectionPlayerCreation(replicationPacketFactory, room, new GameLevel()));
 
-            IPacketReceiver packetReceiver = new PacketReceiver(replicationPacketRead);
+            IPacketReceiver packetReceiver = new PacketReceiver();
+
+            ServerUpdate update = new ServerUpdate(newClientsListener, replicationPacketRead, room, tcpListener,
+                packetReceiver);
+            
+            FixedUpdateLoop fixedUpdateLoop = new FixedUpdateLoop(100, update);
 
             while (true)
             {
-                newClientsListener.ListenNewClients(tcpListener);
-
-                foreach (Client client in room.Clients)
-                {
-                    if (client.IsConnected)
-                        packetReceiver.ReceivePackets(client.InputStream, replicationPacketRead);
-                }
+                fixedUpdateLoop.Update();
+                Task.Yield();
             }
         }
     }

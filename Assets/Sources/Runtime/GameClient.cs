@@ -17,7 +17,6 @@ class GameClient : INetworkStreamRead
 
     public void ReadNetworkStream(IInputStream inputStream)
     {
-        Debug.Log(inputStream.NotEmpty());
         while (inputStream.NotEmpty())
         {
             int readInt32 = inputStream.ReadInt32();

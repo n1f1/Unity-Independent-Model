@@ -1,0 +1,32 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using GameModes.MultiPlayer.PlayerCharacter.Common;
+
+namespace GameModes.MultiPlayer.NetworkingTypesConfigurations
+{
+    public static class SerializableTypesIdMap
+    {
+        public static IEnumerable<(Type, int)> Get()
+        {
+            return StringToInt(Create());
+        }
+
+        private static IEnumerable<(Type, string)> Create()
+        {
+            IEnumerable<(Type, string)> tuples = new List<(Type, string)>
+            {
+                (typeof(Model.Characters.Player), "PLYR"),
+                (typeof(MoveCommand), "CMVE")
+            };
+
+            return tuples;
+        }
+
+        private static IEnumerable<(Type, int)> StringToInt(IEnumerable<(Type, string)> input)
+        {
+            return input.Select(tuple => (tuple.Item1, BitConverter.ToInt32(Encoding.UTF8.GetBytes(tuple.Item2))));
+        }
+    }
+}

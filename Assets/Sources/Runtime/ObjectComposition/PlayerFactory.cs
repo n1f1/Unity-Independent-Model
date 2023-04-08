@@ -1,11 +1,12 @@
 ﻿using System;
 using GameMenu;
+using GameModes;
 using Model.Characters;
 using Model.Characters.CharacterHealth;
 using Model.Characters.Shooting;
 using Model.Characters.Shooting.Bullets;
 using Model.SpatialObject;
-using View.Factories;
+using Simulation.View.Factories;
 using Vector3 = System.Numerics.Vector3;
 
 namespace ObjectComposition

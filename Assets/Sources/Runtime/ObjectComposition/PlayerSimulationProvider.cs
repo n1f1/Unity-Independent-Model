@@ -1,16 +1,15 @@
 ﻿using System;
-using ClientNetworking;
 using Model;
 using Model.Characters;
 using Model.Characters.CharacterHealth;
 using Model.Characters.Shooting;
 using Model.SpatialObject;
+using Simulation;
 using Simulation.Input;
 using Simulation.Movement;
 using Simulation.Shooting;
-using SimulationObject;
+using Simulation.View.Factories;
 using UnityEngine;
-using View.Factories;
 using Object = UnityEngine.Object;
 
 namespace ObjectComposition

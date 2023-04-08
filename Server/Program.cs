@@ -3,14 +3,16 @@ using System.Collections.Generic;
 using System.Net;
 using System.Net.Sockets;
 using System.Threading.Tasks;
-using ClientNetworking;
-using ClientNetworking.NetworkingTypesConfigurations;
+using GameModes.MultiPlayer;
+using GameModes.MultiPlayer.NetworkingTypesConfigurations;
+using GameModes.MultiPlayer.PlayerCharacter.Common;
 using Model.Characters;
-using Networking;
+using Networking.Connection;
 using Networking.ObjectsHashing;
-using Networking.Replication;
-using Networking.Replication.ObjectCreationReplication;
-using Networking.Replication.Serialization;
+using Networking.PacketReceive;
+using Networking.PacketReceive.Replication;
+using Networking.PacketReceive.Replication.ObjectCreationReplication;
+using Networking.PacketReceive.Replication.Serialization;
 
 namespace Server
 {

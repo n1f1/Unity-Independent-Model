@@ -4,6 +4,6 @@ namespace Model.Characters
 {
     public interface IMovable
     {
-        void Move(Vector3 moveDelta);
+        void Move(Vector3 direction, float deltaTime);
     }
 }

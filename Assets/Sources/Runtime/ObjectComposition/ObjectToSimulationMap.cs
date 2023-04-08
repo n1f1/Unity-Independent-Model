@@ -1,6 +1,6 @@
 using System.Collections;
 using GameMenu;
-using SimulationObject;
+using Simulation;
 
 namespace ObjectComposition
 {

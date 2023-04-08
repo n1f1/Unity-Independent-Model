@@ -1,7 +1,6 @@
 ﻿using System;
-using Model.Characters.CharacterHealth;
 
-namespace GameMenu
+namespace Model.Characters.CharacterHealth
 {
     public class CompositeDeath : IDeathView
     {

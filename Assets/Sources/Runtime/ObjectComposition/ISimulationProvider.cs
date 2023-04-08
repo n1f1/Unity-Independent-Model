@@ -1,4 +1,4 @@
-using SimulationObject;
+using Simulation;
 
 namespace ObjectComposition
 {

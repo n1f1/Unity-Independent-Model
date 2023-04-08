@@ -15,9 +15,9 @@ namespace Simulation.Shooting
         private void Awake() =>
             _layerMask = LayerMask.GetMask("AimPlane");
 
-        public void Initialize(CharacterShooter simulation)
+        public void Initialize(CharacterShooter enemyPlayerPrediction)
         {
-            _simulation = simulation ?? throw new ArgumentNullException();
+            _simulation = enemyPlayerPrediction ?? throw new ArgumentNullException();
             _camera = Camera.main;
         }
 

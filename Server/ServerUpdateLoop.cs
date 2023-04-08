@@ -1,7 +1,8 @@
 ﻿using System;
 using System.Net.Sockets;
-using Networking;
-using Networking.Replication;
+using Networking.Connection;
+using Networking.PacketReceive;
+using Networking.PacketReceive.Replication;
 
 namespace Server
 {

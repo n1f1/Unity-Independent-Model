@@ -19,17 +19,20 @@ namespace Simulation.Movement
             return this;
         }
 
-        public void Initialize(IMovable movable)
+        public void Initialize(IMovable enemyPlayerPrediction)
         {
-            _movable = movable ?? throw new ArgumentNullException();
+            _movable = enemyPlayerPrediction ?? throw new ArgumentNullException();
         }
 
         public void UpdateTime(float deltaTime)
         {
             Vector3 input = new Vector3(_movementInput.X, 0, _movementInput.Y);
 
+            if (input.Length() > 1f)
+                input = Vector3.Normalize(input);
+
             if (input != Vector3.Zero)
-                _movable.Move(Vector3.Normalize(input) * deltaTime);
+                _movable.Move(input, deltaTime);
         }
     }
 }

@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Numerics;
 using Model.Characters;
-using Networking;
-using Networking.PacketSender;
-using Networking.Replication.ObjectCreationReplication;
+using Networking.Connection;
+using Networking.PacketReceive.Replication.ObjectCreationReplication;
+using Networking.PacketSend;
 
 namespace Server
 {

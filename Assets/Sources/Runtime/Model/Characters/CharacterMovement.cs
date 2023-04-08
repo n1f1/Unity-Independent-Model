@@ -13,7 +13,7 @@ namespace Model.Characters
         {
             _transform = transform ?? throw new ArgumentNullException();
 
-            if (_speed < 0)
+            if (Speed < 0)
                 throw new ArgumentOutOfRangeException();
 
             _speed = speed;
@@ -21,13 +21,19 @@ namespace Model.Characters
 
         public Vector3 Position => _transform.Position;
 
-        public void Move(Vector3 moveDelta) =>
-            _transform.SetPosition(_transform.Position + moveDelta * _speed);
+        public float Speed => _speed;
 
-        public Vector3 GetPositionForDelta(Vector3 moveDelta) =>
-            _transform.Position + moveDelta * _speed;
+        public void Move(Vector3 direction, float deltaTime) =>
+            _transform.SetPosition(_transform.Position + direction * deltaTime * Speed);
 
-        public void MoveTo(Vector3 position) =>
+        public void Move(Vector3 position)
+        {
             _transform.SetPosition(position);
+        }
+
+        public Vector3 GetPosition(Vector3 direction, float time)
+        {
+            return _transform.Position + direction * time * Speed;
+        }
     }
 }

@@ -1,5 +1,6 @@
 using System.Numerics;
 using Model.Characters;
+using Model.Characters.CharacterHealth;
 using Model.Characters.Shooting;
 using ObjectComposition;
 

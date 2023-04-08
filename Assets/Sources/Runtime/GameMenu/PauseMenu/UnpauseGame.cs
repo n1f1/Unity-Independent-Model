@@ -1,5 +1,5 @@
 ﻿using System;
-using SinglePlayer;
+using GameModes.SinglePlayer;
 using UI;
 
 namespace GameMenu.PauseMenu

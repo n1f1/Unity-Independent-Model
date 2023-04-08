@@ -2,13 +2,13 @@
 using Model.Characters.Shooting;
 using Model.Characters.Shooting.Bullets;
 using Model.SpatialObject;
+using Simulation;
 using Simulation.Pool;
-using SimulationObject;
 using Transform = Model.SpatialObject.Transform;
 
 namespace ObjectComposition
 {
-    public class PooledBulletFactory : IBulletFactory<DefaultBullet>, IBulletDestroyer
+    public class PooledBulletFactory : IBulletFactory<DefaultBullet>
     {
         private readonly ISimulationProvider<DefaultBullet> _bulletSimulationProvider;
         private readonly KeyPooledObjectPool<DefaultBullet, SimulationObject<DefaultBullet>> _objectPool;

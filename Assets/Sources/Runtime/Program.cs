@@ -1,5 +1,6 @@
 using System.Threading.Tasks;
 using GameMenu;
+using GameModes;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using Utility.GameLoop;

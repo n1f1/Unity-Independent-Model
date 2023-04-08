@@ -1,6 +1,4 @@
-﻿using Model.Characters.CharacterHealth;
-
-namespace ObjectComposition
+﻿namespace Model.Characters.CharacterHealth
 {
     public class NullDeathView : IDeathView
     {

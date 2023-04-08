@@ -3,8 +3,8 @@ using Model.Characters;
 using Model.Characters.CharacterHealth;
 using Model.Characters.Enemy;
 using Model.SpatialObject;
+using Simulation;
 using Simulation.Pool;
-using SimulationObject;
 using Transform = Model.SpatialObject.Transform;
 using Vector3 = System.Numerics.Vector3;
 

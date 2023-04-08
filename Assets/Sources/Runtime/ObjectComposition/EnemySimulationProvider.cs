@@ -3,10 +3,10 @@ using Model;
 using Model.Characters.CharacterHealth;
 using Model.Characters.Enemy;
 using Model.SpatialObject;
+using Simulation;
 using Simulation.Physics;
-using SimulationObject;
+using Simulation.View.Factories;
 using UnityEngine;
-using View.Factories;
 using Object = UnityEngine.Object;
 
 namespace ObjectComposition

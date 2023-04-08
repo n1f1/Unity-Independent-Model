@@ -1,6 +1,7 @@
 ﻿using System;
-using MultiPlayer;
-using SinglePlayer;
+using GameModes;
+using GameModes.MultiPlayer;
+using GameModes.SinglePlayer;
 using UI;
 using UnityEngine;
 using Object = UnityEngine.Object;

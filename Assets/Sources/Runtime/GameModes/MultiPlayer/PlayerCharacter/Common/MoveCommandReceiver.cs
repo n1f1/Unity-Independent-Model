@@ -2,25 +2,24 @@
 using System.Collections.Generic;
 using GameModes.MultiPlayer.PlayerCharacter.Client;
 using GameModes.MultiPlayer.PlayerCharacter.Remote;
-using Networking;
 using Networking.PacketReceive;
 
 namespace GameModes.MultiPlayer.PlayerCharacter.Common
 {
     public record MoveCommandReceiver : IReplicatedObjectReceiver<MoveCommand>
     {
-        private readonly NotReconciledMovementCommands _notReconciledMovementCommands;
+        private readonly NotReconciledCommands<MoveCommand> _notReconciledCommands;
         private readonly PlayerClient _clientPlayer;
         private readonly IMovementCommandPrediction _movementCommandPrediction;
 
-        public MoveCommandReceiver(NotReconciledMovementCommands reconciledMovement,
+        public MoveCommandReceiver(NotReconciledCommands<MoveCommand> reconciled,
             PlayerClient clientPlayer, IMovementCommandPrediction movementCommandPrediction)
         {
             _movementCommandPrediction = movementCommandPrediction ??
                                        throw new ArgumentNullException(nameof(movementCommandPrediction));
             _clientPlayer = clientPlayer ?? throw new ArgumentNullException(nameof(clientPlayer));
-            _notReconciledMovementCommands =
-                reconciledMovement ?? throw new ArgumentNullException(nameof(reconciledMovement));
+            _notReconciledCommands =
+                reconciled ?? throw new ArgumentNullException(nameof(reconciled));
         }
 
         public void Receive(MoveCommand newCommand)
@@ -38,8 +37,8 @@ namespace GameModes.MultiPlayer.PlayerCharacter.Common
 
         private void ProcessClientPlayerCommand(MoveCommand newCommand)
         {
-            _notReconciledMovementCommands.Reconcile(newCommand);
-            IEnumerable<MoveCommand> notReconciled = _notReconciledMovementCommands.GetNotReconciled();
+            _notReconciledCommands.ReconcileAllBefore(newCommand);
+            IEnumerable<MoveCommand> notReconciled = _notReconciledCommands.GetNotReconciled();
             
             newCommand.Execute();
             

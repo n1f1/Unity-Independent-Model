@@ -1,9 +1,10 @@
-﻿namespace Model.Characters.Shooting
+﻿using Model.Characters.Shooting.Bullets;
+
+namespace Model.Characters.Shooting
 {
     public interface IWeapon
     {
-        public IAim Aim { get; }
-        public void Shoot();
-        bool CanShoot();
+        public IBullet Shoot(IAim aim);
+        bool CanShoot(IAim aim);
     }
 }

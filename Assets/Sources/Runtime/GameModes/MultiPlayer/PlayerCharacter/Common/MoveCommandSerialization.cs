@@ -1,4 +1,3 @@
-using System;
 using Model.Characters;
 using Networking.ObjectsHashing;
 using Networking.PacketReceive.Replication.ObjectCreationReplication;
@@ -18,8 +17,8 @@ namespace GameModes.MultiPlayer.PlayerCharacter.Common
 
         public void Serialize(MoveCommand inObject, IOutputStream outputStream)
         {
-            short movementId = HashedObjects.GetID(inObject.Movement);
-            outputStream.Write(movementId);
+            short playerId = HashedObjects.GetID(inObject.Player);
+            outputStream.Write(playerId);
             outputStream.Write(inObject.Acceleration);
             outputStream.Write(inObject.DeltaTime);
             outputStream.Write(inObject.Position);
@@ -28,15 +27,14 @@ namespace GameModes.MultiPlayer.PlayerCharacter.Common
 
         public MoveCommand Deserialize(IInputStream inputStream)
         {
-            short movementInstanceID = inputStream.ReadInt16();
+            short playerInstanceID = inputStream.ReadInt16();
             Vector3 moveDelta = inputStream.ReadVector3();
             float deltaTime = inputStream.ReadSingle();
             Vector3 position = inputStream.ReadVector3();
             short id = inputStream.ReadInt16();
-            CharacterMovement movement = HashedObjects.GetInstance<CharacterMovement>(movementInstanceID);
-            Console.Write($"movement id: {movementInstanceID} for {movement.Position}");
+            Player player = HashedObjects.GetInstance<Player>(playerInstanceID);
 
-            return new MoveCommand(movement, moveDelta, deltaTime, position, id);
+            return new MoveCommand(player, moveDelta, deltaTime, position, id);
         }
     }
 }

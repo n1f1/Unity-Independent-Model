@@ -1,6 +1,5 @@
 ﻿using System;
-using GameMenu;
-using GameModes;
+using GameModes.MultiPlayer;
 using Model.Characters;
 using Model.Characters.CharacterHealth;
 using Model.Characters.Shooting;
@@ -9,7 +8,7 @@ using Model.SpatialObject;
 using Simulation.View.Factories;
 using Vector3 = System.Numerics.Vector3;
 
-namespace ObjectComposition
+namespace GameModes.SinglePlayer.ObjectComposition
 {
     public class PlayerFactory : IPlayerFactory
     {
@@ -21,7 +20,8 @@ namespace ObjectComposition
 
         public PlayerFactory(LevelConfig levelConfig, IViewFactory<IPositionView> positionViewFactory,
             IViewFactory<IHealthView> healthViewFactory, IPositionView cameraView,
-            IBulletFactory<IBullet> pooledBulletFactory, IObjectToSimulationMap objectToSimulationMapping, IDeathView deathView)
+            IBulletFactory<IBullet> pooledBulletFactory, IObjectToSimulationMap objectToSimulationMapping,
+            IDeathView deathView)
         {
             _deathView = deathView ?? throw new ArgumentNullException(nameof(deathView));
             _objectToSimulationMapping =
@@ -39,14 +39,21 @@ namespace ObjectComposition
             IPositionView positionView = playerSimulation.GetView<IPositionView>();
             positionView = new CompositePositionView(positionView, _cameraView);
 
-            Player player = new Player(
-                positionView,
-                playerSimulation.GetView<IHealthView>(),
-                new ForwardAim(playerSimulation.GetView<IForwardAimView>()), _bulletFactory, _bulletFactory, position,
-                _deathView);
+            BulletsContainer bulletsContainer = new BulletsContainer(_bulletFactory);
+
+            Cooldown cooldown = new Cooldown(Player.ShootingCooldown);
+            IWeapon weapon = new DefaultGun(_bulletFactory ?? throw new ArgumentException(),
+                cooldown,
+                bulletsContainer);
+
+            IHealthView healthView = playerSimulation.GetView<IHealthView>();
+            IForwardAimView forwardAimView = playerSimulation.GetView<IForwardAimView>();
+
+            Player player = new Player(positionView, healthView, new ForwardAim(forwardAimView), position, _deathView,
+                weapon, bulletsContainer, cooldown);
 
             IMovable movable = player.CharacterMovement;
-            
+
             _playerSimulationProvider.InitializeSimulation(playerSimulation, player, movable);
 
             playerSimulation.Enable();

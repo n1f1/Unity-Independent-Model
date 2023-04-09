@@ -6,7 +6,7 @@ using Simulation;
 using Simulation.Pool;
 using Transform = Model.SpatialObject.Transform;
 
-namespace ObjectComposition
+namespace GameModes.SinglePlayer.ObjectComposition
 {
     public class PooledBulletFactory : IBulletFactory<DefaultBullet>
     {

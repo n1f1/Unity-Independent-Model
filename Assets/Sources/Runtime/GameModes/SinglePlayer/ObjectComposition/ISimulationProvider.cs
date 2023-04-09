@@ -1,6 +1,6 @@
 using Simulation;
 
-namespace ObjectComposition
+namespace GameModes.SinglePlayer.ObjectComposition
 {
     internal interface ISimulationProvider<TSimulated>
     {

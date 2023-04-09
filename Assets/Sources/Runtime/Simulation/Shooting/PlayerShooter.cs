@@ -6,16 +6,16 @@ using Utility;
 
 namespace Simulation.Shooting
 {
-    internal class PlayerShooter : MonoBehaviour, ISimulation<CharacterShooter>
+    internal class PlayerShooter : MonoBehaviour, ISimulation<ICharacterShooter>
     {
         private LayerMask _layerMask;
-        private CharacterShooter _simulation;
+        private ICharacterShooter _simulation;
         private Camera _camera;
 
         private void Awake() =>
             _layerMask = LayerMask.GetMask("AimPlane");
 
-        public void Initialize(CharacterShooter enemyPlayerPrediction)
+        public void Initialize(ICharacterShooter enemyPlayerPrediction)
         {
             _simulation = enemyPlayerPrediction ?? throw new ArgumentNullException();
             _camera = Camera.main;
@@ -32,7 +32,7 @@ namespace Simulation.Shooting
             Ray ray = _camera.ScreenPointToRay(UnityEngine.Input.mousePosition);
 
             if (UnityEngine.Physics.Raycast(ray, out RaycastHit hit, 999f, _layerMask))
-                _simulation.Aim(hit.point.Convert());
+                _simulation.AimAt(hit.point.Convert());
             else
                 _simulation.StopAiming();
         }
@@ -40,7 +40,10 @@ namespace Simulation.Shooting
         private void ProcessShooting()
         {
             if (UnityEngine.Input.GetMouseButton(0))
-                _simulation.Shoot();
+            {
+                if (_simulation.CanShoot())
+                    _simulation.Shoot();
+            }
         }
     }
 }

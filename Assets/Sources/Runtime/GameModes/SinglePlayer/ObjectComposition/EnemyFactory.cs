@@ -8,7 +8,7 @@ using Simulation.Pool;
 using Transform = Model.SpatialObject.Transform;
 using Vector3 = System.Numerics.Vector3;
 
-namespace ObjectComposition
+namespace GameModes.SinglePlayer.ObjectComposition
 {
     public class EnemyFactory : IEnemyFactory
     {

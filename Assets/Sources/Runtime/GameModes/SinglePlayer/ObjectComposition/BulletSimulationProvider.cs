@@ -9,7 +9,7 @@ using Simulation.View.Factories;
 using UnityEngine;
 using Object = UnityEngine.Object;
 
-namespace ObjectComposition
+namespace GameModes.SinglePlayer.ObjectComposition
 {
     public class BulletSimulationProvider : ISimulationProvider<DefaultBullet>
     {

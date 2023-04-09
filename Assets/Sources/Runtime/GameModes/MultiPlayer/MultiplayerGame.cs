@@ -1,20 +1,20 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Net.Sockets;
-using System.Threading.Tasks;
 using GameMenu;
 using GameMenu.PauseMenu;
 using GameModes.MultiPlayer.Connection;
 using GameModes.MultiPlayer.NetworkingTypesConfigurations;
 using GameModes.MultiPlayer.PlayerCharacter;
 using GameModes.MultiPlayer.PlayerCharacter.Client;
+using GameModes.MultiPlayer.PlayerCharacter.Client.Shooting;
 using GameModes.MultiPlayer.PlayerCharacter.Common;
 using GameModes.MultiPlayer.PlayerCharacter.Remote;
 using GameModes.SinglePlayer;
+using GameModes.SinglePlayer.ObjectComposition;
 using Model.Characters;
 using Model.Characters.CharacterHealth;
 using Model.SpatialObject;
-using Networking;
 using Networking.ObjectsHashing;
 using Networking.PacketReceive;
 using Networking.PacketReceive.Replication;
@@ -22,7 +22,6 @@ using Networking.PacketReceive.Replication.ObjectCreationReplication;
 using Networking.PacketReceive.Replication.Serialization;
 using Networking.PacketSend.ObjectSend;
 using Networking.StreamIO;
-using ObjectComposition;
 using Simulation.Common;
 using Simulation.View;
 using Simulation.View.Factories;
@@ -37,9 +36,12 @@ namespace GameModes.MultiPlayer
         private GameStatus _gameStatus;
         private IObjectToSimulationMap _objectToSimulationMap;
         private PlayerClient _clientPlayer;
-        private NotReconciledMovementCommands _notReconciledMovementCommands;
-        private UpdatableContainer _updatableContainer = new();
+        private NotReconciledCommands<MoveCommand> _notReconciledMoveCommands;
+        private readonly UpdatableContainer _updatableContainer = new();
         private IMovementCommandPrediction _movementCommandPrediction;
+        private NotReconciledCommands<FireCommand> _notReconciledFireCommands;
+        private INetworkStreamRead _networkStreamRead;
+        private IInputStream _inputStream;
 
         public MultiplayerGame(IGameLoader gameLoader)
         {
@@ -55,8 +57,8 @@ namespace GameModes.MultiPlayer
                 return;
 
             NetworkStream networkStream = serverConnection.Client.GetStream();
-            IInputStream inputStream = new BinaryReaderInputStream(networkStream);
             IOutputStream outputStream = new BinaryWriterOutputStream(networkStream);
+            _inputStream = new BinaryReaderInputStream(networkStream);
 
             HashedObjectsList hashedObjects = new HashedObjectsList();
 
@@ -65,7 +67,8 @@ namespace GameModes.MultiPlayer
 
             _objectToSimulationMap = new ObjectToSimulationMap();
             _clientPlayer = new PlayerClient();
-            _notReconciledMovementCommands = new NotReconciledMovementCommands();
+            _notReconciledMoveCommands = new NotReconciledCommands<MoveCommand>();
+            _notReconciledFireCommands = new NotReconciledCommands<FireCommand>();
             _movementCommandPrediction =
                 new AllRemotePlayersMovementPrediction(NetworkConstants.RTT, NetworkConstants.ServerFixedDeltaTime);
 
@@ -73,14 +76,16 @@ namespace GameModes.MultiPlayer
             {
                 {
                     typeof(MoveCommand),
-                    new MoveCommandReceiver(_notReconciledMovementCommands, _clientPlayer, _movementCommandPrediction)
+                    new MoveCommandReceiver(_notReconciledMoveCommands, _clientPlayer, _movementCommandPrediction)
                 },
-                {typeof(Player), new PlayerReceiver(_objectToSimulationMap, _clientPlayer)}
+                {typeof(Player), new PlayerReceiver(_objectToSimulationMap, _clientPlayer)},
+                {typeof(FireCommand), new FireCommandReceiver(_notReconciledFireCommands, _clientPlayer)}
             };
 
             IEnumerable<(Type, object)> serialization = new List<(Type, object)>
             {
-                (typeof(MoveCommand), new MoveCommandSerialization(hashedObjects, typeIdConversion))
+                (typeof(MoveCommand), new MoveCommandSerialization(hashedObjects, typeIdConversion)),
+                (typeof(FireCommand), new FireCommandSerialization(hashedObjects, typeIdConversion))
             };
 
             INetworkObjectSender objectSender = new StreamObjectSender(serialization, typeIdConversion, outputStream);
@@ -89,7 +94,8 @@ namespace GameModes.MultiPlayer
             IEnumerable<(Type, object)> deserialization = new List<(Type, object)>
             {
                 (typeof(Player), new PlayerSerialization(hashedObjects, typeIdConversion, playerFactory)),
-                (typeof(MoveCommand), new MoveCommandSerialization(hashedObjects, typeIdConversion))
+                (typeof(MoveCommand), new MoveCommandSerialization(hashedObjects, typeIdConversion)),
+                (typeof(FireCommand), new FireCommandSerialization(hashedObjects, typeIdConversion))
             };
 
             IReplicationPacketRead packetRead =
@@ -97,17 +103,8 @@ namespace GameModes.MultiPlayer
 
             GameClient gameClient = new GameClient(packetRead);
 
-            INetworkStreamRead networkStreamRead = new LatencyDebugTestNetworkStreamRead(gameClient,
+            _networkStreamRead = new LatencyDebugTestNetworkStreamRead(gameClient,
                 NetworkConstants.BaseLatency, NetworkConstants.JitterDelta);
-
-            bool quitting = false;
-            Application.quitting += () => quitting = true;
-
-            while (quitting == false)
-            {
-                networkStreamRead.ReadNetworkStream(inputStream);
-                await Task.Yield();
-            }
         }
 
         private IPlayerFactory CreatePlayerFactory(INetworkObjectSender networkObjectSender)
@@ -127,14 +124,15 @@ namespace GameModes.MultiPlayer
                 new HealthViewFactory(), cameraView, bulletFactory, _objectToSimulationMap,
                 new CompositeDeath(
                     new SetLooseGameStatus(_gameStatus),
-                    new OpenMenuOnDeath(_gameLoader)), networkObjectSender, _notReconciledMovementCommands,
-                _updatableContainer, _movementCommandPrediction);
+                    new OpenMenuOnDeath(_gameLoader)), networkObjectSender, _notReconciledMoveCommands,
+                _updatableContainer, _movementCommandPrediction, _notReconciledFireCommands);
 
             return playerFactory;
         }
 
         public void UpdateTime(float deltaTime)
         {
+            _networkStreamRead?.ReadNetworkStream(_inputStream);
             _updatableContainer.UpdateTime(deltaTime);
             _clientPlayer?.UpdateTime(deltaTime);
         }

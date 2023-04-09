@@ -1,5 +1,5 @@
-﻿using Model.Characters.Shooting.Bullets;
-using ObjectComposition;
+﻿using GameModes.SinglePlayer.ObjectComposition;
+using Model.Characters.Shooting.Bullets;
 using Simulation;
 using Simulation.Pool;
 using Simulation.View.Factories;

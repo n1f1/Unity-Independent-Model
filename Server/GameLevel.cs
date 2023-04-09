@@ -1,16 +1,29 @@
-﻿using System.Collections.Generic;
-using Model.Characters;
+﻿using System;
+using System.Collections.Generic;
+using Networking.Connection;
 
 namespace Server
 {
-    internal class GameLevel
+    internal class GameSimulation
     {
-        private readonly List<Player> _players = new();
-        public IEnumerable<Player> Players => _players;
+        private readonly List<GameClient> _gameClients = new();
+        private Room _room;
+        public IEnumerable<GameClient> GameClients => _gameClients;
 
-        public void Add(Player player)
+        public void Add(GameClient player, Room room)
         {
-            _players.Add(player);
+            _room = room ?? throw new ArgumentNullException(nameof(room));
+            _gameClients.Add(player);
+        }
+
+        public void AddPassedTime(float time)
+        {
+            foreach (GameClient gameClient in _gameClients)
+            {
+                gameClient.Player.UpdateTime(time);
+                gameClient.ProcessReceivedCommands();
+                gameClient.SendOutgoingCommands(_room);
+            }
         }
     }
 }

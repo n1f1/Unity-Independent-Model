@@ -12,7 +12,7 @@ using Simulation.View.Factories;
 using UnityEngine;
 using Object = UnityEngine.Object;
 
-namespace ObjectComposition
+namespace GameModes.SinglePlayer.ObjectComposition
 {
     public class PlayerSimulationProvider
     {
@@ -50,7 +50,7 @@ namespace ObjectComposition
             movableSimulation.Initialize(movable);
             simulation.RegisterUpdatable(movableSimulation);
 
-            ISimulation<CharacterShooter> characterShooter = simulation.GetSimulation<CharacterShooter>();
+            ISimulation<ICharacterShooter> characterShooter = simulation.GetSimulation<ICharacterShooter>();
             characterShooter.Initialize(simulated.CharacterShooter);
             simulation.RegisterUpdatable(characterShooter);
         }

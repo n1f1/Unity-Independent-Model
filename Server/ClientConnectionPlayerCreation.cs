@@ -11,10 +11,13 @@ namespace Server
     {
         private readonly ObjectReplicationPacketFactory _replicationPacketFactory;
         private readonly Room _room;
-        private readonly GameLevel _game;
-        
-        public ClientConnectionPlayerCreation(ObjectReplicationPacketFactory replicationPacketFactory, Room room, GameLevel game)
+        private readonly GameSimulation _game;
+        private PlayerToClientMap _playerToClientMap;
+
+        public ClientConnectionPlayerCreation(ObjectReplicationPacketFactory replicationPacketFactory, Room room,
+            GameSimulation game, PlayerToClientMap playerToClientMap)
         {
+            _playerToClientMap = playerToClientMap ?? throw new ArgumentNullException(nameof(playerToClientMap));
             _replicationPacketFactory = replicationPacketFactory ??
                                         throw new ArgumentNullException(nameof(replicationPacketFactory));
             _room = room ?? throw new ArgumentNullException(nameof(room));
@@ -23,7 +26,7 @@ namespace Server
 
         public void Connect(Client client)
         {
-            Player player = new NullPlayerFactory().CreatePlayer(new Vector3(1, 0, 1));
+            Player player = new ServerPlayerFactory().CreatePlayer(new Vector3(1, 0, 1));
 
             INetworkPacket networkPacket = _replicationPacketFactory.Create(player);
 
@@ -33,10 +36,12 @@ namespace Server
                     other.Sender.SendPacket(networkPacket);
             }
 
-            foreach (Player other in _game.Players)
-                client.Sender.SendPacket(_replicationPacketFactory.Create(other));
+            foreach (GameClient other in _game.GameClients)
+                client.Sender.SendPacket(_replicationPacketFactory.Create(other.Player));
 
-            _game.Add(player);
+            GameClient gameClient = new GameClient(player, _replicationPacketFactory);
+            _playerToClientMap.Add(gameClient);
+            _game.Add(gameClient, _room);
         }
     }
 }

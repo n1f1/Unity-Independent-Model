@@ -1,6 +1,6 @@
 using Simulation;
 
-namespace ObjectComposition
+namespace GameModes.MultiPlayer
 {
     public interface IObjectToSimulationMap
     {

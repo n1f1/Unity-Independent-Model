@@ -1,7 +1,6 @@
 ﻿using System;
 using Model.Characters.CharacterHealth;
 using NUnit.Framework;
-using ObjectComposition;
 using Tests.Model.Characters.CharacterHealth.Support;
 
 namespace Tests.Model.Characters.CharacterHealth

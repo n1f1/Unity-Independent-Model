@@ -13,10 +13,12 @@ namespace Server
         private readonly IPacketReceiver _packetReceiver;
         private readonly TcpListener _tcpListener;
         private readonly Room _room;
+        private GameSimulation _gameSimulation;
 
         public ServerUpdate(NewClientsListener newClientsListener, IReplicationPacketRead replicationPacketRead,
-            Room room, TcpListener tcpListener, IPacketReceiver packetReceiver)
+            Room room, TcpListener tcpListener, IPacketReceiver packetReceiver, GameSimulation gameSimulation)
         {
+            _gameSimulation = gameSimulation ?? throw new ArgumentNullException(nameof(gameSimulation));
             _packetReceiver = packetReceiver ?? throw new ArgumentNullException(nameof(packetReceiver));
             _newClientsListener = newClientsListener ?? throw new ArgumentNullException(nameof(newClientsListener));
             _replicationPacketRead =
@@ -34,6 +36,8 @@ namespace Server
                 if (client.IsConnected)
                     _packetReceiver.ReceivePackets(client.InputStream, _replicationPacketRead);
             }
+
+            _gameSimulation.AddPassedTime(fixedTimeInMilliseconds);
         }
     }
 }

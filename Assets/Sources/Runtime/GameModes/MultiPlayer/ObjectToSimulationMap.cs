@@ -1,8 +1,7 @@
 using System.Collections;
-using GameMenu;
 using Simulation;
 
-namespace ObjectComposition
+namespace GameModes.MultiPlayer
 {
     public class ObjectToSimulationMap : IObjectToSimulationMap
     {

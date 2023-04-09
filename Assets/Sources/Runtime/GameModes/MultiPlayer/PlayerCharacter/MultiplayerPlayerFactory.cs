@@ -1,17 +1,21 @@
 ﻿using System;
 using GameModes.MultiPlayer.PlayerCharacter.Client;
+using GameModes.MultiPlayer.PlayerCharacter.Client.Shooting;
+using GameModes.MultiPlayer.PlayerCharacter.Common;
 using GameModes.MultiPlayer.PlayerCharacter.Remote;
+using GameModes.SinglePlayer.ObjectComposition;
 using Model;
 using Model.Characters;
 using Model.Characters.CharacterHealth;
 using Model.Characters.Shooting;
 using Model.Characters.Shooting.Bullets;
 using Model.SpatialObject;
-using Networking;
 using Networking.PacketSend.ObjectSend;
-using ObjectComposition;
 using Simulation;
 using Simulation.Common;
+using Simulation.Input;
+using Simulation.Movement;
+using Simulation.Shooting;
 using Simulation.View.Factories;
 using Vector3 = System.Numerics.Vector3;
 
@@ -25,21 +29,25 @@ namespace GameModes.MultiPlayer.PlayerCharacter
         private readonly IObjectToSimulationMap _objectToSimulationMapping;
         private readonly IDeathView _deathView;
         private readonly INetworkObjectSender _sender;
-        private readonly NotReconciledMovementCommands _notReconciledMovementCommands;
+        private readonly NotReconciledCommands<MoveCommand> _notReconciledCommands;
         private readonly IMovementCommandPrediction _movementCommandPrediction;
         private int _createdNumber;
-        private UpdatableContainer _updatableContainer;
+        private readonly UpdatableContainer _updatableContainer;
+        private NotReconciledCommands<FireCommand> _notReconciledFireCommands;
 
         public MultiplayerPlayerFactory(LevelConfig levelConfig, IViewFactory<IPositionView> positionViewFactory,
             IViewFactory<IHealthView> healthViewFactory, IPositionView cameraView,
             IBulletFactory<IBullet> pooledBulletFactory, IObjectToSimulationMap objectToSimulationMapping,
             IDeathView deathView, INetworkObjectSender networkObjectSender,
-            NotReconciledMovementCommands movementCommands, UpdatableContainer updatableContainer, IMovementCommandPrediction movementCommandPrediction)
+            NotReconciledCommands<MoveCommand> commands, UpdatableContainer updatableContainer,
+            IMovementCommandPrediction movementCommandPrediction,
+            NotReconciledCommands<FireCommand> notReconciledFireCommands)
         {
+            _notReconciledFireCommands = notReconciledFireCommands;
             _movementCommandPrediction = movementCommandPrediction;
             _updatableContainer = updatableContainer;
-            _notReconciledMovementCommands =
-                movementCommands ?? throw new ArgumentNullException(nameof(movementCommands));
+            _notReconciledCommands =
+                commands ?? throw new ArgumentNullException(nameof(commands));
             _deathView = deathView ?? throw new ArgumentNullException(nameof(deathView));
             _objectToSimulationMapping =
                 objectToSimulationMapping ?? throw new ArgumentNullException(nameof(objectToSimulationMapping));
@@ -50,35 +58,47 @@ namespace GameModes.MultiPlayer.PlayerCharacter
             _sender = networkObjectSender ?? throw new ArgumentNullException(nameof(networkObjectSender));
         }
 
-        public Model.Characters.Player CreatePlayer(Vector3 position)
+        public Player CreatePlayer(Vector3 position)
         {
-            SimulationObject<Model.Characters.Player> playerSimulation = _playerSimulationProvider.CreateSimulationObject();
+            SimulationObject<Player> playerSimulation = _playerSimulationProvider.CreateSimulationObject();
             IPositionView positionView = playerSimulation.GetView<IPositionView>();
             IForwardAimView forwardAimView = playerSimulation.GetView<IForwardAimView>();
             IHealthView healthView = playerSimulation.GetView<IHealthView>();
 
             if (_createdNumber == 0)
                 positionView = new CompositePositionView(positionView, _cameraView);
+            else
+                forwardAimView = new NullAimView();
 
-            Model.Characters.Player player = new Model.Characters.Player(
-                positionView,
-                healthView,
-                new ForwardAim(forwardAimView), _bulletFactory, _bulletFactory, position,
-                _deathView);
+            BulletsContainer bulletsContainer = new BulletsContainer(_bulletFactory);
 
-            IMovable movable = player.CharacterMovement;
+            Cooldown cooldown = new Cooldown(_createdNumber == 0 ? Player.ShootingCooldown : 0);
+            IWeapon weapon =
+                new DefaultGun(_bulletFactory ?? throw new ArgumentException(), cooldown, bulletsContainer);
 
-            if (_createdNumber == 0)
-                movable = new ClientPlayerMovementCommandSender(player.CharacterMovement, _sender, _notReconciledMovementCommands);
+            Player player = new Player(positionView, healthView, new ForwardAim(forwardAimView), position,
+                _deathView, weapon, bulletsContainer, cooldown);
 
             if (_createdNumber == 0)
             {
-                _playerSimulationProvider.InitializeSimulation(playerSimulation, player, movable);
-                playerSimulation.Enable();
-                _objectToSimulationMapping.RegisterNew(player, playerSimulation);
-            }
+                IMovable movable = new ClientPlayerMovementCommandSender(player, _sender,
+                    _notReconciledCommands);
 
-            if (_createdNumber != 0)
+                playerSimulation.AddSimulation(playerSimulation.GameObject.AddComponent<PlayerMovement>()
+                    .Initialize(new AxisInput()));
+
+                ISimulation<IMovable> movableSimulation = playerSimulation.GetSimulation<IMovable>();
+                movableSimulation.Initialize(movable);
+                playerSimulation.RegisterUpdatable(movableSimulation);
+
+                ISimulation<ICharacterShooter> fireCommandSender =
+                    playerSimulation.GameObject.AddComponent<PlayerShooter>();
+
+                playerSimulation.AddSimulation(fireCommandSender);
+                fireCommandSender.Initialize(new FireCommandSender(player, _sender, _notReconciledFireCommands));
+                playerSimulation.RegisterUpdatable(fireCommandSender);
+            }
+            else
             {
                 ISimulation<RemotePlayerPrediction> simulation =
                     playerSimulation.GameObject.AddComponent<RemotePlayerPredictionSimulation>();
@@ -87,12 +107,12 @@ namespace GameModes.MultiPlayer.PlayerCharacter
                 simulation.Initialize(new RemotePlayerPrediction(_movementCommandPrediction,
                     player.CharacterMovement));
                 playerSimulation.RegisterUpdatable(simulation);
-
-                playerSimulation.Enable();
-                _objectToSimulationMapping.RegisterNew(player, playerSimulation);
                 _updatableContainer.QueryAdd(playerSimulation);
+                _updatableContainer.QueryAdd(player);
             }
 
+            playerSimulation.Enable();
+            _objectToSimulationMapping.RegisterNew(player, playerSimulation);
             _createdNumber++;
 
             return player;

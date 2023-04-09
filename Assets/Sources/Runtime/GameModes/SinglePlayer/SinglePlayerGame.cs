@@ -1,11 +1,12 @@
 using System;
 using GameMenu;
 using GameMenu.PauseMenu;
+using GameModes.MultiPlayer;
+using GameModes.SinglePlayer.ObjectComposition;
 using Model.Characters;
 using Model.Characters.CharacterHealth;
 using Model.Characters.Enemy;
 using Model.SpatialObject;
-using ObjectComposition;
 using Simulation;
 using Simulation.View;
 using Simulation.View.Factories;

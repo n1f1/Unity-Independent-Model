@@ -1,13 +1,12 @@
 using System;
 using GameModes.MultiPlayer.PlayerCharacter.Client;
-using Networking;
+using Model.Characters;
 using Networking.PacketReceive;
-using ObjectComposition;
 using UnityEngine;
 
 namespace GameModes.MultiPlayer.PlayerCharacter.Common
 {
-    public class PlayerReceiver : IReplicatedObjectReceiver<Model.Characters.Player>
+    public class PlayerReceiver : IReplicatedObjectReceiver<Player>
     {
         private readonly IObjectToSimulationMap _objectToSimulationMap;
         private readonly PlayerClient _clientPlayer;
@@ -20,7 +19,7 @@ namespace GameModes.MultiPlayer.PlayerCharacter.Common
             _objectToSimulationMap = objectToSimulation ?? throw new ArgumentNullException(nameof(objectToSimulation));
         }
 
-        public void Receive(Model.Characters.Player createdObject)
+        public void Receive(Player createdObject)
         {
             if(_received)
                 return;

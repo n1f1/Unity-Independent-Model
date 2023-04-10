@@ -3,20 +3,17 @@ using System.Collections.Generic;
 using System.Net;
 using System.Net.Sockets;
 using System.Threading.Tasks;
-using GameModes.MultiPlayer;
 using GameModes.MultiPlayer.NetworkingTypesConfigurations;
 using GameModes.MultiPlayer.PlayerCharacter.Client.Shooting;
 using GameModes.MultiPlayer.PlayerCharacter.Common;
-using GameModes.SinglePlayer;
 using Model.Characters;
+using Model.Characters.Shooting.Bullets;
 using Networking.Connection;
 using Networking.ObjectsHashing;
 using Networking.PacketReceive;
 using Networking.PacketReceive.Replication;
 using Networking.PacketReceive.Replication.ObjectCreationReplication;
 using Networking.PacketReceive.Replication.Serialization;
-using Networking.PacketSend;
-using Networking.PacketSend.ObjectSend;
 
 namespace Server
 {
@@ -32,16 +29,21 @@ namespace Server
             ITypeIdConversion typeIdConversion = new TypeIdConversion(
                 new Dictionary<Type, int>().PopulateDictionaryFromTuple(SerializableTypesIdMap.Get()));
 
+            GameSimulation game = new GameSimulation();
+            BulletsContainer bulletsContainer = new BulletsContainer(new NullBulletDestroyer());
+            ServerPlayerFactory playerFactory = new ServerPlayerFactory(bulletsContainer, game);
+            game.Add(bulletsContainer);
+
             IEnumerable<(Type, object)> serialization = new List<(Type, object)>
             {
-                (typeof(Player), new PlayerSerialization(hashedObjects, typeIdConversion, new ServerPlayerFactory())),
+                (typeof(Player), new PlayerSerialization(hashedObjects, typeIdConversion, playerFactory)),
                 (typeof(MoveCommand), new MoveCommandSerialization(hashedObjects, typeIdConversion)),
                 (typeof(FireCommand), new FireCommandSerialization(hashedObjects, typeIdConversion))
             };
 
             IEnumerable<(Type, object)> deserialization = new List<(Type, object)>
             {
-                (typeof(Player), new PlayerSerialization(hashedObjects, typeIdConversion, new ServerPlayerFactory())),
+                (typeof(Player), new PlayerSerialization(hashedObjects, typeIdConversion, playerFactory)),
                 (typeof(MoveCommand), new MoveCommandSerialization(hashedObjects, typeIdConversion)),
                 (typeof(FireCommand), new FireCommandSerialization(hashedObjects, typeIdConversion))
             };
@@ -50,7 +52,7 @@ namespace Server
             dictionary.PopulateDictionary(serialization);
             ObjectReplicationPacketFactory replicationPacketFactory =
                 new ObjectReplicationPacketFactory(dictionary, typeIdConversion);
-            
+
             PlayerToClientMap playerToClientMap = new PlayerToClientMap();
 
             Dictionary<Type, object> receivers = new Dictionary<Type, object>
@@ -67,9 +69,9 @@ namespace Server
             IReplicationPacketRead replicationPacketRead = new ReplicationPacketRead(new CreationReplicator(
                 typeIdConversion, deserializations, new ReceivedReplicatedObjectMatcher(receivers)));
 
-            GameSimulation game = new GameSimulation();
             NewClientsListener newClientsListener = new NewClientsListener(room,
-                new ClientConnectionPlayerCreation(replicationPacketFactory, room, game, playerToClientMap));
+                new ClientConnectionPlayerCreation(replicationPacketFactory, room, game, playerToClientMap,
+                    playerFactory));
 
             IPacketReceiver packetReceiver = new PacketReceiver();
 

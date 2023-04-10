@@ -8,5 +8,7 @@ namespace Model.Characters.Shooting.Bullets
             Vector3.Zero;
 
         public float Distance => 0;
+        public Vector3 Start { get; }
+        public Vector3 Finish { get; }
     }
 }

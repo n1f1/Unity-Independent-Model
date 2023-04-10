@@ -1,5 +1,6 @@
 using Model.Characters.CharacterHealth;
 using Model.Characters.Shooting.Bullets;
+using Model.SpatialObject;
 
 namespace Server
 {
@@ -11,5 +12,6 @@ namespace Server
         }
 
         public bool Collided { get; }
+        public Transform Transform { get; }
     }
 }

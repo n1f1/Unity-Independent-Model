@@ -8,7 +8,7 @@ using Transform = Model.SpatialObject.Transform;
 
 namespace GameModes.SinglePlayer.ObjectComposition
 {
-    public class PooledBulletFactory : IBulletFactory<DefaultBullet>
+    public class PooledBulletFactory : IBulletFactory<IBullet>
     {
         private readonly ISimulationProvider<DefaultBullet> _bulletSimulationProvider;
         private readonly KeyPooledObjectPool<DefaultBullet, SimulationObject<DefaultBullet>> _objectPool;
@@ -26,7 +26,7 @@ namespace GameModes.SinglePlayer.ObjectComposition
                 AddNewToObjectPool();
         }
 
-        public DefaultBullet CreateBullet(ITrajectory trajectory, float speed, int damage)
+        public IBullet CreateBullet(ITrajectory trajectory, float speed, int damage)
         {
             if (!_objectPool.CanGet())
                 AddNewToObjectPool();

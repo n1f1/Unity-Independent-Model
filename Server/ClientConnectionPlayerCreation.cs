@@ -12,11 +12,13 @@ namespace Server
         private readonly ObjectReplicationPacketFactory _replicationPacketFactory;
         private readonly Room _room;
         private readonly GameSimulation _game;
-        private PlayerToClientMap _playerToClientMap;
+        private readonly PlayerToClientMap _playerToClientMap;
+        private readonly ServerPlayerFactory _playerFactory;
 
         public ClientConnectionPlayerCreation(ObjectReplicationPacketFactory replicationPacketFactory, Room room,
-            GameSimulation game, PlayerToClientMap playerToClientMap)
+            GameSimulation game, PlayerToClientMap playerToClientMap, ServerPlayerFactory serverPlayerFactory)
         {
+            _playerFactory = serverPlayerFactory ?? throw new ArgumentNullException(nameof(serverPlayerFactory));
             _playerToClientMap = playerToClientMap ?? throw new ArgumentNullException(nameof(playerToClientMap));
             _replicationPacketFactory = replicationPacketFactory ??
                                         throw new ArgumentNullException(nameof(replicationPacketFactory));
@@ -26,7 +28,7 @@ namespace Server
 
         public void Connect(Client client)
         {
-            Player player = new ServerPlayerFactory().CreatePlayer(new Vector3(1, 0, 1));
+            Player player = _playerFactory.CreatePlayer(new Vector3(1, 0, 1));
 
             INetworkPacket networkPacket = _replicationPacketFactory.Create(player);
 

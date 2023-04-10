@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Numerics;
+using GameModes.MultiPlayer;
 using GameModes.MultiPlayer.PlayerCharacter.Client.Shooting;
 using GameModes.MultiPlayer.PlayerCharacter.Common;
 using Model.Characters;
@@ -20,7 +21,8 @@ namespace Server
         private Vector3 _acceleration;
         private float _deltaTime;
         private short _id;
-        private ObjectReplicationPacketFactory _objectReplicationPacketFactory;
+        private readonly ObjectReplicationPacketFactory _objectReplicationPacketFactory;
+        private readonly LinkedList<PhysicBullet> _firedBullets = new();
 
         public GameClient(Player player, ObjectReplicationPacketFactory objectReplicationPacketFactory)
         {
@@ -29,6 +31,7 @@ namespace Server
         }
 
         public Player Player { get; }
+        public IEnumerable<PhysicBullet> FiredBullets => _firedBullets;
 
         public void AddCommand(MoveCommand command) =>
             _moveCommands.Enqueue(command);
@@ -58,6 +61,14 @@ namespace Server
             {
                 fireCommand.Execute();
                 Console.WriteLine($"fire {fireCommand.Succeeded}");
+
+                if (fireCommand.Succeeded)
+                {
+                    Console.WriteLine("add bullet");
+                    fireCommand.Bullet.UpdateTime(NetworkConstants.ServerFixedDeltaTime / 2f);
+                    _firedBullets.AddLast(new PhysicBullet(fireCommand.Bullet));
+                }
+
                 _processedFire = true;
             }
         }
@@ -92,6 +103,15 @@ namespace Server
         {
             foreach (Client roomClient in room.Clients)
                 roomClient.Sender.SendPacket(networkPacket);
+        }
+
+        public void RemoveCollidedBullets()
+        {
+            for (LinkedListNode<PhysicBullet> node = _firedBullets.First; node != null; node = node.Next)
+            {
+                if (node.Value.Collided)
+                    _firedBullets.Remove(node);
+            }
         }
     }
 }

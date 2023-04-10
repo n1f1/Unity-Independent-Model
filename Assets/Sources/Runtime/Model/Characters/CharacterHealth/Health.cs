@@ -26,6 +26,8 @@ namespace Model.Characters.CharacterHealth
 
         public void TakeDamage(float damage)
         {
+            Console.WriteLine("take damage");
+            
             if (damage < 0)
                 throw new ArgumentOutOfRangeException();
 

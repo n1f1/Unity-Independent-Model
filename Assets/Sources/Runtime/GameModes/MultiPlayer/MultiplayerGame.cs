@@ -14,6 +14,7 @@ using GameModes.SinglePlayer;
 using GameModes.SinglePlayer.ObjectComposition;
 using Model.Characters;
 using Model.Characters.CharacterHealth;
+using Model.Characters.Shooting.Bullets;
 using Model.SpatialObject;
 using Networking.ObjectsHashing;
 using Networking.PacketReceive;
@@ -42,6 +43,7 @@ namespace GameModes.MultiPlayer
         private NotReconciledCommands<FireCommand> _notReconciledFireCommands;
         private INetworkStreamRead _networkStreamRead;
         private IInputStream _inputStream;
+        private BulletsContainer _bulletsContainer;
 
         public MultiplayerGame(IGameLoader gameLoader)
         {
@@ -120,12 +122,14 @@ namespace GameModes.MultiPlayer
             PooledBulletFactory bulletFactory =
                 BulletFactoryCreation.CreatePooledBulletFactory(_levelConfig.BulletTemplate);
 
+            _bulletsContainer = new BulletsContainer(bulletFactory);
+            
             IPlayerFactory playerFactory = new MultiplayerPlayerFactory(_levelConfig, new PositionViewFactory(),
                 new HealthViewFactory(), cameraView, bulletFactory, _objectToSimulationMap,
                 new CompositeDeath(
                     new SetLooseGameStatus(_gameStatus),
                     new OpenMenuOnDeath(_gameLoader)), networkObjectSender, _notReconciledMoveCommands,
-                _updatableContainer, _movementCommandPrediction, _notReconciledFireCommands);
+                _updatableContainer, _movementCommandPrediction, _notReconciledFireCommands, _bulletsContainer);
 
             return playerFactory;
         }
@@ -134,6 +138,7 @@ namespace GameModes.MultiPlayer
         {
             _networkStreamRead?.ReadNetworkStream(_inputStream);
             _updatableContainer.UpdateTime(deltaTime);
+            _bulletsContainer?.Update(deltaTime);
             _clientPlayer?.UpdateTime(deltaTime);
         }
     }

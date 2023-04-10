@@ -1,5 +1,6 @@
 ﻿using Model.Characters.CharacterHealth;
 using Model.Characters.Shooting.Bullets;
+using Model.SpatialObject;
 
 namespace GameModes.MultiPlayer.PlayerCharacter.Client.Shooting
 {
@@ -10,5 +11,6 @@ namespace GameModes.MultiPlayer.PlayerCharacter.Client.Shooting
         }
 
         public bool Collided { get; }
+        public Transform Transform { get; }
     }
 }

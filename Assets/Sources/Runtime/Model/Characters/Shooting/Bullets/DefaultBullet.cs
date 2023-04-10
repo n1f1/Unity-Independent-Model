@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using Model.Characters.CharacterHealth;
 using Model.SpatialObject;
 
@@ -6,7 +7,6 @@ namespace Model.Characters.Shooting.Bullets
 {
     public class DefaultBullet : IBullet
     {
-        private readonly Transform _transform;
         private float _distance;
 
         private ITrajectory _trajectory;
@@ -16,11 +16,12 @@ namespace Model.Characters.Shooting.Bullets
 
         public DefaultBullet(Transform transform, ITrajectory trajectory, float speed = 0, int damage = 0)
         {
-            _transform = transform ?? throw new ArgumentNullException();
+            Transform = transform ?? throw new ArgumentNullException();
             Reset(trajectory, speed, damage);
         }
-
+        
         public bool Collided { get; private set; }
+        public Transform Transform { get; }
 
         public void Reset(ITrajectory trajectory, float speed, int damage)
         {
@@ -59,8 +60,11 @@ namespace Model.Characters.Shooting.Bullets
         private float GetNormalizedPassedDistance(float passedTime) =>
             Math.Clamp(passedTime * _speed / _distance, 0, 1);
 
-        private void UpdatePosition(float ratio) =>
-            _transform.SetPosition(_trajectory.EvaluateForNormalizedRatio(ratio));
+        private void UpdatePosition(float ratio)
+        {
+            Transform.SetPosition(_trajectory.EvaluateForNormalizedRatio(ratio));
+            Console.WriteLine(Transform.Position);
+        }
 
         public void Hit(IDamageable damageable)
         {

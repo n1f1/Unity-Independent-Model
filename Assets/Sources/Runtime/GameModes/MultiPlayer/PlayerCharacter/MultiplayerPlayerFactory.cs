@@ -25,15 +25,16 @@ namespace GameModes.MultiPlayer.PlayerCharacter
     {
         private readonly IPositionView _cameraView;
         private readonly PlayerSimulationProvider _playerSimulationProvider;
-        private readonly IBulletFactory<IBullet> _bulletFactory;
         private readonly IObjectToSimulationMap _objectToSimulationMapping;
         private readonly IDeathView _deathView;
         private readonly INetworkObjectSender _sender;
         private readonly NotReconciledCommands<MoveCommand> _notReconciledCommands;
         private readonly IMovementCommandPrediction _movementCommandPrediction;
-        private int _createdNumber;
         private readonly UpdatableContainer _updatableContainer;
-        private NotReconciledCommands<FireCommand> _notReconciledFireCommands;
+        private readonly NotReconciledCommands<FireCommand> _notReconciledFireCommands;
+        private IBulletFactory<IBullet> _bulletFactory;
+        private int _createdNumber;
+        private BulletsContainer _bulletsContainer;
 
         public MultiplayerPlayerFactory(LevelConfig levelConfig, IViewFactory<IPositionView> positionViewFactory,
             IViewFactory<IHealthView> healthViewFactory, IPositionView cameraView,
@@ -41,7 +42,7 @@ namespace GameModes.MultiPlayer.PlayerCharacter
             IDeathView deathView, INetworkObjectSender networkObjectSender,
             NotReconciledCommands<MoveCommand> commands, UpdatableContainer updatableContainer,
             IMovementCommandPrediction movementCommandPrediction,
-            NotReconciledCommands<FireCommand> notReconciledFireCommands)
+            NotReconciledCommands<FireCommand> notReconciledFireCommands, BulletsContainer bulletsContainer)
         {
             _notReconciledFireCommands = notReconciledFireCommands;
             _movementCommandPrediction = movementCommandPrediction;
@@ -52,6 +53,7 @@ namespace GameModes.MultiPlayer.PlayerCharacter
             _objectToSimulationMapping =
                 objectToSimulationMapping ?? throw new ArgumentNullException(nameof(objectToSimulationMapping));
             _bulletFactory = pooledBulletFactory;
+            _bulletsContainer = bulletsContainer;
             _cameraView = cameraView ?? throw new ArgumentNullException(nameof(cameraView));
             _playerSimulationProvider = new PlayerSimulationProvider(levelConfig.PlayerTemplate, positionViewFactory,
                 healthViewFactory);
@@ -67,17 +69,21 @@ namespace GameModes.MultiPlayer.PlayerCharacter
 
             if (_createdNumber == 0)
                 positionView = new CompositePositionView(positionView, _cameraView);
-            else
-                forwardAimView = new NullAimView();
+            
+            Transform playerTransform = new Transform(positionView, position);
 
-            BulletsContainer bulletsContainer = new BulletsContainer(_bulletFactory);
+            if (_createdNumber != 0)
+            {
+                forwardAimView = new NullAimView();
+                _bulletFactory = new RemoteFiredBulletFactory(playerTransform, _bulletFactory);
+            }
 
             Cooldown cooldown = new Cooldown(_createdNumber == 0 ? Player.ShootingCooldown : 0);
             IWeapon weapon =
-                new DefaultGun(_bulletFactory ?? throw new ArgumentException(), cooldown, bulletsContainer);
+                new DefaultGun(_bulletFactory ?? throw new ArgumentException(), cooldown, _bulletsContainer);
 
-            Player player = new Player(positionView, healthView, new ForwardAim(forwardAimView), position,
-                _deathView, weapon, bulletsContainer, cooldown);
+            Player player = new Player(healthView, new ForwardAim(forwardAimView),
+                _deathView, weapon, cooldown, playerTransform);
 
             if (_createdNumber == 0)
             {

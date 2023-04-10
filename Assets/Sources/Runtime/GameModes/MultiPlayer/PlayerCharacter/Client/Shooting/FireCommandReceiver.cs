@@ -28,10 +28,6 @@ namespace GameModes.MultiPlayer.PlayerCharacter.Client.Shooting
         private void ProcessRemoteCommand(FireCommand createdObject)
         {
             createdObject.Execute();
-            Debug.Log(createdObject.Succeeded);
-
-            if (createdObject.Succeeded)
-                createdObject.Bullet.UpdateTime(NetworkConstants.RTT);
         }
 
         private void ProcessClientCommand(FireCommand command)

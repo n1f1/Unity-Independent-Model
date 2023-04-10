@@ -1,18 +1,19 @@
 using Model.Characters.Shooting;
 using Model.Characters.Shooting.Bullets;
+using Model.SpatialObject;
 
 namespace Server
 {
-    internal class NullBulletFactory : IBulletFactory<IBullet>
+    internal class ServerBulletFactory : IBulletFactory<IBullet>
     {
         public IBullet CreateBullet(ITrajectory trajectory, float speed, int damage)
         {
-            return new NullBullet();
+            IBullet bullet = new DefaultBullet(new Transform(new NullPositionVew()), trajectory, speed,damage);
+            return bullet;
         }
 
         public void Destroy(IBullet bullet)
         {
-            
         }
     }
 }

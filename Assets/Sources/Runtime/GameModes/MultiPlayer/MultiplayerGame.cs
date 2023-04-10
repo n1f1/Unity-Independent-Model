@@ -25,7 +25,6 @@ using Networking.PacketSend.ObjectSend;
 using Networking.StreamIO;
 using Simulation.Common;
 using Simulation.View;
-using Simulation.View.Factories;
 using UnityEngine;
 
 namespace GameModes.MultiPlayer
@@ -124,8 +123,7 @@ namespace GameModes.MultiPlayer
 
             _bulletsContainer = new BulletsContainer(bulletFactory);
             
-            IPlayerFactory playerFactory = new MultiplayerPlayerFactory(_levelConfig, new PositionViewFactory(),
-                new HealthViewFactory(), cameraView, bulletFactory, _objectToSimulationMap,
+            IPlayerFactory playerFactory = new MultiplayerPlayerFactory(_levelConfig, cameraView, bulletFactory, _objectToSimulationMap,
                 new CompositeDeath(
                     new SetLooseGameStatus(_gameStatus),
                     new OpenMenuOnDeath(_gameLoader)), networkObjectSender, _notReconciledMoveCommands,

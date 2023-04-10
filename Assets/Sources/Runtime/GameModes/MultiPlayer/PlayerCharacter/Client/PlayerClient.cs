@@ -5,10 +5,10 @@ namespace GameModes.MultiPlayer.PlayerCharacter.Client
 {
     public class PlayerClient
     {
-        private SimulationObject<Player> _playerSimulation;
+        private SimulationObject _playerSimulation;
         public Player Player { get; private set; }
 
-        public void SetClientPlayerSimulation(Player player, SimulationObject<Player> playerSimulation)
+        public void SetClientPlayerSimulation(Player player, SimulationObject playerSimulation)
         {
             Player = player;
             _playerSimulation = playerSimulation;

@@ -25,10 +25,10 @@ namespace GameModes.SinglePlayer.ObjectComposition
             _healthViewFactory = healthViewFactory ?? throw new ArgumentNullException();
         }
 
-        public SimulationObject<Enemy> CreateSimulationObject()
+        public SimulationObject CreateSimulationObject()
         {
             GameObject enemyObject = Object.Instantiate(_enemyTemplate);
-            SimulationObject<Enemy> simulation = new SimulationObject<Enemy>(enemyObject);
+            SimulationObject simulation = new SimulationObject(enemyObject);
             simulation.Add(_positionViewFactory.Create(enemyObject));
             simulation.Add(_healthViewFactory.Create(enemyObject));
             
@@ -39,7 +39,7 @@ namespace GameModes.SinglePlayer.ObjectComposition
             return simulation;
         }
 
-        public void InitializeSimulation(SimulationObject<Enemy> simulation, Enemy enemy)
+        public void InitializeSimulation(SimulationObject simulation, Enemy enemy)
         {
             (simulation ?? throw new ArgumentException()).GetSimulation<IDamageable>()
                 .Initialize((enemy ?? throw new ArgumentNullException()).Health);

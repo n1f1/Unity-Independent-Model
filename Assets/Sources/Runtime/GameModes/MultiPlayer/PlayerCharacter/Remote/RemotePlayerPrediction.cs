@@ -3,7 +3,7 @@ using Model.Characters;
 
 namespace GameModes.MultiPlayer.PlayerCharacter.Remote
 {
-    internal class RemotePlayerPrediction
+    public class RemotePlayerPrediction
     {
         private readonly IMovementCommandPrediction _movementCommandPrediction;
         private readonly CharacterMovement _playerCharacterMovement;

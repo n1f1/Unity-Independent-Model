@@ -4,8 +4,8 @@ namespace GameModes.MultiPlayer
 {
     public interface IObjectToSimulationMap
     {
-        void RegisterNew<TSimulated>(TSimulated simulated, SimulationObject<TSimulated> simulationObject);
-        SimulationObject<TSimulated> Unregister<TSimulated>(TSimulated simulated);
-        SimulationObject<TSimulated> Get<TSimulated>(TSimulated simulated);
+        void RegisterNew<TSimulated>(TSimulated simulated, SimulationObject simulationObject);
+        SimulationObject Unregister<TSimulated>(TSimulated simulated);
+        SimulationObject Get<TSimulated>(TSimulated simulated);
     }
 }

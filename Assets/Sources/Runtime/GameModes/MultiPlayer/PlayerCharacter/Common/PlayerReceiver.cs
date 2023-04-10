@@ -26,7 +26,6 @@ namespace GameModes.MultiPlayer.PlayerCharacter.Common
             
             _clientPlayer.SetClientPlayerSimulation(createdObject, _objectToSimulationMap.Get(createdObject));
             _received = true;
-            Debug.Log("Receive " + createdObject + "!");
         }
     }
 }

@@ -4,7 +4,7 @@ namespace GameModes.SinglePlayer.ObjectComposition
 {
     internal interface ISimulationProvider<TSimulated>
     {
-        public SimulationObject<TSimulated> CreateSimulationObject();
-        void InitializeSimulation(SimulationObject<TSimulated> simulation, TSimulated simulated);
+        public SimulationObject CreateSimulationObject();
+        void InitializeSimulation(SimulationObject simulation, TSimulated simulated);
     }
 }

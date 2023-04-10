@@ -12,11 +12,11 @@ namespace GameModes.SinglePlayer.ObjectComposition
 {
     public class EnemyFactory : IEnemyFactory
     {
-        private readonly KeyPooledObjectPool<Enemy, SimulationObject<Enemy>> _objectPool = new();
+        private readonly KeyPooledObjectPool<Enemy, SimulationObject> _objectPool = new();
 
         private readonly ISimulationProvider<Enemy> _simulationProvider;
         private readonly Player _player;
-        private SimulationObject<Enemy> _freeSimulation;
+        private SimulationObject _freeSimulation;
 
         public EnemyFactory(Player player, EnemySimulationProvider enemySimulationProvider)
         {
@@ -39,13 +39,13 @@ namespace GameModes.SinglePlayer.ObjectComposition
 
         private void AddNewToObjectPool(Vector3 position)
         {
-            SimulationObject<Enemy> simulation = _freeSimulation ?? _simulationProvider.CreateSimulationObject();
+            SimulationObject simulation = _freeSimulation ?? _simulationProvider.CreateSimulationObject();
             _freeSimulation = null;
             Enemy enemy = CreateNewEnemy(position, simulation);
             _objectPool.AddNew(enemy, simulation);
         }
 
-        private Enemy CreateNewEnemy(Vector3 position, SimulationObject<Enemy> simulation)
+        private Enemy CreateNewEnemy(Vector3 position, SimulationObject simulation)
         {
             IDeath death = new Death(new NullDeathView());
             Health health = new Health(100f, simulation.GetView<IHealthView>(), death);

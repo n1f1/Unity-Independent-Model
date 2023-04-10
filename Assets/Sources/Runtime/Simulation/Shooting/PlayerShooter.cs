@@ -15,10 +15,12 @@ namespace Simulation.Shooting
         private void Awake() =>
             _layerMask = LayerMask.GetMask("AimPlane");
 
-        public void Initialize(ICharacterShooter enemyPlayerPrediction)
+        public ISimulation<ICharacterShooter> Initialize(ICharacterShooter enemyPlayerPrediction)
         {
             _simulation = enemyPlayerPrediction ?? throw new ArgumentNullException();
             _camera = Camera.main;
+
+            return this;
         }
 
         public void UpdateTime(float deltaTime)

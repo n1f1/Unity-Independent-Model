@@ -7,9 +7,10 @@ namespace GameModes.MultiPlayer.PlayerCharacter.Remote
     {
         private RemotePlayerPrediction _remotePlayerPrediction;
 
-        public void Initialize(RemotePlayerPrediction remotePlayerPrediction)
+        public ISimulation<RemotePlayerPrediction> Initialize(RemotePlayerPrediction remotePlayerPrediction)
         {
             _remotePlayerPrediction = remotePlayerPrediction;
+            return this;
         }
 
         public void UpdateTime(float deltaTime)

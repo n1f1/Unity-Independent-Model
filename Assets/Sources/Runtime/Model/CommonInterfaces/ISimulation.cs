@@ -2,6 +2,6 @@
 {
     public interface ISimulation<in TSimulated> : IUpdatable
     {
-        void Initialize(TSimulated simulated);
+        ISimulation<TSimulated> Initialize(TSimulated simulated);
     }
 }

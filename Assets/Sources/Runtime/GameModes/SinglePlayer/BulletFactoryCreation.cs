@@ -13,7 +13,7 @@ namespace GameModes.SinglePlayer
         {
             PooledBulletFactory bulletFactory =
                 new PooledBulletFactory(
-                    new KeyPooledObjectPool<DefaultBullet, SimulationObject<DefaultBullet>>(64),
+                    new KeyPooledObjectPool<DefaultBullet, SimulationObject>(64),
                     new BulletSimulationProvider(bulletTemplate, new PositionViewFactory()));
 
             bulletFactory.PopulatePool();

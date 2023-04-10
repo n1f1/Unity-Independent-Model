@@ -22,10 +22,10 @@ namespace GameModes.SinglePlayer.ObjectComposition
             _bulletTemplate = bulletTemplate ? bulletTemplate : throw new ArgumentException();
         }
 
-        public SimulationObject<DefaultBullet> CreateSimulationObject()
+        public SimulationObject CreateSimulationObject()
         {
             GameObject bullet = Object.Instantiate(_bulletTemplate);
-            SimulationObject<DefaultBullet> simulation = new SimulationObject<DefaultBullet>(bullet);
+            SimulationObject simulation = new SimulationObject(bullet);
             simulation.Add(_viewFactory.Create(bullet));
             TriggerEnter<IDamageable> physicsHandler = bullet.AddComponent<DamageableTriggerEnter>();
             simulation.AddSimulation(physicsHandler);
@@ -33,7 +33,7 @@ namespace GameModes.SinglePlayer.ObjectComposition
             return simulation;
         }
 
-        public void InitializeSimulation(SimulationObject<DefaultBullet> simulation, DefaultBullet simulated)
+        public void InitializeSimulation(SimulationObject simulation, DefaultBullet simulated)
         {
             simulation.GetSimulation<PhysicsInteraction<Trigger<IDamageable>>>()
                 .Initialize(new BulletCollisionEnter(simulated));

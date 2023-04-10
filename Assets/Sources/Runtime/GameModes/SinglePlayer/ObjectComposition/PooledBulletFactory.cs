@@ -11,9 +11,9 @@ namespace GameModes.SinglePlayer.ObjectComposition
     public class PooledBulletFactory : IBulletFactory<IBullet>
     {
         private readonly ISimulationProvider<DefaultBullet> _bulletSimulationProvider;
-        private readonly KeyPooledObjectPool<DefaultBullet, SimulationObject<DefaultBullet>> _objectPool;
+        private readonly KeyPooledObjectPool<DefaultBullet, SimulationObject> _objectPool;
 
-        public PooledBulletFactory(KeyPooledObjectPool<DefaultBullet, SimulationObject<DefaultBullet>> objectPool,
+        public PooledBulletFactory(KeyPooledObjectPool<DefaultBullet, SimulationObject> objectPool,
             BulletSimulationProvider bulletSimulationProvider)
         {
             _objectPool = objectPool ?? throw new ArgumentException();
@@ -48,7 +48,7 @@ namespace GameModes.SinglePlayer.ObjectComposition
 
         private void AddNewToObjectPool()
         {
-            SimulationObject<DefaultBullet> simulation = _bulletSimulationProvider.CreateSimulationObject();
+            SimulationObject simulation = _bulletSimulationProvider.CreateSimulationObject();
 
             DefaultBullet defaultBullet =
                 new DefaultBullet(new Transform(simulation.GetView<IPositionView>()), new NullTrajectory());

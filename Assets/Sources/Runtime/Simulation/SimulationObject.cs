@@ -6,14 +6,12 @@ using UnityEngine;
 
 namespace Simulation
 {
-    public class SimulationObject<T> : IPoolable, IUpdatable
+    public class SimulationObject : IPoolable, IUpdatable
     {
         private readonly Dictionary<Type, object> _simulations = new();
         private readonly Dictionary<Type, IView> _views = new();
         private readonly List<IUpdatable> _updatableList = new();
         private readonly GameObject _gameObject;
-
-        private T _simulated;
 
         public SimulationObject(GameObject gameObject)
         {
@@ -30,10 +28,17 @@ namespace Simulation
         public TView GetView<TView>() where TView : IView => 
             (TView) _views[typeof(TView)];
 
-        public void AddSimulation<TSimulated>(ISimulation<TSimulated> simulation)
+        public void AddUpdatableSimulation<TSimulated>(ISimulation<TSimulated> simulation)
         {
-            _simulations.Add(typeof(TSimulated), simulation);
+            if (_updatableList.Contains(simulation) || _simulations.ContainsKey(typeof(TSimulated)))
+                throw new InvalidOperationException();
+            
+            AddSimulation(simulation);
+            _updatableList.Add(simulation);
         }
+
+        public void AddSimulation<TSimulated>(ISimulation<TSimulated> simulation) => 
+            _simulations.Add(typeof(TSimulated), simulation);
 
         public ISimulation<T1> GetSimulation<T1>() => 
             _simulations[typeof(T1)] as ISimulation<T1>;
@@ -43,14 +48,6 @@ namespace Simulation
 
         public void Disable() => 
             _gameObject.SetActive(false);
-
-        public void RegisterUpdatable<TSimulatable>(ISimulation<TSimulatable> simulation)
-        {
-            if (_updatableList.Contains(simulation))
-                throw new ArgumentException();
-            
-            _updatableList.Add(simulation);
-        }
 
         public void UpdateTime(float deltaTime)
         {

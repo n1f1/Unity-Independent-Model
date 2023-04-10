@@ -25,7 +25,7 @@ namespace GameModes.SinglePlayer
         private EnemySpawner _enemySpawner;
         private EnemyContainer _enemyContainer;
         private Player _player;
-        private SimulationObject<Player> _playerSimulation;
+        private SimulationObject _playerSimulation;
         private BulletsContainer _bulletsContainer;
 
         public SinglePlayerGame(IGameLoader gameLoader)
@@ -47,10 +47,10 @@ namespace GameModes.SinglePlayer
                 BulletFactoryCreation.CreatePooledBulletFactory(_levelConfig.BulletTemplate);
 
             _bulletsContainer = new BulletsContainer(bulletFactory);
-            
+
             IObjectToSimulationMap objectToSimulationMap = new ObjectToSimulationMap();
-            PlayerFactory playerFactory = new PlayerFactory(_levelConfig, new PositionViewFactory(),
-                new HealthViewFactory(), cameraView, bulletFactory, objectToSimulationMap,
+            PlayerFactory playerFactory = new PlayerFactory(_levelConfig, cameraView, bulletFactory,
+                objectToSimulationMap,
                 new CompositeDeath(
                     new SetLooseGameStatus(_gameStatus),
                     new OpenMenuOnDeath(_gameLoader)), _bulletsContainer);

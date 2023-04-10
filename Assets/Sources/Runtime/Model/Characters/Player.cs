@@ -8,7 +8,7 @@ namespace Model.Characters
 {
     public class Player : IUpdatable
     {
-        public const int MAXHealth = 10000;
+        public const int MAXHealth = 100;
         public const float ShootingCooldown = 0.1f;
         public const float CharacterSpeed = 5f;
 

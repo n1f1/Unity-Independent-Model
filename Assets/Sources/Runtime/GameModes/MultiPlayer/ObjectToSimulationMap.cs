@@ -7,22 +7,22 @@ namespace GameModes.MultiPlayer
     {
         private readonly Hashtable _objectToSimulation = new();
 
-        public void RegisterNew<TSimulated>(TSimulated simulated, SimulationObject<TSimulated> simulationObject)
+        public void RegisterNew<TSimulated>(TSimulated simulated, SimulationObject simulationObject)
         {
             _objectToSimulation.Add(simulated, simulationObject);
         }
         
-        public SimulationObject<TSimulated> Unregister<TSimulated>(TSimulated simulated)
+        public SimulationObject Unregister<TSimulated>(TSimulated simulated)
         {
-            SimulationObject<TSimulated> simulation = Get(simulated);
+            SimulationObject simulation = Get(simulated);
             _objectToSimulation.Remove(simulated);
 
             return simulation;
         }
 
-        public SimulationObject<TSimulated> Get<TSimulated>(TSimulated simulated)
+        public SimulationObject Get<TSimulated>(TSimulated simulated)
         {
-            SimulationObject<TSimulated> simulation = (SimulationObject<TSimulated>) _objectToSimulation[simulated];
+            SimulationObject simulation = (SimulationObject) _objectToSimulation[simulated];
 
             return simulation;
         }

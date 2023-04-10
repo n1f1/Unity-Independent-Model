@@ -19,9 +19,11 @@ namespace Simulation.Movement
             return this;
         }
 
-        public void Initialize(IMovable enemyPlayerPrediction)
+        public ISimulation<IMovable> Initialize(IMovable enemyPlayerPrediction)
         {
             _movable = enemyPlayerPrediction ?? throw new ArgumentNullException();
+            
+            return this;
         }
 
         public void UpdateTime(float deltaTime)

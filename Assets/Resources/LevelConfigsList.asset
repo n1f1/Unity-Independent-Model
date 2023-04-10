@@ -13,6 +13,6 @@ MonoBehaviour:
   m_Name: LevelConfigsList
   m_EditorClassIdentifier: 
   _playerTemplate: {fileID: 2194177111192662445, guid: 1b71c6137b88b0d448a89b086bf3591d, type: 3}
-  _enemyTemplate: {fileID: 7236927723848388118, guid: 8d5e05f849122d34a9921648dfd90c2c, type: 3}
+  _enemyTemplate: {fileID: 8258326307865483140, guid: 8d5e05f849122d34a9921648dfd90c2c, type: 3}
   _bulletTemplate: {fileID: 2377098120977607454, guid: 7db54154569923849b3c00a03152e158, type: 3}
   _remotePlayerTemplate: {fileID: 2194177111192662445, guid: 1b71c6137b88b0d448a89b086bf3591d, type: 3}

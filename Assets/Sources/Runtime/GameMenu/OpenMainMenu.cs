@@ -12,9 +12,9 @@ namespace GameMenu
             _gameLoader = gameLoader ?? throw new ArgumentNullException(nameof(gameLoader));
         }
 
-        public async void Execute()
+        public void Execute()
         {
-            await _gameLoader.Load(new NullGame());
+            _gameLoader.Load(new NullGame());
             MainMenu mainMenu = new MainMenu(_gameLoader);
             mainMenu.Open();
         }

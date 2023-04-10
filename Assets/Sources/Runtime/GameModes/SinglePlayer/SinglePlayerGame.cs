@@ -3,6 +3,8 @@ using GameMenu;
 using GameMenu.PauseMenu;
 using GameModes.MultiPlayer;
 using GameModes.SinglePlayer.ObjectComposition;
+using GameModes.SinglePlayer.ObjectComposition.EnemyConstruction;
+using GameModes.SinglePlayer.ObjectComposition.PlayerConstruction;
 using Model.Characters;
 using Model.Characters.CharacterHealth;
 using Model.Characters.Enemy;
@@ -10,7 +12,6 @@ using Model.Characters.Shooting.Bullets;
 using Model.SpatialObject;
 using Simulation;
 using Simulation.View;
-using Simulation.View.Factories;
 using UnityEngine;
 using Vector3 = System.Numerics.Vector3;
 
@@ -57,13 +58,8 @@ namespace GameModes.SinglePlayer
 
             _player = playerFactory.CreatePlayer(Vector3.Zero);
             _playerSimulation = objectToSimulationMap.Get(_player);
-
-            EnemySimulationProvider enemySimulationProvider =
-                new EnemySimulationProvider(_levelConfig.EnemyTemplate, new HealthViewFactory(),
-                    new PositionViewFactory());
-
             _enemyContainer = new EnemyContainer();
-            _enemySpawner = new EnemySpawner(3, _enemyContainer, new EnemyFactory(_player, enemySimulationProvider),
+            _enemySpawner = new EnemySpawner(3, _enemyContainer, new EnemyFactory(_player, _levelConfig),
                 _player.Transform);
 
             _enemySpawner.Start();

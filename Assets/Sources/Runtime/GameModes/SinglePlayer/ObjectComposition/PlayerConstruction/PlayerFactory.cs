@@ -6,12 +6,11 @@ using Model.Characters.Shooting;
 using Model.Characters.Shooting.Bullets;
 using Model.SpatialObject;
 using Simulation;
-using UnityEngine;
 using Object = UnityEngine.Object;
 using Transform = Model.SpatialObject.Transform;
 using Vector3 = System.Numerics.Vector3;
 
-namespace GameModes.SinglePlayer.ObjectComposition
+namespace GameModes.SinglePlayer.ObjectComposition.PlayerConstruction
 {
     public class PlayerFactory : IPlayerFactory
     {
@@ -59,7 +58,6 @@ namespace GameModes.SinglePlayer.ObjectComposition
             simulation.AddUpdatableSimulation(playerSimulation.Movable.Initialize(movable));
             simulation.AddUpdatableSimulation(playerSimulation.CharacterShooter.Initialize(player.CharacterShooter));
             simulation.Enable();
-            Debug.Log(simulation);
 
             _objectToSimulationMapping.RegisterNew(player, simulation);
 

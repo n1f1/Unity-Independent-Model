@@ -16,7 +16,7 @@ namespace GameModes
             _gameUpdate = gameUpdate ?? throw new ArgumentNullException(nameof(gameUpdate));
         }
 
-        public async Task Load(IGame game)
+        public async void Load(IGame game)
         {
             _sceneLoadingOperation = SceneManager.LoadSceneAsync(1);
 

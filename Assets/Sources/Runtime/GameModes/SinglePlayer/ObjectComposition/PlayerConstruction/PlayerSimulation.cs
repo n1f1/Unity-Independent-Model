@@ -6,7 +6,7 @@ using Simulation.Movement;
 using Simulation.Shooting;
 using UnityEngine;
 
-namespace GameModes.SinglePlayer.ObjectComposition
+namespace GameModes.SinglePlayer.ObjectComposition.PlayerConstruction
 {
     public class PlayerSimulation : MonoBehaviour, IPlayerSimulation
     {
@@ -14,7 +14,6 @@ namespace GameModes.SinglePlayer.ObjectComposition
         {
             Movable = gameObject.AddComponent<PlayerMovement>().Initialize(new AxisInput());
             CharacterShooter = gameObject.AddComponent<PlayerShooter>();
-            Debug.Log(CharacterShooter);
         }
 
         public ISimulation<IMovable> Movable { get; set; }

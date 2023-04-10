@@ -1,13 +1,11 @@
 ﻿using Model.Characters.CharacterHealth;
-using Model.Characters.Shooting;
 using Model.SpatialObject;
 
-namespace GameModes.SinglePlayer.ObjectComposition
+namespace GameModes.SinglePlayer.ObjectComposition.CharacterWithHealth
 {
-    public interface IPlayerView
+    public interface ICharacterWithHealthView
     {
         IPositionView PositionView { get; set; }
         IHealthView HealthView { get; set; }
-        IForwardAimView ForwardAimView { get; set; }
     }
 }

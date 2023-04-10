@@ -1,12 +1,11 @@
-﻿using Model.Characters.CharacterHealth;
+﻿using GameModes.SinglePlayer.ObjectComposition.CharacterWithHealth;
+using Model.Characters.CharacterHealth;
 using Model.Characters.Shooting;
-using Model.SpatialObject;
 using Simulation.View;
-using UnityEngine;
 
-namespace GameModes.SinglePlayer.ObjectComposition
+namespace GameModes.SinglePlayer.ObjectComposition.PlayerConstruction
 {
-    public class PlayerView : MonoBehaviour, IPlayerView
+    public class PlayerView : CharacterWithHealthView, IPlayerView
     {
         private void Awake()
         {
@@ -15,9 +14,7 @@ namespace GameModes.SinglePlayer.ObjectComposition
             HealthView = gameObject.GetComponentInChildren<IHealthView>();
             ForwardAimView = gameObject.GetComponentInChildren<IForwardAimView>();
         }
-
-        public IPositionView PositionView { get; set; }
-        public IHealthView HealthView { get; set; }
+        
         public IForwardAimView ForwardAimView { get; set; }
     }
 }

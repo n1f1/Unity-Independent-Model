@@ -2,7 +2,7 @@
 using Model.Characters;
 using Model.Characters.Shooting;
 
-namespace GameModes.SinglePlayer.ObjectComposition
+namespace GameModes.SinglePlayer.ObjectComposition.PlayerConstruction
 {
     public interface IPlayerSimulation
     {

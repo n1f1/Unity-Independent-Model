@@ -4,6 +4,7 @@ using GameModes.MultiPlayer.PlayerCharacter.Client.Shooting;
 using GameModes.MultiPlayer.PlayerCharacter.Common;
 using GameModes.MultiPlayer.PlayerCharacter.Remote;
 using GameModes.SinglePlayer.ObjectComposition;
+using GameModes.SinglePlayer.ObjectComposition.PlayerConstruction;
 using Model.Characters;
 using Model.Characters.CharacterHealth;
 using Model.Characters.Shooting;

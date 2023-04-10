@@ -97,3 +97,41 @@ CapsuleCollider:
   m_Height: 2.0256352
   m_Direction: 1
   m_Center: {x: 0, y: 1.0142894, z: 0}
+--- !u!114 &-711886275315569570
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7236927723848388118}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a04b2ba2a5b84a02b8676c3cefe706dc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &4170737115441048943
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7236927723848388118}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 36b9ae935c9b43ae85f234f0f7255977, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &8258326307865483140
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7236927723848388118}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d6a0dab8d9e1427ba59f5998da955cf5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _enemyViewBehavior: {fileID: -711886275315569570}
+  _enemySimulationBehaviour: {fileID: 4170737115441048943}

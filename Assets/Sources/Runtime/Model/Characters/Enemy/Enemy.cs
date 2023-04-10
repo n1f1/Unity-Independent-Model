@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Numerics;
 using Model.Characters.CharacterHealth;
 using Model.Characters.Shooting;
 using Model.SpatialObject;
@@ -13,16 +14,15 @@ namespace Model.Characters.Enemy
         private readonly FollowTarget _followTarget;
         private readonly Cooldown _cooldown;
 
-        public Enemy(Transform transform, IDeath death, Health health, Player player)
+        public Enemy(Vector3 position, Player player, IHealthView healthView, IPositionView positionView)
         {
-            if (transform == null)
-                throw new ArgumentNullException();
-
             if (player == null)
                 throw new ArgumentNullException();
 
-            _death = death ?? throw new ArgumentNullException();
-            _health = health ?? throw new ArgumentNullException();
+            Transform transform = new Transform(positionView, position);
+            
+            _death = new Death(new NullDeathView());
+            _health = new Health(100f, healthView, _death);
             _cooldown = new Cooldown(1);
 
             _enemyAttack = new EnemyAttack(player.Health, new CooldownAttack(_cooldown,
@@ -30,7 +30,7 @@ namespace Model.Characters.Enemy
 
             _followTarget = new FollowTarget(player.Transform, transform, new CharacterMovement(transform, 4f));
         }
-
+        
         public Health Health => _health;
         public bool Dead => _death.Dead;
 

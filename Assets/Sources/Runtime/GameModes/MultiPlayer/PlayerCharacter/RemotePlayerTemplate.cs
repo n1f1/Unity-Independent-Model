@@ -1,4 +1,6 @@
-﻿using UnityEngine;
+﻿using GameModes.SinglePlayer.ObjectComposition;
+using GameModes.SinglePlayer.ObjectComposition.PlayerConstruction;
+using UnityEngine;
 using Utility;
 
 namespace GameModes.MultiPlayer.PlayerCharacter

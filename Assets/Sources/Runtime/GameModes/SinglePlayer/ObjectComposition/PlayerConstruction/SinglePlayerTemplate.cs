@@ -1,8 +1,7 @@
-﻿using GameModes.SinglePlayer.ObjectComposition;
-using UnityEngine;
+﻿using UnityEngine;
 using Utility;
 
-namespace GameModes
+namespace GameModes.SinglePlayer.ObjectComposition.PlayerConstruction
 {
     public class SinglePlayerTemplate : MonoBehaviour
     {

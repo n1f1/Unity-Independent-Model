@@ -33,9 +33,7 @@ namespace GameModes.MultiPlayer.PlayerCharacter.Common
             short playerInstanceId = inputStream.ReadInt16();
             Vector3 position = inputStream.ReadVector3();
             short movementInstanceID = inputStream.ReadInt16();
-
-            Debug.Log(position);
-            var player = _playerFactory.CreatePlayer(position);
+            Player player = _playerFactory.CreatePlayer(position);
 
             HashedObjects.RegisterWithID(player, playerInstanceId);
             HashedObjects.RegisterWithID(player.CharacterMovement, movementInstanceID);

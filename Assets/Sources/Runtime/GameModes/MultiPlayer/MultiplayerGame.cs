@@ -2,19 +2,17 @@
 using System.Collections.Generic;
 using System.Net.Sockets;
 using GameModes.Game;
-using GameModes.GameStatus;
-using GameModes.GameStatus.Pause;
 using GameModes.MultiPlayer.Connection;
 using GameModes.MultiPlayer.PlayerCharacter;
 using GameModes.MultiPlayer.PlayerCharacter.Client;
 using GameModes.MultiPlayer.PlayerCharacter.Client.Reconciliation;
-using GameModes.MultiPlayer.PlayerCharacter.Client.Shooting;
 using GameModes.MultiPlayer.PlayerCharacter.Common;
 using GameModes.MultiPlayer.PlayerCharacter.Common.Movement;
 using GameModes.MultiPlayer.PlayerCharacter.Common.Shooting;
 using GameModes.MultiPlayer.PlayerCharacter.Remote;
 using GameModes.MultiPlayer.PlayerCharacter.Remote.Movement;
-using GameModes.SinglePlayer;
+using GameModes.Status;
+using GameModes.Status.Pause;
 using Menus.PauseMenu;
 using Model.Characters.CharacterHealth;
 using Model.Characters.Player;
@@ -40,7 +38,7 @@ namespace GameModes.MultiPlayer
     {
         private readonly IGameLoader _gameLoader;
         private LevelConfig _levelConfig;
-        private GameStatus.GameStatus _gameStatus;
+        private GameStatus _gameStatus;
         private IObjectToSimulationMap _objectToSimulationMap;
         private PlayerClient _clientPlayer;
         private NotReconciledCommands<MoveCommand> _notReconciledMoveCommands;
@@ -68,6 +66,8 @@ namespace GameModes.MultiPlayer
             IOutputStream outputStream = new BinaryWriterOutputStream(networkStream);
             _inputStream = new BinaryReaderInputStream(networkStream);
 
+            _levelConfig = Resources.Load<LevelConfig>(GameResourceConfigurations.LevelConfigsList);
+
             HashedObjectsList hashedObjects = new HashedObjectsList();
 
             TypeIdConversion typeIdConversion = new TypeIdConversion(
@@ -86,7 +86,8 @@ namespace GameModes.MultiPlayer
                     typeof(MoveCommand),
                     new MoveCommandReceiver(_notReconciledMoveCommands, _clientPlayer, _movementCommandPrediction)
                 },
-                {typeof(Player), new PlayerReceiver(_objectToSimulationMap, _clientPlayer)},
+                {typeof(ClientPlayer), new ClientPlayerReceiver(_objectToSimulationMap, _clientPlayer)},
+                {typeof(Player), new RemotePlayerReceiver(_objectToSimulationMap)},
                 {typeof(FireCommand), new FireCommandReceiver(_notReconciledFireCommands, _clientPlayer)}
             };
 
@@ -97,11 +98,24 @@ namespace GameModes.MultiPlayer
             };
 
             INetworkObjectSender objectSender = new StreamObjectSender(serialization, typeIdConversion, outputStream);
-            IPlayerFactory playerFactory = CreatePlayerFactory(objectSender);
+
+            PooledBulletFactory bulletFactory =
+                BulletFactoryCreation.CreatePooledFactory(_levelConfig.BulletTemplate);
+
+            _bulletsContainer = new BulletsContainer(bulletFactory);
+
+            IPlayerFactory playerFactory = CreatePlayerFactory(objectSender, bulletFactory);
+            PlayerSerialization playerSerialization =
+                new PlayerSerialization(hashedObjects, typeIdConversion, playerFactory);
+
+            IPlayerFactory remotePlayerFactory = new RemotePlayerFactory(_levelConfig, bulletFactory,
+                _objectToSimulationMap, new NullDeathView(), _updatableContainer, _movementCommandPrediction,
+                _bulletsContainer);
 
             IEnumerable<(Type, object)> deserialization = new List<(Type, object)>
             {
-                (typeof(Player), new PlayerSerialization(hashedObjects, typeIdConversion, playerFactory)),
+                (typeof(Player), new PlayerSerialization(hashedObjects, typeIdConversion, remotePlayerFactory)),
+                (typeof(ClientPlayer), new ClientPlayerSerialization(playerSerialization)),
                 (typeof(MoveCommand), new MoveCommandSerialization(hashedObjects, typeIdConversion)),
                 (typeof(FireCommand), new FireCommandSerialization(hashedObjects, typeIdConversion))
             };
@@ -115,26 +129,22 @@ namespace GameModes.MultiPlayer
                 NetworkConstants.BaseLatency, NetworkConstants.JitterDelta);
         }
 
-        private IPlayerFactory CreatePlayerFactory(INetworkObjectSender networkObjectSender)
+        private IPlayerFactory CreatePlayerFactory(INetworkObjectSender networkObjectSender,
+            PooledBulletFactory bulletFactory)
         {
-            _levelConfig = Resources.Load<LevelConfig>(GameResourceConfigurations.LevelConfigsList);
             IPositionView cameraView = Camera.main.GetComponentInParent<PositionView>();
 
             GamePause pauseStatus = new GamePause();
             PauseMenu pauseMenu = new PauseMenu(_gameLoader, pauseStatus);
             pauseMenu.Create();
-            _gameStatus = new GameStatus.GameStatus(pauseStatus);
+            _gameStatus = new GameStatus(pauseStatus);
 
-            PooledBulletFactory bulletFactory =
-                BulletFactoryCreation.CreatePooledFactory(_levelConfig.BulletTemplate);
+            IDeathView death =
+                new CompositeDeath(new SetLooseGameStatus(_gameStatus), new OpenMenuOnDeath(_gameLoader));
 
-            _bulletsContainer = new BulletsContainer(bulletFactory);
-            
-            IPlayerFactory playerFactory = new MultiplayerPlayerFactory(_levelConfig, cameraView, bulletFactory, _objectToSimulationMap,
-                new CompositeDeath(
-                    new SetLooseGameStatus(_gameStatus),
-                    new OpenMenuOnDeath(_gameLoader)), networkObjectSender, _notReconciledMoveCommands,
-                _updatableContainer, _movementCommandPrediction, _notReconciledFireCommands, _bulletsContainer);
+            IPlayerFactory playerFactory = new ClientPlayerFactory(_levelConfig.PlayerTemplate, cameraView,
+                bulletFactory, _objectToSimulationMap, death, networkObjectSender, _notReconciledMoveCommands,
+                _notReconciledFireCommands, _bulletsContainer);
 
             return playerFactory;
         }

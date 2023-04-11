@@ -1,9 +1,8 @@
-﻿using GameModes.MultiPlayer.PlayerCharacter.Remote;
-using GameModes.MultiPlayer.PlayerCharacter.Remote.Movement;
+﻿using GameModes.MultiPlayer.PlayerCharacter.Remote.Movement;
 using Simulation;
 using Simulation.Characters.Player;
 
-namespace GameModes.MultiPlayer.PlayerCharacter
+namespace GameModes.MultiPlayer.PlayerCharacter.Remote
 {
     class RemotePlayerSimulation : PlayerSimulation, IRemotePlayerSimulation
     {

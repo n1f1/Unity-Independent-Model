@@ -1,5 +1,5 @@
-using Model.Characters.Shooting;
-using Model.Characters.Shooting.Bullets;
+using Model.Shooting;
+using Model.Shooting.Bullets;
 using Model.SpatialObject;
 
 namespace Server

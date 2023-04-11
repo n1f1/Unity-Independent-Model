@@ -4,6 +4,7 @@ using GameModes.MultiPlayer.PlayerCharacter.Client;
 using GameModes.MultiPlayer.PlayerCharacter.Client.Reconciliation;
 using GameModes.MultiPlayer.PlayerCharacter.Remote.Movement;
 using Networking.PacketReceive;
+using UnityEngine;
 
 namespace GameModes.MultiPlayer.PlayerCharacter.Common.Movement
 {
@@ -33,6 +34,7 @@ namespace GameModes.MultiPlayer.PlayerCharacter.Common.Movement
 
         private void ProcessRemotePlayerCommand(MoveCommand newCommand)
         {
+            Debug.Log(newCommand.ID);
             _movementCommandPrediction.PredictNextPacket(newCommand);
         }
 

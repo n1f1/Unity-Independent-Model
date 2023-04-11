@@ -1,9 +1,8 @@
-﻿using GameModes.MultiPlayer.PlayerCharacter.Remote;
-using GameModes.SinglePlayer;
+﻿using GameModes.SinglePlayer;
 using UnityEngine;
 using Utility;
 
-namespace GameModes.MultiPlayer.PlayerCharacter
+namespace GameModes.MultiPlayer.PlayerCharacter.Remote
 {
     public class RemotePlayerTemplate : SinglePlayerTemplate
     {

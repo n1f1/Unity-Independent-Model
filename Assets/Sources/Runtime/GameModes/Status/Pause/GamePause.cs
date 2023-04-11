@@ -1,6 +1,6 @@
 ﻿using Menus.PauseMenu;
 
-namespace GameModes.GameStatus.Pause
+namespace GameModes.Status.Pause
 {
     public class GamePause : IPause, IPauseStatus
     {

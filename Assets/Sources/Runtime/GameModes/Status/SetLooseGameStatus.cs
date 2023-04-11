@@ -1,7 +1,7 @@
 ﻿using System;
 using Model.Characters.CharacterHealth;
 
-namespace GameModes.GameStatus
+namespace GameModes.Status
 {
     public class SetLooseGameStatus : IDeathView
     {

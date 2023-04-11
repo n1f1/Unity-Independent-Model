@@ -1,5 +1,6 @@
 ﻿using System;
 using GameModes.MultiPlayer.PlayerCharacter.Client.Shooting;
+using GameModes.MultiPlayer.PlayerCharacter.Common.Shooting;
 using Networking.PacketReceive;
 
 namespace Server

@@ -1,4 +1,4 @@
-﻿namespace GameModes.GameStatus.Pause
+﻿namespace GameModes.Status.Pause
 {
     public interface IPauseStatus
     {

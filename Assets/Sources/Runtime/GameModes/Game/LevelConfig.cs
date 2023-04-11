@@ -1,4 +1,5 @@
 ﻿using GameModes.MultiPlayer.PlayerCharacter;
+using GameModes.MultiPlayer.PlayerCharacter.Remote;
 using GameModes.SinglePlayer;
 using Simulation.Characters.Enemy;
 using Simulation.Shooting.Bullets;

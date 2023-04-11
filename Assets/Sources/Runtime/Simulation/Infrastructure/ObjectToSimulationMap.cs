@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 
 namespace Simulation.Infrastructure
@@ -21,6 +22,9 @@ namespace Simulation.Infrastructure
 
         public SimulationObject Get<TSimulated>(TSimulated simulated)
         {
+            if (_objectToSimulation.ContainsKey(simulated) == false)
+                throw new InvalidOperationException();
+            
             SimulationObject simulation = (SimulationObject) _objectToSimulation[simulated];
 
             return simulation;

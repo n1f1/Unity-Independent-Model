@@ -1,5 +1,6 @@
 ﻿using System;
 using GameModes.MultiPlayer.PlayerCharacter.Common;
+using GameModes.MultiPlayer.PlayerCharacter.Common.Movement;
 using Networking.PacketReceive;
 
 namespace Server

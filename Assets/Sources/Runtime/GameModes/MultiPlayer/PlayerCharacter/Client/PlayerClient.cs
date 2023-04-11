@@ -1,5 +1,4 @@
-﻿using Model.Characters;
-using Model.Characters.Player;
+﻿using Model.Characters.Player;
 using Simulation;
 
 namespace GameModes.MultiPlayer.PlayerCharacter.Client

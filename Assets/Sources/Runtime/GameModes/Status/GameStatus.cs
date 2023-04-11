@@ -1,7 +1,7 @@
 ﻿using System;
-using GameModes.GameStatus.Pause;
+using GameModes.Status.Pause;
 
-namespace GameModes.GameStatus
+namespace GameModes.Status
 {
     public class GameStatus : IPauseStatus
     {

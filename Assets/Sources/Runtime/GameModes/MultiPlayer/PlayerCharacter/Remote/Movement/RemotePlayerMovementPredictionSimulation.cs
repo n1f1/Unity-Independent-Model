@@ -13,9 +13,7 @@ namespace GameModes.MultiPlayer.PlayerCharacter.Remote.Movement
             return this;
         }
 
-        public void UpdateTime(float deltaTime)
-        {
+        public void UpdateTime(float deltaTime) => 
             _remotePlayerMovementPrediction.UpdateTime(deltaTime);
-        }
     }
 }

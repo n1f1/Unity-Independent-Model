@@ -1,8 +1,8 @@
 using System;
 using GameModes.Game;
-using GameModes.GameStatus;
-using GameModes.GameStatus.Pause;
 using GameModes.MultiPlayer;
+using GameModes.Status;
+using GameModes.Status.Pause;
 using Menus.PauseMenu;
 using Model.Characters;
 using Model.Characters.CharacterHealth;
@@ -29,7 +29,7 @@ namespace GameModes.SinglePlayer
         private EnemyContainer _enemyContainer;
         private EnemySpawner _enemySpawner;
         private LevelConfig _levelConfig;
-        private GameStatus.GameStatus _gameStatus;
+        private GameStatus _gameStatus;
         private Player _player;
 
         public SinglePlayerGame(IGameLoader gameLoader)
@@ -45,7 +45,7 @@ namespace GameModes.SinglePlayer
             GamePause pauseStatus = new GamePause();
             PauseMenu pauseMenu = new PauseMenu(_gameLoader, pauseStatus);
             pauseMenu.Create();
-            _gameStatus = new GameStatus.GameStatus(pauseStatus);
+            _gameStatus = new GameStatus(pauseStatus);
 
             CreatePlayer(cameraView);
             CreateEnemy();

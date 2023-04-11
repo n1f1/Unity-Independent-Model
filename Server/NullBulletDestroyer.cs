@@ -1,4 +1,4 @@
-using Model.Characters.Shooting.Bullets;
+using Model.Shooting.Bullets;
 
 namespace Server
 {

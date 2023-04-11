@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using Model.Characters;
+using Model.Characters.Player;
 
 namespace Server
 {

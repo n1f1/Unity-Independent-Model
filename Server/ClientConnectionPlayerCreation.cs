@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Numerics;
-using Model.Characters;
+using GameModes.MultiPlayer.PlayerCharacter.Client;
+using Model.Characters.Player;
 using Networking.Connection;
 using Networking.PacketReceive.Replication.ObjectCreationReplication;
 using Networking.PacketSend;
@@ -30,12 +31,13 @@ namespace Server
         {
             Player player = _playerFactory.CreatePlayer(new Vector3(1, 0, 1));
 
-            INetworkPacket networkPacket = _replicationPacketFactory.Create(player);
+            INetworkPacket playerPacket = _replicationPacketFactory.Create(player);
+            INetworkPacket clientPlayerPacket = _replicationPacketFactory.Create(new ClientPlayer(player));
 
             foreach (Client other in _room.Clients)
             {
                 if (other.IsConnected)
-                    other.Sender.SendPacket(networkPacket);
+                    other.Sender.SendPacket(other == client ? clientPlayerPacket : playerPacket);
             }
 
             foreach (GameClient other in _game.GameClients)

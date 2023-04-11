@@ -10,8 +10,8 @@ namespace GameModes.SinglePlayer
         [SerializeField] private MonoBehaviour _playerViewBehavior;
         [SerializeField] private MonoBehaviour _playerSimulationBehaviour;
 
-        public IPlayerView PlayerViewBehavior => (IPlayerView) _playerViewBehavior;
-        public IPlayerSimulation PlayerSimulationBehaviour => (IPlayerSimulation) _playerSimulationBehaviour;
+        public IPlayerView PlayerView => (IPlayerView) _playerViewBehavior;
+        public IPlayerSimulation PlayerSimulation => (IPlayerSimulation) _playerSimulationBehaviour;
 
         protected virtual void OnValidate()
         {

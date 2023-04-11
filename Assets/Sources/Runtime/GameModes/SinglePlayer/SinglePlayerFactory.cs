@@ -39,8 +39,8 @@ namespace GameModes.SinglePlayer
         {
             SinglePlayerTemplate playerTemplate = Object.Instantiate(_playerTemplate);
             SimulationObject simulation = new SimulationObject(playerTemplate.gameObject);
-            IPlayerView playerView = playerTemplate.PlayerViewBehavior;
-            IPlayerSimulation playerSimulation = playerTemplate.PlayerSimulationBehaviour;
+            IPlayerView playerView = playerTemplate.PlayerView;
+            IPlayerSimulation playerSimulation = playerTemplate.PlayerSimulation;
 
             playerView.PositionView = new CompositePositionView(playerView.PositionView, _cameraView);
 

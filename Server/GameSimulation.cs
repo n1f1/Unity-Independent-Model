@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Model.Characters;
-using Model.Characters.Shooting.Bullets;
+using Model.Characters.Player;
+using Model.Shooting.Bullets;
 using Networking.Connection;
 
 namespace Server
@@ -22,11 +22,10 @@ namespace Server
 
         public void AddPassedTime(float time)
         {
-            Console.WriteLine(time);
             for (int i = 0; i < 5; i++)
             {
                 _bulletsContainer.Update(time / 5f);
-                
+
                 foreach (GameClient gameClient in _gameClients)
                 {
                     foreach (PhysicBullet bullet in gameClient.FiredBullets)

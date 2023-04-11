@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using GameModes.MultiPlayer.PlayerCharacter.Client;
 using GameModes.MultiPlayer.PlayerCharacter.Client.Shooting;
 using GameModes.MultiPlayer.PlayerCharacter.Common;
 using GameModes.MultiPlayer.PlayerCharacter.Common.Movement;
@@ -22,6 +23,7 @@ namespace GameModes.MultiPlayer
             IEnumerable<(Type, string)> tuples = new List<(Type, string)>
             {
                 (typeof(Player), "PLYR"),
+                (typeof(ClientPlayer), "CLNT"),
                 (typeof(MoveCommand), "CMVE"),
                 (typeof(FireCommand), "FIRE")
             };

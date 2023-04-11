@@ -3,11 +3,13 @@ using System.Collections.Generic;
 using System.Net;
 using System.Net.Sockets;
 using System.Threading.Tasks;
-using GameModes.MultiPlayer.NetworkingTypesConfigurations;
-using GameModes.MultiPlayer.PlayerCharacter.Client.Shooting;
+using GameModes.MultiPlayer;
+using GameModes.MultiPlayer.PlayerCharacter.Client;
 using GameModes.MultiPlayer.PlayerCharacter.Common;
-using Model.Characters;
-using Model.Characters.Shooting.Bullets;
+using GameModes.MultiPlayer.PlayerCharacter.Common.Movement;
+using GameModes.MultiPlayer.PlayerCharacter.Common.Shooting;
+using Model.Characters.Player;
+using Model.Shooting.Bullets;
 using Networking.Connection;
 using Networking.ObjectsHashing;
 using Networking.PacketReceive;
@@ -34,16 +36,20 @@ namespace Server
             ServerPlayerFactory playerFactory = new ServerPlayerFactory(bulletsContainer, game);
             game.Add(bulletsContainer);
 
+            PlayerSerialization playerSerialization =
+                new PlayerSerialization(hashedObjects, typeIdConversion, playerFactory);
+            
             IEnumerable<(Type, object)> serialization = new List<(Type, object)>
             {
-                (typeof(Player), new PlayerSerialization(hashedObjects, typeIdConversion, playerFactory)),
+                (typeof(Player), playerSerialization),
+                (typeof(ClientPlayer), new ClientPlayerSerialization(playerSerialization)),
                 (typeof(MoveCommand), new MoveCommandSerialization(hashedObjects, typeIdConversion)),
                 (typeof(FireCommand), new FireCommandSerialization(hashedObjects, typeIdConversion))
             };
 
             IEnumerable<(Type, object)> deserialization = new List<(Type, object)>
             {
-                (typeof(Player), new PlayerSerialization(hashedObjects, typeIdConversion, playerFactory)),
+                (typeof(Player), playerSerialization),
                 (typeof(MoveCommand), new MoveCommandSerialization(hashedObjects, typeIdConversion)),
                 (typeof(FireCommand), new FireCommandSerialization(hashedObjects, typeIdConversion))
             };

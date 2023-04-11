@@ -7,7 +7,6 @@ namespace Simulation
     public class SimulationObject<TTemplate> : IUpdatable
     {
         private readonly Dictionary<Type, object> _simulations = new();
-        private readonly Dictionary<Type, IView> _views = new();
         private readonly List<IUpdatable> _updatableList = new();
 
         public SimulationObject(TTemplate template)
@@ -16,14 +15,6 @@ namespace Simulation
         }
 
         public TTemplate Template { get; }
-
-        public void Add<TView>(TView view) where TView : IView
-        {
-            _views.Add(typeof(TView), view);
-        }
-
-        public TView GetView<TView>() where TView : IView => 
-            (TView) _views[typeof(TView)];
 
         public void AddUpdatableSimulation<TSimulated>(ISimulation<TSimulated> simulation)
         {

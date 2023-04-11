@@ -1,4 +1,5 @@
-﻿using Model.SpatialObject;
+﻿using Model.Characters.Shooting.Bullets;
+using Model.SpatialObject;
 using Simulation.View;
 using UnityEngine;
 

@@ -1,4 +1,4 @@
-namespace GameMenu
+namespace GameModes
 {
     public interface IGameLoader
     {

@@ -14,7 +14,7 @@ namespace Model.Characters.Enemy
         private readonly FollowTarget _followTarget;
         private readonly Cooldown _cooldown;
 
-        public Enemy(Vector3 position, Player player, IHealthView healthView, IPositionView positionView)
+        public Enemy(Vector3 position, Player.Player player, IHealthView healthView, IPositionView positionView)
         {
             if (player == null)
                 throw new ArgumentNullException();

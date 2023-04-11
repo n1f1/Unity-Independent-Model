@@ -1,7 +1,7 @@
-﻿using GameModes.SinglePlayer.ObjectComposition.CharacterWithHealth;
+﻿using Model.Characters.CharacterHealth;
 using Model.Characters.Shooting;
 
-namespace GameModes.SinglePlayer.ObjectComposition.PlayerConstruction
+namespace Model.Characters.Player
 {
     public interface IPlayerView : ICharacterWithHealthView
     {

@@ -2,7 +2,7 @@
 
 namespace Model.Characters.Shooting
 {
-    public interface IAimView : IView
+    public interface IAimView
     {
         void Aim(Vector3 position, Vector3 aimPosition);
         void Stop();

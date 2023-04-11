@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using Model.Characters.Shooting.Bullets;
+using UnityEngine;
 using Utility;
 
 namespace GameModes.SinglePlayer.ObjectComposition.Bullets

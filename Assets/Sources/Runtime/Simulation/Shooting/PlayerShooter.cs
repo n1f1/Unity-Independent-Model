@@ -11,6 +11,7 @@ namespace Simulation.Shooting
         private LayerMask _layerMask;
         private ICharacterShooter _simulation;
         private Camera _camera;
+        private RaycastHit[] _raycastHitBuffer;
 
         private void Awake() =>
             _layerMask = LayerMask.GetMask("AimPlane");
@@ -19,6 +20,7 @@ namespace Simulation.Shooting
         {
             _simulation = enemyPlayerPrediction ?? throw new ArgumentNullException();
             _camera = Camera.main;
+            _raycastHitBuffer = new RaycastHit[1];
 
             return this;
         }
@@ -33,8 +35,8 @@ namespace Simulation.Shooting
         {
             Ray ray = _camera.ScreenPointToRay(UnityEngine.Input.mousePosition);
 
-            if (UnityEngine.Physics.Raycast(ray, out RaycastHit hit, 999f, _layerMask))
-                _simulation.AimAt(hit.point.Convert());
+            if (UnityEngine.Physics.RaycastNonAlloc(ray, _raycastHitBuffer, 999f, _layerMask) > 0)
+                _simulation.AimAt(_raycastHitBuffer[0].point.Convert());
             else
                 _simulation.StopAiming();
         }

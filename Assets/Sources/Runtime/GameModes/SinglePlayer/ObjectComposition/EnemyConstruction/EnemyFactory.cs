@@ -1,6 +1,7 @@
 ﻿using System;
 using Model.Characters;
 using Model.Characters.Enemy;
+using Model.Characters.Player;
 using Simulation;
 using Simulation.Pool;
 using Object = UnityEngine.Object;

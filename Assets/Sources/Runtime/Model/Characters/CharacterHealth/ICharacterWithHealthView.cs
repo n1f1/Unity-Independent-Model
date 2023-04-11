@@ -1,7 +1,6 @@
-﻿using Model.Characters.CharacterHealth;
-using Model.SpatialObject;
+﻿using Model.SpatialObject;
 
-namespace GameModes.SinglePlayer.ObjectComposition.CharacterWithHealth
+namespace Model.Characters.CharacterHealth
 {
     public interface ICharacterWithHealthView
     {

@@ -8,6 +8,7 @@ using GameModes.SinglePlayer.ObjectComposition.PlayerConstruction;
 using Model.Characters;
 using Model.Characters.CharacterHealth;
 using Model.Characters.Enemy;
+using Model.Characters.Player;
 using Model.Characters.Shooting.Bullets;
 using Model.SpatialObject;
 using Simulation;

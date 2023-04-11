@@ -1,6 +1,7 @@
 using System;
 using GameModes.MultiPlayer.PlayerCharacter.Common;
 using Model.Characters;
+using Model.Characters.Player;
 using Networking.PacketSend.ObjectSend;
 using Vector3 = System.Numerics.Vector3;
 

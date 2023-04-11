@@ -1,7 +1,6 @@
 using System.Collections;
-using Simulation;
 
-namespace GameModes.MultiPlayer
+namespace Simulation
 {
     public class ObjectToSimulationMap : IObjectToSimulationMap
     {

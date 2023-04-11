@@ -1,6 +1,6 @@
 using Model;
 
-namespace GameMenu
+namespace GameModes
 {
     public interface IGame : IUpdatable
     {

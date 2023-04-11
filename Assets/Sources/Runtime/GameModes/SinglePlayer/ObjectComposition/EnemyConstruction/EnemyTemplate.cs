@@ -1,4 +1,5 @@
-﻿using Simulation.Pool;
+﻿using Model.Characters.Enemy;
+using Simulation.Pool;
 using UnityEngine;
 using Utility;
 

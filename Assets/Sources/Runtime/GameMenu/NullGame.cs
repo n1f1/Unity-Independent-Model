@@ -1,4 +1,6 @@
-﻿namespace GameMenu
+﻿using GameModes;
+
+namespace GameMenu
 {
     public class NullGame : IGame
     {

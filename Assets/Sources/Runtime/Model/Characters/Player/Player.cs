@@ -1,10 +1,9 @@
 ﻿using System;
-using System.Numerics;
 using Model.Characters.CharacterHealth;
 using Model.Characters.Shooting;
 using Model.SpatialObject;
 
-namespace Model.Characters
+namespace Model.Characters.Player
 {
     public class Player : IUpdatable
     {

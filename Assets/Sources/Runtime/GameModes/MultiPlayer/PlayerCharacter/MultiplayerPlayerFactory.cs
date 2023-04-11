@@ -7,6 +7,7 @@ using GameModes.SinglePlayer.ObjectComposition;
 using GameModes.SinglePlayer.ObjectComposition.PlayerConstruction;
 using Model.Characters;
 using Model.Characters.CharacterHealth;
+using Model.Characters.Player;
 using Model.Characters.Shooting;
 using Model.Characters.Shooting.Bullets;
 using Model.SpatialObject;

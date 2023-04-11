@@ -1,6 +1,4 @@
-using Simulation;
-
-namespace GameModes.MultiPlayer
+namespace Simulation
 {
     public interface IObjectToSimulationMap
     {

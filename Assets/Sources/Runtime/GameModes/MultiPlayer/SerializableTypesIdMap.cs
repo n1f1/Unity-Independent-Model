@@ -4,8 +4,9 @@ using System.Linq;
 using System.Text;
 using GameModes.MultiPlayer.PlayerCharacter.Client.Shooting;
 using GameModes.MultiPlayer.PlayerCharacter.Common;
+using Model.Characters.Player;
 
-namespace GameModes.MultiPlayer.NetworkingTypesConfigurations
+namespace GameModes.MultiPlayer
 {
     public static class SerializableTypesIdMap
     {
@@ -18,7 +19,7 @@ namespace GameModes.MultiPlayer.NetworkingTypesConfigurations
         {
             IEnumerable<(Type, string)> tuples = new List<(Type, string)>
             {
-                (typeof(Model.Characters.Player), "PLYR"),
+                (typeof(Player), "PLYR"),
                 (typeof(MoveCommand), "CMVE"),
                 (typeof(FireCommand), "FIRE")
             };

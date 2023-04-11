@@ -1,4 +1,5 @@
 using Model.Characters;
+using Model.Characters.Player;
 using Networking.ObjectsHashing;
 using Networking.PacketReceive.Replication.ObjectCreationReplication;
 using Networking.PacketReceive.Replication.Serialization;

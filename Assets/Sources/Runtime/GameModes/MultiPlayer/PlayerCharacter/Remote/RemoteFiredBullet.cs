@@ -2,6 +2,7 @@
 using Model.Characters.CharacterHealth;
 using Model.Characters.Shooting.Bullets;
 using Model.SpatialObject;
+using Networking;
 
 namespace GameModes.MultiPlayer.PlayerCharacter.Remote
 {

@@ -1,4 +1,5 @@
-﻿using TMPro;
+﻿using Networking.Connection;
+using TMPro;
 using UnityEngine;
 
 namespace GameModes.MultiPlayer.Connection

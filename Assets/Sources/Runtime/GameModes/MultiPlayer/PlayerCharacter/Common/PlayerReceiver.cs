@@ -1,7 +1,9 @@
 using System;
 using GameModes.MultiPlayer.PlayerCharacter.Client;
 using Model.Characters;
+using Model.Characters.Player;
 using Networking.PacketReceive;
+using Simulation;
 using UnityEngine;
 
 namespace GameModes.MultiPlayer.PlayerCharacter.Common

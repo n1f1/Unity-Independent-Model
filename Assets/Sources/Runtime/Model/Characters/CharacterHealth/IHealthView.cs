@@ -1,6 +1,6 @@
 ﻿namespace Model.Characters.CharacterHealth
 {
-    public interface IHealthView : IView
+    public interface IHealthView
     {
         void Display(float normalizedHealth);
     }

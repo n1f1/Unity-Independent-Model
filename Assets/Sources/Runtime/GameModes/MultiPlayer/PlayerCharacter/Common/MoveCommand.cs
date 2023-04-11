@@ -2,6 +2,7 @@ using System;
 using System.Numerics;
 using GameModes.MultiPlayer.PlayerCharacter.Client;
 using Model.Characters;
+using Model.Characters.Player;
 
 namespace GameModes.MultiPlayer.PlayerCharacter.Common
 {

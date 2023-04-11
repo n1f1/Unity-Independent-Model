@@ -1,6 +1,6 @@
 using System.Numerics;
 
-namespace Model.Characters
+namespace Model.Characters.Player
 {
     public interface IPlayerFactory
     {

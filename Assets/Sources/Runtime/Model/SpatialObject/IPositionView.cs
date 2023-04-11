@@ -2,7 +2,7 @@
 
 namespace Model.SpatialObject
 {
-    public interface IPositionView : IView
+    public interface IPositionView
     {
         void UpdatePosition(Vector3 position);
     }

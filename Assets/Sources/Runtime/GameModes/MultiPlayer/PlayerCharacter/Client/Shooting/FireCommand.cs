@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Numerics;
 using Model.Characters;
+using Model.Characters.Player;
 using Model.Characters.Shooting.Bullets;
 
 namespace GameModes.MultiPlayer.PlayerCharacter.Client.Shooting

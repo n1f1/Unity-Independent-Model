@@ -1,6 +1,6 @@
 ﻿using Model.SpatialObject;
 
-namespace GameModes.SinglePlayer.ObjectComposition.Bullets
+namespace Model.Characters.Shooting.Bullets
 {
     public interface IBulletView
     {

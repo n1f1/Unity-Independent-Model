@@ -1,5 +1,6 @@
 ﻿using GameModes.SinglePlayer.ObjectComposition.CharacterWithHealth;
 using Model.Characters.CharacterHealth;
+using Model.Characters.Player;
 using Model.Characters.Shooting;
 using Simulation.View;
 

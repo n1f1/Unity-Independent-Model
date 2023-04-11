@@ -7,6 +7,8 @@ namespace GameModes.SinglePlayer.ObjectComposition.PlayerConstruction
 {
     public class PlayerView : CharacterWithHealthView, IPlayerView
     {
+        public IForwardAimView ForwardAimView { get; set; }
+
         private void Awake()
         {
             //TODO: editor assertions
@@ -14,7 +16,5 @@ namespace GameModes.SinglePlayer.ObjectComposition.PlayerConstruction
             HealthView = gameObject.GetComponentInChildren<IHealthView>();
             ForwardAimView = gameObject.GetComponentInChildren<IForwardAimView>();
         }
-        
-        public IForwardAimView ForwardAimView { get; set; }
     }
 }

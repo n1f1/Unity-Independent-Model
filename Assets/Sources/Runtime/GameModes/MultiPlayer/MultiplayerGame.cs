@@ -12,6 +12,7 @@ using GameModes.MultiPlayer.PlayerCharacter.Common;
 using GameModes.MultiPlayer.PlayerCharacter.Remote;
 using GameModes.SinglePlayer;
 using GameModes.SinglePlayer.ObjectComposition;
+using GameModes.SinglePlayer.ObjectComposition.Bullets;
 using Model.Characters;
 using Model.Characters.CharacterHealth;
 using Model.Characters.Shooting.Bullets;
@@ -119,7 +120,7 @@ namespace GameModes.MultiPlayer
             _gameStatus = new GameStatus(pauseStatus);
 
             PooledBulletFactory bulletFactory =
-                BulletFactoryCreation.CreatePooledBulletFactory(_levelConfig.BulletTemplate);
+                BulletFactoryCreation.CreatePooledFactory(_levelConfig.BulletTemplate);
 
             _bulletsContainer = new BulletsContainer(bulletFactory);
             

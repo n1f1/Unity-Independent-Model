@@ -1,23 +1,23 @@
 ﻿using System;
 using Model.Characters.Shooting;
 using Model.Characters.Shooting.Bullets;
-using Model.SpatialObject;
 using Simulation;
 using Simulation.Pool;
+using Object = UnityEngine.Object;
 using Transform = Model.SpatialObject.Transform;
 
-namespace GameModes.SinglePlayer.ObjectComposition
+namespace GameModes.SinglePlayer.ObjectComposition.Bullets
 {
     public class PooledBulletFactory : IBulletFactory<IBullet>
     {
-        private readonly ISimulationProvider<DefaultBullet> _bulletSimulationProvider;
         private readonly KeyPooledObjectPool<DefaultBullet, SimulationObject> _objectPool;
+        private readonly BulletTemplate _bulletTemplate;
 
-        public PooledBulletFactory(KeyPooledObjectPool<DefaultBullet, SimulationObject> objectPool,
-            BulletSimulationProvider bulletSimulationProvider)
+        public PooledBulletFactory(BulletTemplate bulletTemplate,
+            KeyPooledObjectPool<DefaultBullet, SimulationObject> objectPool)
         {
+            _bulletTemplate = bulletTemplate;
             _objectPool = objectPool ?? throw new ArgumentException();
-            _bulletSimulationProvider = bulletSimulationProvider ?? throw new ArgumentNullException();
         }
 
         public void PopulatePool()
@@ -48,12 +48,15 @@ namespace GameModes.SinglePlayer.ObjectComposition
 
         private void AddNewToObjectPool()
         {
-            SimulationObject simulation = _bulletSimulationProvider.CreateSimulationObject();
+            BulletTemplate bulletTemplate = Object.Instantiate(_bulletTemplate);
+            SimulationObject simulation = new SimulationObject(bulletTemplate.gameObject);
 
             DefaultBullet defaultBullet =
-                new DefaultBullet(new Transform(simulation.GetView<IPositionView>()), new NullTrajectory());
+                new DefaultBullet(new Transform(bulletTemplate.BulletView.PositionView), new NullTrajectory());
 
-            _bulletSimulationProvider.InitializeSimulation(simulation, defaultBullet);
+            simulation.AddUpdatableSimulation(
+                bulletTemplate.BulletSimulation.Collidable.Initialize(new BulletCollisionEnter(defaultBullet)));
+            
             _objectPool.AddNew(defaultBullet, simulation);
         }
     }

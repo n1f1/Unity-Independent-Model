@@ -6,11 +6,11 @@ using UnityEngine;
 namespace Simulation.Physics
 {
     public abstract class PhysicsInteractionHandler<TInteractionType> : MonoBehaviour,
-        ISimulation<PhysicsInteraction<TInteractionType>>
+        ISimulation<IPhysicsInteraction<TInteractionType>>
     {
-        protected PhysicsInteraction<TInteractionType> PhysicsInteraction;
+        protected IPhysicsInteraction<TInteractionType> PhysicsInteraction;
 
-        public ISimulation<PhysicsInteraction<TInteractionType>> Initialize(PhysicsInteraction<TInteractionType> enemyPlayerPrediction)
+        public ISimulation<IPhysicsInteraction<TInteractionType>> Initialize(IPhysicsInteraction<TInteractionType> enemyPlayerPrediction)
         {
             PhysicsInteraction = enemyPlayerPrediction ?? throw new ArgumentException();
 

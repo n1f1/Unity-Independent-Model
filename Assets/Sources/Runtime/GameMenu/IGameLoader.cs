@@ -1,5 +1,3 @@
-using System.Threading.Tasks;
-
 namespace GameMenu
 {
     public interface IGameLoader

@@ -4,7 +4,7 @@ using Model.Physics;
 
 namespace Model.Characters.Shooting.Bullets
 {
-    public class BulletCollisionEnter : PhysicsInteraction<Trigger<IDamageable>>
+    public class BulletCollisionEnter : IPhysicsInteraction<Trigger<IDamageable>>
     {
         private readonly IBullet _bullet;
 

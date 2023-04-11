@@ -1,11 +1,9 @@
 ﻿using System;
 using Model.Characters;
-using Model.Characters.CharacterHealth;
 using Model.Characters.Enemy;
 using Simulation;
 using Simulation.Pool;
 using Object = UnityEngine.Object;
-using Transform = Model.SpatialObject.Transform;
 using Vector3 = System.Numerics.Vector3;
 
 namespace GameModes.SinglePlayer.ObjectComposition.EnemyConstruction
@@ -14,13 +12,13 @@ namespace GameModes.SinglePlayer.ObjectComposition.EnemyConstruction
     {
         private readonly KeyPooledObjectPool<Enemy, PoolableSimulationObject<EnemyTemplate>> _objectPool = new();
         private readonly Player _player;
-        private readonly LevelConfig _levelConfig;
+        private readonly EnemyTemplate _enemyTemplate;
 
         private PoolableSimulationObject<EnemyTemplate> _freeSimulationToReuse;
 
-        public EnemyFactory(Player player, LevelConfig levelConfig)
+        public EnemyFactory(Player player, EnemyTemplate enemyTemplate)
         {
-            _levelConfig = levelConfig;
+            _enemyTemplate = enemyTemplate ?? throw new ArgumentNullException(nameof(enemyTemplate));
             _player = player ?? throw new ArgumentNullException();
         }
 
@@ -60,7 +58,7 @@ namespace GameModes.SinglePlayer.ObjectComposition.EnemyConstruction
 
             if (_freeSimulationToReuse == null)
             {
-                EnemyTemplate enemyTemplate = Object.Instantiate(_levelConfig.EnemyTemplate);
+                EnemyTemplate enemyTemplate = Object.Instantiate(_enemyTemplate);
                 simulation = new PoolableSimulationObject<EnemyTemplate>(enemyTemplate);
             }
             else

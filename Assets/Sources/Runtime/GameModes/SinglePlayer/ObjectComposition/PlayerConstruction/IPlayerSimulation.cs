@@ -1,6 +1,7 @@
 ﻿using Model;
 using Model.Characters;
 using Model.Characters.Shooting;
+using Simulation;
 
 namespace GameModes.SinglePlayer.ObjectComposition.PlayerConstruction
 {

@@ -4,6 +4,5 @@ namespace GameModes.SinglePlayer.ObjectComposition.EnemyConstruction
 {
     public class EnemyView : CharacterWithHealthView, IEnemyView
     {
-        
     }
 }

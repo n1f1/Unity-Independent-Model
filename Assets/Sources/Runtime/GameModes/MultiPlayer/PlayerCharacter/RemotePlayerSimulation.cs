@@ -2,6 +2,7 @@
 using GameModes.SinglePlayer.ObjectComposition;
 using GameModes.SinglePlayer.ObjectComposition.PlayerConstruction;
 using Model;
+using Simulation;
 
 namespace GameModes.MultiPlayer.PlayerCharacter
 {

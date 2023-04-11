@@ -19,12 +19,4 @@ namespace GameMenu
             mainMenu.Open();
         }
     }
-
-    public class NullGame : IGame
-    {
-        public void Load()
-        {
-            
-        }
-    }
 }

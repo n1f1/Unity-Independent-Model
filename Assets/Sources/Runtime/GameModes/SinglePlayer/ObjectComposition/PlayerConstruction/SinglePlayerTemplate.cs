@@ -8,13 +8,13 @@ namespace GameModes.SinglePlayer.ObjectComposition.PlayerConstruction
         [SerializeField] private MonoBehaviour _playerViewBehavior;
         [SerializeField] private MonoBehaviour _playerSimulationBehaviour;
 
+        public IPlayerView PlayerViewBehavior => (IPlayerView) _playerViewBehavior;
+        public IPlayerSimulation PlayerSimulationBehaviour => (IPlayerSimulation) _playerSimulationBehaviour;
+
         protected virtual void OnValidate()
         {
             InspectorInterfaceInjection.TrySetObject<IPlayerView>(ref _playerViewBehavior);
             InspectorInterfaceInjection.TrySetObject<IPlayerSimulation>(ref _playerSimulationBehaviour);
         }
-
-        public IPlayerView PlayerViewBehavior => (IPlayerView) _playerViewBehavior;
-        public IPlayerSimulation PlayerSimulationBehaviour => (IPlayerSimulation) _playerSimulationBehaviour;
     }
 }

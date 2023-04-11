@@ -19,30 +19,43 @@ namespace GameModes.SinglePlayer.ObjectComposition.PlayerConstruction
         private readonly IObjectToSimulationMap _objectToSimulationMapping;
         private readonly IDeathView _deathView;
         private readonly BulletsContainer _bulletsContainer;
-        private readonly LevelConfig _levelConfig;
+        private readonly SinglePlayerTemplate _playerTemplate;
 
-        public PlayerFactory(LevelConfig levelConfig, IPositionView cameraView,
+        public PlayerFactory(SinglePlayerTemplate playerTemplate, IPositionView cameraView,
             IBulletFactory<IBullet> pooledBulletFactory, IObjectToSimulationMap objectToSimulationMapping,
             IDeathView deathView, BulletsContainer bulletsContainer)
         {
-            _levelConfig = levelConfig;
+            _playerTemplate = playerTemplate ?? throw new ArgumentNullException(nameof(playerTemplate));
             _deathView = deathView ?? throw new ArgumentNullException(nameof(deathView));
             _objectToSimulationMapping =
                 objectToSimulationMapping ?? throw new ArgumentNullException(nameof(objectToSimulationMapping));
-            _bulletFactory = pooledBulletFactory;
-            _bulletsContainer = bulletsContainer;
+            _bulletFactory = pooledBulletFactory ?? throw new ArgumentNullException(nameof(pooledBulletFactory));
+            _bulletsContainer = bulletsContainer ?? throw new ArgumentNullException(nameof(bulletsContainer));
             _cameraView = cameraView ?? throw new ArgumentNullException(nameof(cameraView));
         }
 
         public Player CreatePlayer(Vector3 position)
         {
-            SinglePlayerTemplate playerTemplate = Object.Instantiate(_levelConfig.PlayerTemplate);
+            SinglePlayerTemplate playerTemplate = Object.Instantiate(_playerTemplate);
             SimulationObject simulation = new SimulationObject(playerTemplate.gameObject);
             IPlayerView playerView = playerTemplate.PlayerViewBehavior;
             IPlayerSimulation playerSimulation = playerTemplate.PlayerSimulationBehaviour;
 
-            IPositionView positionView = new CompositePositionView(playerView.PositionView, _cameraView);
+            playerView.PositionView = new CompositePositionView(playerView.PositionView, _cameraView);
 
+            Player player = CreatePlayer(position, playerView);
+
+            simulation.AddUpdatableSimulation(playerSimulation.Movable.Initialize(player.CharacterMovement));
+            simulation.AddUpdatableSimulation(playerSimulation.CharacterShooter.Initialize(player.CharacterShooter));
+            simulation.Enable();
+
+            _objectToSimulationMapping.RegisterNew(player, simulation);
+
+            return player;
+        }
+
+        private Player CreatePlayer(Vector3 position, IPlayerView playerView)
+        {
             Cooldown cooldown = new Cooldown(Player.ShootingCooldown);
             IWeapon weapon = new DefaultGun(_bulletFactory ?? throw new ArgumentException(),
                 cooldown,
@@ -51,16 +64,8 @@ namespace GameModes.SinglePlayer.ObjectComposition.PlayerConstruction
             ForwardAim forwardAim = new ForwardAim(playerView.ForwardAimView);
 
             Player player = new Player(playerView.HealthView, forwardAim, _deathView,
-                weapon, cooldown, new Transform(positionView, position));
-
-            IMovable movable = player.CharacterMovement;
-
-            simulation.AddUpdatableSimulation(playerSimulation.Movable.Initialize(movable));
-            simulation.AddUpdatableSimulation(playerSimulation.CharacterShooter.Initialize(player.CharacterShooter));
-            simulation.Enable();
-
-            _objectToSimulationMapping.RegisterNew(player, simulation);
-
+                weapon, cooldown, new Transform(playerView.PositionView, position));
+            
             return player;
         }
     }

@@ -1,21 +1,24 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Net.Sockets;
-using GameMenu;
-using GameMenu.PauseMenu;
+using GameModes.Game;
+using GameModes.GameStatus;
+using GameModes.GameStatus.Pause;
 using GameModes.MultiPlayer.Connection;
 using GameModes.MultiPlayer.PlayerCharacter;
 using GameModes.MultiPlayer.PlayerCharacter.Client;
+using GameModes.MultiPlayer.PlayerCharacter.Client.Reconciliation;
 using GameModes.MultiPlayer.PlayerCharacter.Client.Shooting;
 using GameModes.MultiPlayer.PlayerCharacter.Common;
+using GameModes.MultiPlayer.PlayerCharacter.Common.Movement;
+using GameModes.MultiPlayer.PlayerCharacter.Common.Shooting;
 using GameModes.MultiPlayer.PlayerCharacter.Remote;
+using GameModes.MultiPlayer.PlayerCharacter.Remote.Movement;
 using GameModes.SinglePlayer;
-using GameModes.SinglePlayer.ObjectComposition;
-using GameModes.SinglePlayer.ObjectComposition.Bullets;
-using Model.Characters;
+using Menus.PauseMenu;
 using Model.Characters.CharacterHealth;
 using Model.Characters.Player;
-using Model.Characters.Shooting.Bullets;
+using Model.Shooting.Bullets;
 using Model.SpatialObject;
 using Networking;
 using Networking.Connection;
@@ -26,9 +29,9 @@ using Networking.PacketReceive.Replication.ObjectCreationReplication;
 using Networking.PacketReceive.Replication.Serialization;
 using Networking.PacketSend.ObjectSend;
 using Networking.StreamIO;
-using Simulation;
-using Simulation.Common;
-using Simulation.View;
+using Simulation.Infrastructure;
+using Simulation.Shooting.Bullets;
+using Simulation.SpatialObject;
 using UnityEngine;
 
 namespace GameModes.MultiPlayer
@@ -37,7 +40,7 @@ namespace GameModes.MultiPlayer
     {
         private readonly IGameLoader _gameLoader;
         private LevelConfig _levelConfig;
-        private GameStatus _gameStatus;
+        private GameStatus.GameStatus _gameStatus;
         private IObjectToSimulationMap _objectToSimulationMap;
         private PlayerClient _clientPlayer;
         private NotReconciledCommands<MoveCommand> _notReconciledMoveCommands;
@@ -120,7 +123,7 @@ namespace GameModes.MultiPlayer
             GamePause pauseStatus = new GamePause();
             PauseMenu pauseMenu = new PauseMenu(_gameLoader, pauseStatus);
             pauseMenu.Create();
-            _gameStatus = new GameStatus(pauseStatus);
+            _gameStatus = new GameStatus.GameStatus(pauseStatus);
 
             PooledBulletFactory bulletFactory =
                 BulletFactoryCreation.CreatePooledFactory(_levelConfig.BulletTemplate);

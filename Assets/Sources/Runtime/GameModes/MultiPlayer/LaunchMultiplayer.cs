@@ -1,9 +1,9 @@
 using System;
-using GameMenu;
+using GameModes.Game;
 
 namespace GameModes.MultiPlayer
 {
-    public class LaunchMultiplayer : UI.ICommand
+    public class LaunchMultiplayer : UI.Commands.ICommand
     {
         private readonly IGameLoader _gameLoader;
 

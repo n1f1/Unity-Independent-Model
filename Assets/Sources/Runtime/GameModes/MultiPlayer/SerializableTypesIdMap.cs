@@ -4,6 +4,8 @@ using System.Linq;
 using System.Text;
 using GameModes.MultiPlayer.PlayerCharacter.Client.Shooting;
 using GameModes.MultiPlayer.PlayerCharacter.Common;
+using GameModes.MultiPlayer.PlayerCharacter.Common.Movement;
+using GameModes.MultiPlayer.PlayerCharacter.Common.Shooting;
 using Model.Characters.Player;
 
 namespace GameModes.MultiPlayer

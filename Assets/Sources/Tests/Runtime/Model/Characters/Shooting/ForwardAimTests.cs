@@ -1,5 +1,5 @@
 ﻿using System.Numerics;
-using Model.Characters.Shooting;
+using Model.Shooting;
 using NUnit.Framework;
 using Tests.Model.Characters.Shooting.Support;
 

@@ -1,8 +1,7 @@
 ﻿using GameModes.MultiPlayer.PlayerCharacter.Remote;
-using GameModes.SinglePlayer.ObjectComposition;
-using GameModes.SinglePlayer.ObjectComposition.PlayerConstruction;
-using Model;
+using GameModes.MultiPlayer.PlayerCharacter.Remote.Movement;
 using Simulation;
+using Simulation.Characters.Player;
 
 namespace GameModes.MultiPlayer.PlayerCharacter
 {
@@ -11,9 +10,9 @@ namespace GameModes.MultiPlayer.PlayerCharacter
         protected override void Awake()
         {
             base.Awake();
-            PlayerMovePrediction = gameObject.AddComponent<RemotePlayerPredictionSimulation>();
+            PlayerMovePrediction = gameObject.AddComponent<RemotePlayerMovementPredictionSimulation>();
         }
 
-        public ISimulation<RemotePlayerPrediction> PlayerMovePrediction { get; set; }
+        public ISimulation<RemotePlayerMovementPrediction> PlayerMovePrediction { get; set; }
     }
 }

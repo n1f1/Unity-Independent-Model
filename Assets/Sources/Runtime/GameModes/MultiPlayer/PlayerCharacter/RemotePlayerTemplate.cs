@@ -1,5 +1,5 @@
-﻿using GameModes.SinglePlayer.ObjectComposition;
-using GameModes.SinglePlayer.ObjectComposition.PlayerConstruction;
+﻿using GameModes.MultiPlayer.PlayerCharacter.Remote;
+using GameModes.SinglePlayer;
 using UnityEngine;
 using Utility;
 

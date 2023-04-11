@@ -1,5 +1,7 @@
-﻿using Networking.Connection;
+﻿using GameModes.Game;
+using Networking.Connection;
 using UI;
+using UI.Windows;
 using UnityEngine;
 
 namespace GameModes.MultiPlayer.Connection

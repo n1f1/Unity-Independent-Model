@@ -1,18 +1,20 @@
 using System;
-using GameMenu;
-using GameMenu.PauseMenu;
+using GameModes.Game;
+using GameModes.GameStatus;
+using GameModes.GameStatus.Pause;
 using GameModes.MultiPlayer;
-using GameModes.SinglePlayer.ObjectComposition.Bullets;
-using GameModes.SinglePlayer.ObjectComposition.EnemyConstruction;
-using GameModes.SinglePlayer.ObjectComposition.PlayerConstruction;
+using Menus.PauseMenu;
 using Model.Characters;
 using Model.Characters.CharacterHealth;
 using Model.Characters.Enemy;
 using Model.Characters.Player;
-using Model.Characters.Shooting.Bullets;
+using Model.Shooting.Bullets;
 using Model.SpatialObject;
 using Simulation;
-using Simulation.View;
+using Simulation.Characters.Enemy;
+using Simulation.Infrastructure;
+using Simulation.Shooting.Bullets;
+using Simulation.SpatialObject;
 using UnityEngine;
 using Vector3 = System.Numerics.Vector3;
 
@@ -27,7 +29,7 @@ namespace GameModes.SinglePlayer
         private EnemyContainer _enemyContainer;
         private EnemySpawner _enemySpawner;
         private LevelConfig _levelConfig;
-        private GameStatus _gameStatus;
+        private GameStatus.GameStatus _gameStatus;
         private Player _player;
 
         public SinglePlayerGame(IGameLoader gameLoader)
@@ -43,7 +45,7 @@ namespace GameModes.SinglePlayer
             GamePause pauseStatus = new GamePause();
             PauseMenu pauseMenu = new PauseMenu(_gameLoader, pauseStatus);
             pauseMenu.Create();
-            _gameStatus = new GameStatus(pauseStatus);
+            _gameStatus = new GameStatus.GameStatus(pauseStatus);
 
             CreatePlayer(cameraView);
             CreateEnemy();
@@ -80,10 +82,10 @@ namespace GameModes.SinglePlayer
                 new SetLooseGameStatus(_gameStatus),
                 new OpenMenuOnDeath(_gameLoader));
 
-            PlayerFactory playerFactory = new PlayerFactory(_levelConfig.PlayerTemplate, cameraView, bulletFactory,
+            SinglePlayerFactory singlePlayerFactory = new SinglePlayerFactory(_levelConfig.PlayerTemplate, cameraView, bulletFactory,
                 objectToSimulationMap, playerDeath, _bulletsContainer);
 
-            _player = playerFactory.CreatePlayer(Vector3.Zero);
+            _player = singlePlayerFactory.CreatePlayer(Vector3.Zero);
             _playerSimulation = objectToSimulationMap.Get(_player);
         }
     }

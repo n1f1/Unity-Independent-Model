@@ -1,5 +1,5 @@
 ﻿using Model.Characters.CharacterHealth;
-using Model.Characters.Shooting;
+using Model.Shooting;
 
 namespace Model.Characters.Player
 {

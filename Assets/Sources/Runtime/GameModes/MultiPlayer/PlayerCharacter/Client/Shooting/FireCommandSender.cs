@@ -1,8 +1,9 @@
 ﻿using System;
+using GameModes.MultiPlayer.PlayerCharacter.Client.Reconciliation;
+using GameModes.MultiPlayer.PlayerCharacter.Common.Shooting;
 using Model.Characters;
 using Model.Characters.Player;
-using Model.Characters.Shooting;
-using Model.Characters.Shooting.Bullets;
+using Model.Shooting.Bullets;
 using Networking.PacketSend.ObjectSend;
 using Vector3 = System.Numerics.Vector3;
 

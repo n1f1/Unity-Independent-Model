@@ -1,19 +1,24 @@
 ﻿using System;
+using GameModes.Game;
 using GameModes.MultiPlayer.PlayerCharacter.Client;
+using GameModes.MultiPlayer.PlayerCharacter.Client.Movement;
+using GameModes.MultiPlayer.PlayerCharacter.Client.Reconciliation;
 using GameModes.MultiPlayer.PlayerCharacter.Client.Shooting;
 using GameModes.MultiPlayer.PlayerCharacter.Common;
+using GameModes.MultiPlayer.PlayerCharacter.Common.Movement;
+using GameModes.MultiPlayer.PlayerCharacter.Common.Shooting;
 using GameModes.MultiPlayer.PlayerCharacter.Remote;
-using GameModes.SinglePlayer.ObjectComposition;
-using GameModes.SinglePlayer.ObjectComposition.PlayerConstruction;
+using GameModes.MultiPlayer.PlayerCharacter.Remote.Movement;
+using GameModes.MultiPlayer.PlayerCharacter.Remote.Shooting;
 using Model.Characters;
 using Model.Characters.CharacterHealth;
 using Model.Characters.Player;
-using Model.Characters.Shooting;
-using Model.Characters.Shooting.Bullets;
+using Model.Shooting;
+using Model.Shooting.Bullets;
 using Model.SpatialObject;
 using Networking.PacketSend.ObjectSend;
 using Simulation;
-using Simulation.Common;
+using Simulation.Infrastructure;
 using Object = UnityEngine.Object;
 using Transform = Model.SpatialObject.Transform;
 using Vector3 = System.Numerics.Vector3;
@@ -94,7 +99,7 @@ namespace GameModes.MultiPlayer.PlayerCharacter
             }
             else
             {
-                var prediction = new RemotePlayerPrediction(_movementCommandPrediction, player.CharacterMovement);
+                var prediction = new RemotePlayerMovementPrediction(_movementCommandPrediction, player.CharacterMovement);
                 simulation.AddUpdatableSimulation(playerSimulation.PlayerMovePrediction.Initialize(prediction));
                 _updatableContainer.QueryAdd(simulation);
                 _updatableContainer.QueryAdd(player);

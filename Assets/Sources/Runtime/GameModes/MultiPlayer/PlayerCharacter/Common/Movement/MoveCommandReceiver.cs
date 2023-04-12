@@ -34,7 +34,6 @@ namespace GameModes.MultiPlayer.PlayerCharacter.Common.Movement
 
         private void ProcessRemotePlayerCommand(MoveCommand newCommand)
         {
-            Debug.Log(newCommand.ID);
             _movementCommandPrediction.PredictNextPacket(newCommand);
         }
 

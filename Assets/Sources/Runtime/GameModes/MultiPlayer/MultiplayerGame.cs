@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Net.Sockets;
+using System.Linq;
 using GameModes.Game;
 using GameModes.MultiPlayer.Connection;
 using GameModes.MultiPlayer.PlayerCharacter;
@@ -22,7 +22,6 @@ using Networking;
 using Networking.Connection;
 using Networking.ObjectsHashing;
 using Networking.PacketReceive;
-using Networking.PacketReceive.Replication;
 using Networking.PacketReceive.Replication.ObjectCreationReplication;
 using Networking.PacketReceive.Replication.Serialization;
 using Networking.PacketSend.ObjectSend;
@@ -37,17 +36,16 @@ namespace GameModes.MultiPlayer
     public class MultiplayerGame : IGame
     {
         private readonly IGameLoader _gameLoader;
+        private readonly UpdatableContainer _updatableContainer = new();
         private LevelConfig _levelConfig;
         private GameStatus _gameStatus;
         private IObjectToSimulationMap _objectToSimulationMap;
         private PlayerClient _clientPlayer;
         private NotReconciledCommands<MoveCommand> _notReconciledMoveCommands;
-        private readonly UpdatableContainer _updatableContainer = new();
         private IMovementCommandPrediction _movementCommandPrediction;
         private NotReconciledCommands<FireCommand> _notReconciledFireCommands;
-        private INetworkStreamRead _networkStreamRead;
-        private IInputStream _inputStream;
         private BulletsContainer _bulletsContainer;
+        private ClientServerNetworking _networking;
 
         public MultiplayerGame(IGameLoader gameLoader)
         {
@@ -56,77 +54,62 @@ namespace GameModes.MultiPlayer
 
         public async void Load()
         {
-            IServerConnectionView connectionView = new ServerConnectionView();
-            ServerConnection serverConnection = new ServerConnection(connectionView);
-
-            if (await serverConnection.Connect() == false)
-                return;
-
-            NetworkStream networkStream = serverConnection.Client.GetStream();
-            IOutputStream outputStream = new BinaryWriterOutputStream(networkStream);
-            _inputStream = new BinaryReaderInputStream(networkStream);
-
             _levelConfig = Resources.Load<LevelConfig>(GameResourceConfigurations.LevelConfigsList);
 
-            HashedObjectsList hashedObjects = new HashedObjectsList();
+            var dictionary = new Dictionary<Type, int>().PopulateDictionaryFromTuple(SerializableTypesIdMap.Get());
+            ITypeIdConversion typeIdConversion = new TypeIdConversion(dictionary);
+            IServerConnectionView connectionView = new ServerConnectionView();
+            ClientServerNetworking networking = new ClientServerNetworking(connectionView, typeIdConversion);
 
-            TypeIdConversion typeIdConversion = new TypeIdConversion(
-                new Dictionary<Type, int>().PopulateDictionaryFromTuple(SerializableTypesIdMap.Get()));
+            if (await networking.Connect() == false)
+                return;
+
+            _networking = networking;
+            _networking.StreamRead = new LatencyDebugTestNetworkStreamRead(_networking.StreamRead,
+                NetworkConstants.BaseLatency, NetworkConstants.JitterDelta);
 
             _objectToSimulationMap = new ObjectToSimulationMap();
-            _clientPlayer = new PlayerClient();
             _notReconciledMoveCommands = new NotReconciledCommands<MoveCommand>();
             _notReconciledFireCommands = new NotReconciledCommands<FireCommand>();
             _movementCommandPrediction =
                 new AllRemotePlayersMovementPrediction(NetworkConstants.RTT, NetworkConstants.ServerFixedDeltaTime);
 
-            Dictionary<Type, object> receivers = new Dictionary<Type, object>
-            {
-                {
-                    typeof(MoveCommand),
-                    new MoveCommandReceiver(_notReconciledMoveCommands, _clientPlayer, _movementCommandPrediction)
-                },
-                {typeof(ClientPlayer), new ClientPlayerReceiver(_objectToSimulationMap, _clientPlayer)},
-                {typeof(Player), new RemotePlayerReceiver(_objectToSimulationMap)},
-                {typeof(FireCommand), new FireCommandReceiver(_notReconciledFireCommands, _clientPlayer)}
-            };
-
-            IEnumerable<(Type, object)> serialization = new List<(Type, object)>
-            {
-                (typeof(MoveCommand), new MoveCommandSerialization(hashedObjects, typeIdConversion)),
-                (typeof(FireCommand), new FireCommandSerialization(hashedObjects, typeIdConversion))
-            };
-
-            INetworkObjectSender objectSender = new StreamObjectSender(serialization, typeIdConversion, outputStream);
 
             PooledBulletFactory bulletFactory =
                 BulletFactoryCreation.CreatePooledFactory(_levelConfig.BulletTemplate);
 
             _bulletsContainer = new BulletsContainer(bulletFactory);
 
-            IPlayerFactory playerFactory = CreatePlayerFactory(objectSender, bulletFactory);
-            PlayerSerialization playerSerialization =
-                new PlayerSerialization(hashedObjects, typeIdConversion, playerFactory);
+            IPlayerFactory playerFactory = CreatePlayerFactory(_networking.ObjectSender, bulletFactory);
+            _clientPlayer = new PlayerClient();
 
             IPlayerFactory remotePlayerFactory = new RemotePlayerFactory(_levelConfig, bulletFactory,
                 _objectToSimulationMap, new NullDeathView(), _updatableContainer, _movementCommandPrediction,
                 _bulletsContainer);
 
-            IEnumerable<(Type, object)> deserialization = new List<(Type, object)>
-            {
-                (typeof(Player), new PlayerSerialization(hashedObjects, typeIdConversion, remotePlayerFactory)),
-                (typeof(ClientPlayer), new ClientPlayerSerialization(playerSerialization)),
-                (typeof(MoveCommand), new MoveCommandSerialization(hashedObjects, typeIdConversion)),
-                (typeof(FireCommand), new FireCommandSerialization(hashedObjects, typeIdConversion))
-            };
+            HashedObjectsList hashedObjects = new HashedObjectsList();
 
-            IReplicationPacketRead packetRead =
-                new SendToReceiversPacketRead(receivers, deserialization, typeIdConversion);
+            IGenericInterfaceList deserialization = _networking.Deserialization;
+            IGenericInterfaceList serialization = _networking.Serialization;
+            IGenericInterfaceList receivers = _networking.Receivers;
 
-            GameClient gameClient = new GameClient(packetRead);
+            deserialization.Register(typeof(ClientPlayer),
+                new ClientPlayerSerialization(new PlayerSerialization(hashedObjects, typeIdConversion, playerFactory)));
+            deserialization.Register(typeof(Player),
+                new PlayerSerialization(hashedObjects, typeIdConversion, remotePlayerFactory));
+            deserialization.Register(typeof(MoveCommand),
+                new MoveCommandSerialization(hashedObjects, typeIdConversion));
+            deserialization.Register(typeof(FireCommand),
+                new FireCommandSerialization(hashedObjects, typeIdConversion));
 
-            _networkStreamRead = new LatencyDebugTestNetworkStreamRead(gameClient,
-                NetworkConstants.BaseLatency, NetworkConstants.JitterDelta);
+            serialization.Register(typeof(MoveCommand), new MoveCommandSerialization(hashedObjects, typeIdConversion));
+            serialization.Register(typeof(FireCommand), new FireCommandSerialization(hashedObjects, typeIdConversion));
+
+            receivers.Register(typeof(ClientPlayer), new ClientPlayerReceiver(_objectToSimulationMap, _clientPlayer));
+            receivers.Register(typeof(Player), new RemotePlayerReceiver(_objectToSimulationMap));
+            receivers.Register(typeof(FireCommand), new FireCommandReceiver(_notReconciledFireCommands, _clientPlayer));
+            receivers.Register(typeof(MoveCommand),
+                new MoveCommandReceiver(_notReconciledMoveCommands, _clientPlayer, _movementCommandPrediction));
         }
 
         private IPlayerFactory CreatePlayerFactory(INetworkObjectSender networkObjectSender,
@@ -151,7 +134,7 @@ namespace GameModes.MultiPlayer
 
         public void UpdateTime(float deltaTime)
         {
-            _networkStreamRead?.ReadNetworkStream(_inputStream);
+            _networking?.ReadNetworkStream();
             _updatableContainer.UpdateTime(deltaTime);
             _bulletsContainer?.Update(deltaTime);
             _clientPlayer?.UpdateTime(deltaTime);

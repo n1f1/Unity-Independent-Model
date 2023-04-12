@@ -38,7 +38,7 @@ namespace Server
 
             PlayerSerialization playerSerialization =
                 new PlayerSerialization(hashedObjects, typeIdConversion, playerFactory);
-            
+
             IEnumerable<(Type, object)> serialization = new List<(Type, object)>
             {
                 (typeof(Player), playerSerialization),
@@ -56,8 +56,10 @@ namespace Server
 
             Dictionary<Type, object> dictionary = new Dictionary<Type, object>();
             dictionary.PopulateDictionary(serialization);
+
             ObjectReplicationPacketFactory replicationPacketFactory =
-                new ObjectReplicationPacketFactory(dictionary, typeIdConversion);
+                new ObjectReplicationPacketFactory(
+                    new GenericInterfaceWithParameterList(dictionary, typeof(ISerialization<>)), typeIdConversion);
 
             PlayerToClientMap playerToClientMap = new PlayerToClientMap();
 
@@ -67,13 +69,14 @@ namespace Server
                 {typeof(FireCommand), new GameClientFireCommandReceiver(playerToClientMap)}
             };
 
-            Dictionary<Type, IDeserialization<object>> deserializations =
-                new Dictionary<Type, IDeserialization<object>>();
-
+            Dictionary<Type, object> deserializations = new Dictionary<Type, object>();
             deserializations.PopulateDictionary(deserialization);
 
+            IGenericInterfaceList receiver =
+                new GenericInterfaceWithParameterList(receivers, typeof(IReplicatedObjectReceiver<>));
             IReplicationPacketRead replicationPacketRead = new ReplicationPacketRead(new CreationReplicator(
-                typeIdConversion, deserializations, new ReceivedReplicatedObjectMatcher(receivers)));
+                typeIdConversion, new GenericInterfaceWithParameterList(deserializations, typeof(IDeserialization<>)),
+                new ReceivedReplicatedObjectMatcher(receiver)));
 
             NewClientsListener newClientsListener = new NewClientsListener(room,
                 new ClientConnectionPlayerCreation(replicationPacketFactory, room, game, playerToClientMap,

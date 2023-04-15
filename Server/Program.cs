@@ -33,7 +33,7 @@ namespace Server
 
             GameSimulation game = new GameSimulation();
             BulletsContainer bulletsContainer = new BulletsContainer(new NullBulletDestroyer());
-            ServerPlayerFactory playerFactory = new ServerPlayerFactory(bulletsContainer, game);
+            ServerPlayerFactory playerFactory = new ServerPlayerFactory(bulletsContainer);
             game.Add(bulletsContainer);
 
             PlayerSerialization playerSerialization =

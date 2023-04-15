@@ -25,7 +25,7 @@ namespace Model.Characters.Enemy
             _health = new Health(100f, healthView, _death);
             _cooldown = new Cooldown(1);
 
-            _enemyAttack = new EnemyAttack(player.Health, new CooldownAttack(_cooldown,
+            _enemyAttack = new EnemyAttack(player.Damageable, new CooldownAttack(_cooldown,
                 new DistanceAttack(player.Transform, transform, new DefaultAttack())));
 
             _followTarget = new FollowTarget(player.Transform, transform, new CharacterMovement(transform, 4f));

@@ -1,15 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using GameModes.Game;
 using GameModes.MultiPlayer.Connection;
-using GameModes.MultiPlayer.PlayerCharacter;
 using GameModes.MultiPlayer.PlayerCharacter.Client;
+using GameModes.MultiPlayer.PlayerCharacter.Client.Construction;
 using GameModes.MultiPlayer.PlayerCharacter.Client.Reconciliation;
 using GameModes.MultiPlayer.PlayerCharacter.Common;
+using GameModes.MultiPlayer.PlayerCharacter.Common.Construction;
 using GameModes.MultiPlayer.PlayerCharacter.Common.Movement;
 using GameModes.MultiPlayer.PlayerCharacter.Common.Shooting;
 using GameModes.MultiPlayer.PlayerCharacter.Remote;
+using GameModes.MultiPlayer.PlayerCharacter.Remote.Construction;
 using GameModes.MultiPlayer.PlayerCharacter.Remote.Movement;
 using GameModes.Status;
 using GameModes.Status.Pause;
@@ -21,11 +22,11 @@ using Model.SpatialObject;
 using Networking;
 using Networking.Connection;
 using Networking.ObjectsHashing;
-using Networking.PacketReceive;
 using Networking.PacketReceive.Replication.ObjectCreationReplication;
 using Networking.PacketReceive.Replication.Serialization;
 using Networking.PacketSend.ObjectSend;
 using Networking.StreamIO;
+using Simulation.Characters.Player;
 using Simulation.Infrastructure;
 using Simulation.Shooting.Bullets;
 using Simulation.SpatialObject;
@@ -40,7 +41,7 @@ namespace GameModes.MultiPlayer
         private LevelConfig _levelConfig;
         private GameStatus _gameStatus;
         private IObjectToSimulationMap _objectToSimulationMap;
-        private PlayerClient _clientPlayer;
+        private ClientPlayerSimulation _simulationClientPlayer;
         private NotReconciledCommands<MoveCommand> _notReconciledMoveCommands;
         private IMovementCommandPrediction _movementCommandPrediction;
         private NotReconciledCommands<FireCommand> _notReconciledFireCommands;
@@ -68,27 +69,26 @@ namespace GameModes.MultiPlayer
             _networking.StreamRead = new LatencyDebugTestNetworkStreamRead(_networking.StreamRead,
                 NetworkConstants.BaseLatency, NetworkConstants.JitterDelta);
 
+            GamePause pauseStatus = new GamePause();
+            PauseMenu pauseMenu = new PauseMenu(_gameLoader, pauseStatus);
+            pauseMenu.Create();
+            _gameStatus = new GameStatus(pauseStatus);
+
             _objectToSimulationMap = new ObjectToSimulationMap();
             _notReconciledMoveCommands = new NotReconciledCommands<MoveCommand>();
             _notReconciledFireCommands = new NotReconciledCommands<FireCommand>();
             _movementCommandPrediction =
                 new AllRemotePlayersMovementPrediction(NetworkConstants.RTT, NetworkConstants.ServerFixedDeltaTime);
 
-
             PooledBulletFactory bulletFactory =
                 BulletFactoryCreation.CreatePooledFactory(_levelConfig.BulletTemplate);
-
             _bulletsContainer = new BulletsContainer(bulletFactory);
 
-            IPlayerFactory playerFactory = CreatePlayerFactory(_networking.ObjectSender, bulletFactory);
-            _clientPlayer = new PlayerClient();
-
-            IPlayerFactory remotePlayerFactory = new RemotePlayerFactory(_levelConfig, bulletFactory,
-                _objectToSimulationMap, new NullDeathView(), _updatableContainer, _movementCommandPrediction,
-                _bulletsContainer);
+            IPlayerFactory remotePlayerFactory = CreateRemotePlayerFactory(bulletFactory);
+            IPlayerFactory playerFactory = CreateClientPlayerFactory(_networking.ObjectSender, bulletFactory);
+            _simulationClientPlayer = new ClientPlayerSimulation();
 
             HashedObjectsList hashedObjects = new HashedObjectsList();
-
             IGenericInterfaceList deserialization = _networking.Deserialization;
             IGenericInterfaceList serialization = _networking.Serialization;
             IGenericInterfaceList receivers = _networking.Receivers;
@@ -105,31 +105,63 @@ namespace GameModes.MultiPlayer
             serialization.Register(typeof(MoveCommand), new MoveCommandSerialization(hashedObjects, typeIdConversion));
             serialization.Register(typeof(FireCommand), new FireCommandSerialization(hashedObjects, typeIdConversion));
 
-            receivers.Register(typeof(ClientPlayer), new ClientPlayerReceiver(_objectToSimulationMap, _clientPlayer));
+            receivers.Register(typeof(ClientPlayer),
+                new ClientPlayerReceiver(_objectToSimulationMap, _simulationClientPlayer));
             receivers.Register(typeof(Player), new RemotePlayerReceiver(_objectToSimulationMap));
-            receivers.Register(typeof(FireCommand), new FireCommandReceiver(_notReconciledFireCommands, _clientPlayer));
+            receivers.Register(typeof(FireCommand),
+                new FireCommandReceiver(_notReconciledFireCommands, _simulationClientPlayer));
             receivers.Register(typeof(MoveCommand),
-                new MoveCommandReceiver(_notReconciledMoveCommands, _clientPlayer, _movementCommandPrediction));
+                new MoveCommandReceiver(_notReconciledMoveCommands, _simulationClientPlayer,
+                    _movementCommandPrediction));
         }
 
-        private IPlayerFactory CreatePlayerFactory(INetworkObjectSender networkObjectSender,
+        private IPlayerFactory CreateRemotePlayerFactory(PooledBulletFactory bulletFactory)
+        {
+            RemotePlayerSimulationInitializer remotePlayerSimulationInitializer =
+                new RemotePlayerSimulationInitializer(_objectToSimulationMap, _updatableContainer,
+                    _movementCommandPrediction);
+
+            IViewInitializer<IPlayerView> viewInitializer = new ReplaceDeathView(new NullDeathView());
+
+            IPlayerWithViewFactory playerFactory = new RemoteShootingPlayerFactory(bulletFactory, _bulletsContainer);
+
+            RemotePlayerSimulationFactory playerSimulationFactory =
+                new RemotePlayerSimulationFactory(_levelConfig.RemotePlayerTemplate);
+
+            IPlayerFactory factory =
+                new PlayerWithViewAndSimulationFactory<IRemotePlayerSimulation>(playerSimulationFactory,
+                    viewInitializer, playerFactory,
+                    remotePlayerSimulationInitializer);
+
+            return factory;
+        }
+
+        private IPlayerFactory CreateClientPlayerFactory(INetworkObjectSender networkObjectSender,
             PooledBulletFactory bulletFactory)
         {
             IPositionView cameraView = Camera.main.GetComponentInParent<PositionView>();
 
-            GamePause pauseStatus = new GamePause();
-            PauseMenu pauseMenu = new PauseMenu(_gameLoader, pauseStatus);
-            pauseMenu.Create();
-            _gameStatus = new GameStatus(pauseStatus);
+            ClientPlayerSimulationFactory clientPlayerSimulationFactory =
+                new ClientPlayerSimulationFactory(_levelConfig.PlayerTemplate);
 
-            IDeathView death =
-                new CompositeDeath(new SetLooseGameStatus(_gameStatus), new OpenMenuOnDeath(_gameLoader));
+            ClientPlayerSimulationInitializer simulationInitializer = new ClientPlayerSimulationInitializer(
+                _objectToSimulationMap, _notReconciledMoveCommands, _notReconciledFireCommands, networkObjectSender);
 
-            IPlayerFactory playerFactory = new ClientPlayerFactory(_levelConfig.PlayerTemplate, cameraView,
-                bulletFactory, _objectToSimulationMap, death, networkObjectSender, _notReconciledMoveCommands,
-                _notReconciledFireCommands, _bulletsContainer);
+            IViewInitializer<IPlayerView> viewInitializer = new CompositeViewInitializer<IPlayerView>(
+                new ReplaceDeathView(
+                    new CompositeDeath(
+                        new SetLooseGameStatus(_gameStatus),
+                        new OpenMenuOnDeath(_gameLoader))),
+                new AddPositionView(cameraView));
 
-            return playerFactory;
+            IPlayerWithViewFactory playerFactory = new ShootingPlayerFactory(bulletFactory, _bulletsContainer);
+
+            IPlayerFactory factory =
+                new PlayerWithViewAndSimulationFactory<IPlayerSimulation>(clientPlayerSimulationFactory,
+                    viewInitializer, playerFactory,
+                    simulationInitializer);
+
+            return factory;
         }
 
         public void UpdateTime(float deltaTime)
@@ -137,7 +169,7 @@ namespace GameModes.MultiPlayer
             _networking?.ReadNetworkStream();
             _updatableContainer.UpdateTime(deltaTime);
             _bulletsContainer?.Update(deltaTime);
-            _clientPlayer?.UpdateTime(deltaTime);
+            _simulationClientPlayer?.UpdateTime(deltaTime);
         }
     }
 }

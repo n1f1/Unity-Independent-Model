@@ -1,7 +1,6 @@
 ﻿using System;
 using Model.Characters.CharacterHealth;
 using Model.Characters.Player;
-using Model.Shooting;
 using Model.Shooting.Bullets;
 using Model.SpatialObject;
 using Simulation;
@@ -43,6 +42,7 @@ namespace GameModes.SinglePlayer
             IPlayerSimulation playerSimulation = playerTemplate.PlayerSimulation;
 
             playerView.PositionView = new CompositePositionView(playerView.PositionView, _cameraView);
+            playerView.DeathView = _deathView;
 
             Player player = CreatePlayer(position, playerView);
 
@@ -57,16 +57,13 @@ namespace GameModes.SinglePlayer
 
         private Player CreatePlayer(Vector3 position, IPlayerView playerView)
         {
-            Cooldown cooldown = new Cooldown(Player.ShootingCooldown);
-            IWeapon weapon = new DefaultGun(_bulletFactory ?? throw new ArgumentException(),
-                cooldown,
-                _bulletsContainer);
+            Transform transform = new Transform(playerView.PositionView, position);
 
-            ForwardAim forwardAim = new ForwardAim(playerView.ForwardAimView);
+            CharacterShooter characterShooter =
+                DefaultPlayer.CreateCharacterShooter(playerView, transform, _bulletFactory, _bulletsContainer);
 
-            Player player = new Player(playerView.HealthView, forwardAim, _deathView,
-                weapon, cooldown, new Transform(playerView.PositionView, position));
-            
+            Player player = DefaultPlayer.Player(transform, characterShooter, playerView);
+
             return player;
         }
     }

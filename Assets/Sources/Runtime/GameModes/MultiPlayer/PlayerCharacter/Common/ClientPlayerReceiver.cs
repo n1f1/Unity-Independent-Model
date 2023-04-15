@@ -1,5 +1,6 @@
 using System;
 using GameModes.MultiPlayer.PlayerCharacter.Client;
+using GameModes.MultiPlayer.PlayerCharacter.Client.Construction;
 using Networking.PacketReceive;
 using Simulation.Infrastructure;
 
@@ -8,13 +9,13 @@ namespace GameModes.MultiPlayer.PlayerCharacter.Common
     public class ClientPlayerReceiver : IReplicatedObjectReceiver<ClientPlayer>
     {
         private readonly IObjectToSimulationMap _objectToSimulationMap;
-        private readonly PlayerClient _clientPlayer;
+        private readonly ClientPlayerSimulation _simulationClientPlayer;
         
         private bool _received;
 
-        public ClientPlayerReceiver(IObjectToSimulationMap objectToSimulation, PlayerClient clientPlayer)
+        public ClientPlayerReceiver(IObjectToSimulationMap objectToSimulation, ClientPlayerSimulation simulationClientPlayer)
         {
-            _clientPlayer = clientPlayer ?? throw new ArgumentNullException(nameof(clientPlayer));
+            _simulationClientPlayer = simulationClientPlayer ?? throw new ArgumentNullException(nameof(simulationClientPlayer));
             _objectToSimulationMap = objectToSimulation ?? throw new ArgumentNullException(nameof(objectToSimulation));
         }
 
@@ -23,7 +24,7 @@ namespace GameModes.MultiPlayer.PlayerCharacter.Common
             if(_received)
                 return;
             
-            _clientPlayer.SetClientPlayerSimulation(createdObject.Player, _objectToSimulationMap.Get(createdObject.Player));
+            _simulationClientPlayer.SetClientPlayerSimulation(createdObject.Player, _objectToSimulationMap.Get(createdObject.Player));
             _received = true;
         }
     }

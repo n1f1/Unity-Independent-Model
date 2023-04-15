@@ -6,5 +6,6 @@ namespace Model.Characters.CharacterHealth
     {
         IPositionView PositionView { get; set; }
         IHealthView HealthView { get; set; }
+        IDeathView DeathView { get; set; }
     }
 }

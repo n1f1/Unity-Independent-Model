@@ -1,9 +1,9 @@
 ﻿using Model.Characters.Player;
 using Simulation;
 
-namespace GameModes.MultiPlayer.PlayerCharacter.Client
+namespace GameModes.MultiPlayer.PlayerCharacter.Client.Construction
 {
-    public class PlayerClient
+    public class ClientPlayerSimulation
     {
         private SimulationObject _playerSimulation;
         public Player Player { get; private set; }

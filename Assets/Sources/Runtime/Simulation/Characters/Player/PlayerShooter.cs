@@ -37,15 +37,15 @@ namespace Simulation.Characters.Player
             if (UnityEngine.Physics.RaycastNonAlloc(ray, _raycastHitBuffer, 999f, _layerMask) > 0)
                 _simulation.AimAt(_raycastHitBuffer[0].point.Convert());
             else
-                _simulation.StopAiming();
+                _simulation.Aim.Stop();
         }
 
         private void ProcessShooting()
         {
             if (UnityEngine.Input.GetMouseButton(0))
             {
-                if (_simulation.CanShoot())
-                    _simulation.Shoot();
+                if (_simulation.Weapon.CanShoot(_simulation.Aim))
+                    _simulation.Weapon.Shoot(_simulation.Aim);
             }
         }
     }

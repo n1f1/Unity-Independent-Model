@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using GameModes.MultiPlayer.PlayerCharacter.Client;
+using GameModes.MultiPlayer.PlayerCharacter.Client.Construction;
 using GameModes.MultiPlayer.PlayerCharacter.Client.Reconciliation;
 using GameModes.MultiPlayer.PlayerCharacter.Remote.Movement;
 using Networking.PacketReceive;
@@ -11,22 +12,22 @@ namespace GameModes.MultiPlayer.PlayerCharacter.Common.Movement
     public record MoveCommandReceiver : IReplicatedObjectReceiver<MoveCommand>
     {
         private readonly NotReconciledCommands<MoveCommand> _notReconciledCommands;
-        private readonly PlayerClient _clientPlayer;
+        private readonly ClientPlayerSimulation _simulationClientPlayer;
         private readonly IMovementCommandPrediction _movementCommandPrediction;
 
         public MoveCommandReceiver(NotReconciledCommands<MoveCommand> reconciled,
-            PlayerClient clientPlayer, IMovementCommandPrediction movementCommandPrediction)
+            ClientPlayerSimulation simulationClientPlayer, IMovementCommandPrediction movementCommandPrediction)
         {
             _movementCommandPrediction = movementCommandPrediction ??
                                        throw new ArgumentNullException(nameof(movementCommandPrediction));
-            _clientPlayer = clientPlayer ?? throw new ArgumentNullException(nameof(clientPlayer));
+            _simulationClientPlayer = simulationClientPlayer ?? throw new ArgumentNullException(nameof(simulationClientPlayer));
             _notReconciledCommands =
                 reconciled ?? throw new ArgumentNullException(nameof(reconciled));
         }
 
         public void Receive(MoveCommand newCommand)
         {
-            if (newCommand.Movement == _clientPlayer.Player.CharacterMovement)
+            if (newCommand.Movement == _simulationClientPlayer.Player.CharacterMovement)
                 ProcessClientPlayerCommand(newCommand);
             else
                 ProcessRemotePlayerCommand(newCommand);

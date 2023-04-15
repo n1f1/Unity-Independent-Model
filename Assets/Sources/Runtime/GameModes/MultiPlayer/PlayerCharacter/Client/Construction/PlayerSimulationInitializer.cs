@@ -1,0 +1,46 @@
+﻿using System;
+using GameModes.MultiPlayer.PlayerCharacter.Client.Movement;
+using GameModes.MultiPlayer.PlayerCharacter.Client.Reconciliation;
+using GameModes.MultiPlayer.PlayerCharacter.Client.Shooting;
+using GameModes.MultiPlayer.PlayerCharacter.Common.Construction;
+using GameModes.MultiPlayer.PlayerCharacter.Common.Movement;
+using GameModes.MultiPlayer.PlayerCharacter.Common.Shooting;
+using Model.Characters;
+using Model.Characters.Player;
+using Networking.PacketSend.ObjectSend;
+using Simulation;
+using Simulation.Characters.Player;
+using Simulation.Infrastructure;
+
+namespace GameModes.MultiPlayer.PlayerCharacter.Client.Construction
+{
+    internal class ClientPlayerSimulationInitializer : 
+        ISimulationInitializer<Player, IPlayerSimulation, SimulationObject>
+    {
+        private readonly IObjectToSimulationMap _objectToSimulation;
+        private readonly NotReconciledCommands<MoveCommand> _notReconciledCommands;
+        private readonly NotReconciledCommands<FireCommand> _notReconciledFireCommands;
+        private readonly INetworkObjectSender _sender;
+
+        public ClientPlayerSimulationInitializer(IObjectToSimulationMap objectToSimulation,
+            NotReconciledCommands<MoveCommand> reconciledMove,
+            NotReconciledCommands<FireCommand> reconciledFire,
+            INetworkObjectSender sender)
+        {
+            _objectToSimulation = objectToSimulation ?? throw new ArgumentNullException(nameof(objectToSimulation));
+            _notReconciledCommands = reconciledMove ?? throw new ArgumentNullException(nameof(reconciledMove));
+            _notReconciledFireCommands = reconciledFire ?? throw new ArgumentNullException(nameof(reconciledFire));
+            _sender = sender ?? throw new ArgumentNullException(nameof(sender));
+        }
+
+        public void InitializeSimulation(Player player, IPlayerSimulation playerSimulation, SimulationObject simulation)
+        {
+            IMovable movable = new ClientPlayerMovementCommandSender(player, _sender, _notReconciledCommands);
+            var fireCommandSender = new FireCommandSender(player, _sender, _notReconciledFireCommands);
+            simulation.AddUpdatableSimulation(playerSimulation.Movable.Initialize(movable));
+            simulation.AddUpdatableSimulation(playerSimulation.CharacterShooter.Initialize(fireCommandSender));
+            simulation.Enable();
+            _objectToSimulation.RegisterNew(player, simulation);
+        }
+    }
+}

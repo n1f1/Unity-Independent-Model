@@ -1,5 +1,6 @@
 ﻿using System;
 using GameModes.MultiPlayer.PlayerCharacter.Client;
+using GameModes.MultiPlayer.PlayerCharacter.Client.Construction;
 using GameModes.MultiPlayer.PlayerCharacter.Client.Reconciliation;
 using Networking.PacketReceive;
 
@@ -8,18 +9,18 @@ namespace GameModes.MultiPlayer.PlayerCharacter.Common.Shooting
     public class FireCommandReceiver : IReplicatedObjectReceiver<FireCommand>
     {
         private readonly NotReconciledCommands<FireCommand> _notReconciledCommands;
-        private readonly PlayerClient _clientPlayer;
+        private readonly ClientPlayerSimulation _simulationClientPlayer;
 
-        public FireCommandReceiver(NotReconciledCommands<FireCommand> notReconciledCommands, PlayerClient clientPlayer)
+        public FireCommandReceiver(NotReconciledCommands<FireCommand> notReconciledCommands, ClientPlayerSimulation simulationClientPlayer)
         {
             _notReconciledCommands =
                 notReconciledCommands ?? throw new ArgumentNullException(nameof(notReconciledCommands));
-            _clientPlayer = clientPlayer ?? throw new ArgumentNullException(nameof(clientPlayer));
+            _simulationClientPlayer = simulationClientPlayer ?? throw new ArgumentNullException(nameof(simulationClientPlayer));
         }
 
         public void Receive(FireCommand createdObject)
         {
-            if (createdObject.Player == _clientPlayer.Player)
+            if (createdObject.Player == _simulationClientPlayer.Player)
                 ProcessClientCommand(createdObject);
             else
                 ProcessRemoteCommand(createdObject);

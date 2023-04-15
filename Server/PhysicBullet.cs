@@ -43,7 +43,7 @@ namespace Server
                 bullet.Y = 0;
                 
                 if (Vector3.DistanceSquared(playerPosition, bullet) < 1.21f) 
-                    Hit(player.Health);
+                    Hit(player.Damageable);
             }
         }
     }

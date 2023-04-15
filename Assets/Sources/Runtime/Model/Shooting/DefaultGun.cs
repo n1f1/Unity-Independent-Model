@@ -30,5 +30,10 @@ namespace Model.Shooting
 
         public bool CanShoot(IAim aim) =>
             aim.Aiming && _cooldown.IsReady;
+
+        public void CoolDown(float deltaTime)
+        {
+            _cooldown.ReduceTime(deltaTime);
+        }
     }
 }

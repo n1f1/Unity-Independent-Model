@@ -5,8 +5,10 @@ using Model.Characters.Player;
 using Networking.Connection;
 using Networking.PacketReceive.Replication.ObjectCreationReplication;
 using Networking.PacketSend;
+using Server.Characters.ClientPlayer;
+using Server.Simulation;
 
-namespace Server
+namespace Server.Client
 {
     class ClientConnectionPlayerCreation : IClientConnection
     {
@@ -27,25 +29,25 @@ namespace Server
             _game = game ?? throw new ArgumentNullException(nameof(game));
         }
 
-        public void Connect(Client client)
+        public void Connect(ServerClient serverClient)
         {
             Player player = _playerFactory.CreatePlayer(new Vector3(1, 0, 1));
 
             INetworkPacket playerPacket = _replicationPacketFactory.Create(player);
             INetworkPacket clientPlayerPacket = _replicationPacketFactory.Create(new ClientPlayer(player));
 
-            foreach (Client other in _room.Clients)
+            foreach (ServerClient other in _room.Clients)
             {
                 if (other.IsConnected)
-                    other.Sender.SendPacket(other == client ? clientPlayerPacket : playerPacket);
+                    other.Sender.SendPacket(other == serverClient ? clientPlayerPacket : playerPacket);
             }
 
             foreach (GameClient other in _game.GameClients)
-                client.Sender.SendPacket(_replicationPacketFactory.Create(other.Player));
+                serverClient.Sender.SendPacket(_replicationPacketFactory.Create(other.Player));
 
             GameClient gameClient = new GameClient(player, _replicationPacketFactory);
             _playerToClientMap.Add(gameClient);
-            _game.Add(gameClient, _room);
+            _game.Add(gameClient);
         }
     }
 }

@@ -25,13 +25,13 @@ namespace Simulation.Shooting.Bullets
                 AddNewToObjectPool();
         }
 
-        public IBullet CreateBullet(ITrajectory trajectory, float speed, int damage)
+        public IBullet CreateBullet(ITrajectory trajectory, float speed, int damage, IShooter shooter)
         {
             if (!_objectPool.CanGet())
                 AddNewToObjectPool();
 
             DefaultBullet defaultBullet = GetFromPool();
-            defaultBullet.Reset(trajectory, speed, damage);
+            defaultBullet.Reset(trajectory, speed, damage, shooter);
 
             return defaultBullet;
         }
@@ -51,11 +51,12 @@ namespace Simulation.Shooting.Bullets
             SimulationObject simulation = new SimulationObject(bulletTemplate.gameObject);
 
             DefaultBullet defaultBullet =
-                new DefaultBullet(new Transform(bulletTemplate.BulletView.PositionView), new NullTrajectory());
+                new DefaultBullet(new Transform(bulletTemplate.BulletView.PositionView), new NullTrajectory(),
+                    new DamageableShooter());
 
             simulation.AddUpdatableSimulation(
                 bulletTemplate.BulletSimulation.Collidable.Initialize(new BulletCollisionEnter(defaultBullet)));
-            
+
             _objectPool.AddNew(defaultBullet, simulation);
         }
     }

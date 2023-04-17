@@ -1,11 +1,13 @@
 ﻿using System;
 using Model.Characters.CharacterHealth;
 using Model.Characters.Player;
+using Model.Shooting;
 using Model.Shooting.Bullets;
 using Model.SpatialObject;
 using Simulation;
 using Simulation.Characters.Player;
 using Simulation.Infrastructure;
+using Simulation.Shooting;
 using Object = UnityEngine.Object;
 using Transform = Model.SpatialObject.Transform;
 using Vector3 = System.Numerics.Vector3;
@@ -59,10 +61,14 @@ namespace GameModes.SinglePlayer
         {
             Transform transform = new Transform(playerView.PositionView, position);
 
+            DamageableShooter damageableShooter = new DamageableShooter();
+
             CharacterShooter characterShooter =
-                DefaultPlayer.CreateCharacterShooter(playerView, transform, _bulletFactory, _bulletsContainer);
+                DefaultPlayer.CreateCharacterShooter(playerView, transform, _bulletFactory, _bulletsContainer,
+                    damageableShooter);
 
             Player player = DefaultPlayer.Player(transform, characterShooter, playerView);
+            damageableShooter.Exclude(player.Damageable);
 
             return player;
         }

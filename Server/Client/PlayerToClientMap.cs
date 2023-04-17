@@ -1,12 +1,11 @@
 ﻿using System.Collections.Generic;
-using Model.Characters;
 using Model.Characters.Player;
 
-namespace Server
+namespace Server.Client
 {
     internal class PlayerToClientMap
     {
-        private Dictionary<Player, GameClient> _clients = new();
+        private readonly Dictionary<Player, GameClient> _clients = new();
         
         public void Add(GameClient gameClient)
         {

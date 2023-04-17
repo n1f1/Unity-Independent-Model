@@ -1,9 +1,8 @@
 ﻿using System;
-using GameModes.MultiPlayer.PlayerCharacter.Client.Shooting;
 using GameModes.MultiPlayer.PlayerCharacter.Common.Shooting;
 using Networking.PacketReceive;
 
-namespace Server
+namespace Server.Client
 {
     internal class GameClientFireCommandReceiver: IReplicatedObjectReceiver<FireCommand>
     {
@@ -17,7 +16,7 @@ namespace Server
         public void Receive(FireCommand command)
         {
             GameClient gameClient = _playerToClientMap.Get(command.Player);
-            gameClient.AddCommand(command);
+            gameClient.FireCommandHandler.AddCommand(command);
         }
     }
 }

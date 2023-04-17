@@ -3,8 +3,9 @@ using System.Net.Sockets;
 using Networking.Connection;
 using Networking.PacketReceive;
 using Networking.PacketReceive.Replication;
+using Server.Simulation;
 
-namespace Server
+namespace Server.Update
 {
     internal class ServerUpdate : ITimeUpdate
     {
@@ -13,7 +14,7 @@ namespace Server
         private readonly IPacketReceiver _packetReceiver;
         private readonly TcpListener _tcpListener;
         private readonly Room _room;
-        private GameSimulation _gameSimulation;
+        private readonly GameSimulation _gameSimulation;
 
         public ServerUpdate(NewClientsListener newClientsListener, IReplicationPacketRead replicationPacketRead,
             Room room, TcpListener tcpListener, IPacketReceiver packetReceiver, GameSimulation gameSimulation)
@@ -31,7 +32,7 @@ namespace Server
         {
             _newClientsListener.ListenNewClients(_tcpListener);
 
-            foreach (Client client in _room.Clients)
+            foreach (ServerClient client in _room.Clients)
             {
                 if (client.IsConnected)
                     _packetReceiver.ReceivePackets(client.InputStream, _replicationPacketRead);

@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Server
+namespace Server.Update
 {
     internal class FixedUpdateLoop
     {

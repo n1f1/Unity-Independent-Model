@@ -1,7 +1,7 @@
 using System.Numerics;
 using Model.SpatialObject;
 
-namespace Server
+namespace Server.Characters
 {
     internal class NullPositionVew : IPositionView
     {

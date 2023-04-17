@@ -1,9 +1,8 @@
 ﻿using System;
-using GameModes.MultiPlayer.PlayerCharacter.Common;
 using GameModes.MultiPlayer.PlayerCharacter.Common.Movement;
 using Networking.PacketReceive;
 
-namespace Server
+namespace Server.Client
 {
     internal class GameClientMoveCommandReceiver: IReplicatedObjectReceiver<MoveCommand>
     {
@@ -17,7 +16,7 @@ namespace Server
         public void Receive(MoveCommand command)
         {
             GameClient gameClient = _playerToClientMap.Get(command.Player);
-            gameClient.AddCommand(command);
+            gameClient.MoveCommandHandler.AddCommand(command);
         }
     }
 }

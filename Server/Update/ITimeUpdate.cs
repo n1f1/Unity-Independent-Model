@@ -1,4 +1,4 @@
-﻿namespace Server
+﻿namespace Server.Update
 {
     internal interface ITimeUpdate
     {

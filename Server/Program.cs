@@ -16,6 +16,12 @@ using Networking.PacketReceive;
 using Networking.PacketReceive.Replication;
 using Networking.PacketReceive.Replication.ObjectCreationReplication;
 using Networking.PacketReceive.Replication.Serialization;
+using Server.Characters.ClientPlayer;
+using Server.Characters.Shooting;
+using Server.Client;
+using Server.Simulation;
+using Server.Simulation.Physics;
+using Server.Update;
 
 namespace Server
 {
@@ -31,10 +37,10 @@ namespace Server
             ITypeIdConversion typeIdConversion = new TypeIdConversion(
                 new Dictionary<Type, int>().PopulateDictionaryFromTuple(SerializableTypesIdMap.Get()));
 
-            GameSimulation game = new GameSimulation();
-            BulletsContainer bulletsContainer = new BulletsContainer(new NullBulletDestroyer());
-            ServerPlayerFactory playerFactory = new ServerPlayerFactory(bulletsContainer);
-            game.Add(bulletsContainer);
+            IPhysicsSimulation physicsSimulation = new PhysicsSimulation();
+            BulletsContainer bulletsContainer = new BulletsContainer(new PhysicsBulletDestroyer(physicsSimulation));
+            GameSimulation game = new GameSimulation(physicsSimulation, room, bulletsContainer);
+            ServerPlayerFactory playerFactory = new ServerPlayerFactory(bulletsContainer, physicsSimulation);
 
             PlayerSerialization playerSerialization =
                 new PlayerSerialization(hashedObjects, typeIdConversion, playerFactory);
@@ -74,6 +80,7 @@ namespace Server
 
             IGenericInterfaceList receiver =
                 new GenericInterfaceWithParameterList(receivers, typeof(IReplicatedObjectReceiver<>));
+            
             IReplicationPacketRead replicationPacketRead = new ReplicationPacketRead(new CreationReplicator(
                 typeIdConversion, new GenericInterfaceWithParameterList(deserializations, typeof(IDeserialization<>)),
                 new ReceivedReplicatedObjectMatcher(receiver)));

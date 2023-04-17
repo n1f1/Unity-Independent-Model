@@ -17,12 +17,12 @@ namespace GameModes.MultiPlayer.PlayerCharacter.Remote.Shooting
             _bulletFactory = bulletFactory ?? throw new ArgumentNullException(nameof(bulletFactory));
         }
 
-        public IBullet CreateBullet(ITrajectory trajectory, float speed, int damage)
+        public IBullet CreateBullet(ITrajectory trajectory, float speed, int damage, IShooter shooter)
         {
             Vector3 startPosition = _playerTransform.Position;
             startPosition.Y = trajectory.Start.Y;
             ITrajectory fakeTrajectory = new ForwardTrajectory(startPosition, trajectory.Finish);
-            IBullet bullet = _bulletFactory.CreateBullet(fakeTrajectory, speed, damage);
+            IBullet bullet = _bulletFactory.CreateBullet(fakeTrajectory, speed, damage, shooter);
 
             return new RemoteFiredBullet(bullet);
         }

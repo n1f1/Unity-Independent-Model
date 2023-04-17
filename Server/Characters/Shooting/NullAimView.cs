@@ -1,7 +1,7 @@
 using System.Numerics;
 using Model.Shooting;
 
-namespace Server
+namespace Server.Characters.Shooting
 {
     internal class NullAimView : IAimView
     {

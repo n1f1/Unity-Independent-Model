@@ -2,6 +2,6 @@
 {
     public interface IBulletFactory<out TBullet> : IBulletDestroyer where TBullet : IBullet
     {
-        TBullet CreateBullet(ITrajectory trajectory, float speed, int damage);
+        TBullet CreateBullet(ITrajectory trajectory, float speed, int damage, IShooter shooter);
     }
 }

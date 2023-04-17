@@ -1,8 +1,8 @@
 using Model.Characters.Player;
-using Networking.ObjectsHashing;
-using Networking.PacketReceive.Replication.ObjectCreationReplication;
-using Networking.PacketReceive.Replication.Serialization;
-using Networking.StreamIO;
+using Networking.Common.Replication.ObjectsHashing;
+using Networking.Common.Replication.Serialization;
+using Networking.Common.StreamIO;
+using Networking.Common.Utilities;
 using Vector3 = System.Numerics.Vector3;
 
 namespace GameModes.MultiPlayer.PlayerCharacter.Common.Movement
@@ -10,8 +10,8 @@ namespace GameModes.MultiPlayer.PlayerCharacter.Common.Movement
     public class MoveCommandSerialization : DefaultSerialization, ISerialization<MoveCommand>,
         IDeserialization<MoveCommand>
     {
-        public MoveCommandSerialization(IHashedObjectsList hashedObjects, ITypeIdConversion typeId) : base(
-            hashedObjects, typeId)
+        public MoveCommandSerialization(IHashedObjectsList hashedObjects) : base(
+            hashedObjects)
         {
         }
 

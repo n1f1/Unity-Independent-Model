@@ -1,10 +1,10 @@
 ﻿using System;
 using Model.Characters;
 using Model.Characters.Player;
-using Networking.ObjectsHashing;
-using Networking.PacketReceive.Replication.ObjectCreationReplication;
-using Networking.PacketReceive.Replication.Serialization;
-using Networking.StreamIO;
+using Networking.Common.Replication.ObjectsHashing;
+using Networking.Common.Replication.Serialization;
+using Networking.Common.StreamIO;
+using Networking.Common.Utilities;
 using UnityEngine;
 using Vector3 = System.Numerics.Vector3;
 
@@ -14,8 +14,7 @@ namespace GameModes.MultiPlayer.PlayerCharacter.Common
     {
         private readonly IPlayerFactory _playerFactory;
 
-        public PlayerSerialization(IHashedObjectsList hashedObjects, ITypeIdConversion typeId,
-            IPlayerFactory playerFactory) : base(hashedObjects, typeId)
+        public PlayerSerialization(IHashedObjectsList hashedObjects, IPlayerFactory playerFactory) : base(hashedObjects)
         {
             _playerFactory = playerFactory ?? throw new ArgumentNullException(nameof(playerFactory));
         }

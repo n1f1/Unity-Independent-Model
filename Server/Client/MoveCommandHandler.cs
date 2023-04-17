@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Numerics;
 using GameModes.MultiPlayer.PlayerCharacter.Common.Movement;
 using Model.Characters.Player;
-using Networking.Connection;
-using Networking.PacketReceive.Replication.ObjectCreationReplication;
-using Networking.PacketSend;
+using Networking.Common.PacketSend;
+using Networking.Common.Replication.ObjectCreationReplication;
+using Networking.Server;
 
 namespace Server.Client
 {

@@ -10,12 +10,14 @@ using GameModes.MultiPlayer.PlayerCharacter.Common.Movement;
 using GameModes.MultiPlayer.PlayerCharacter.Common.Shooting;
 using Model.Characters.Player;
 using Model.Shooting.Bullets;
-using Networking.Connection;
-using Networking.ObjectsHashing;
-using Networking.PacketReceive;
-using Networking.PacketReceive.Replication;
-using Networking.PacketReceive.Replication.ObjectCreationReplication;
-using Networking.PacketReceive.Replication.Serialization;
+using Networking.Common;
+using Networking.Common.PacketReceive;
+using Networking.Common.Replication;
+using Networking.Common.Replication.ObjectCreationReplication;
+using Networking.Common.Replication.ObjectsHashing;
+using Networking.Common.Replication.Serialization;
+using Networking.Server;
+using Networking.Server.Connection;
 using Server.Characters.ClientPlayer;
 using Server.Characters.Shooting;
 using Server.Client;
@@ -43,21 +45,21 @@ namespace Server
             ServerPlayerFactory playerFactory = new ServerPlayerFactory(bulletsContainer, physicsSimulation);
 
             PlayerSerialization playerSerialization =
-                new PlayerSerialization(hashedObjects, typeIdConversion, playerFactory);
+                new PlayerSerialization(hashedObjects, playerFactory);
 
             IEnumerable<(Type, object)> serialization = new List<(Type, object)>
             {
                 (typeof(Player), playerSerialization),
                 (typeof(ClientPlayer), new ClientPlayerSerialization(playerSerialization)),
-                (typeof(MoveCommand), new MoveCommandSerialization(hashedObjects, typeIdConversion)),
-                (typeof(FireCommand), new FireCommandSerialization(hashedObjects, typeIdConversion))
+                (typeof(MoveCommand), new MoveCommandSerialization(hashedObjects)),
+                (typeof(FireCommand), new FireCommandSerialization(hashedObjects))
             };
 
             IEnumerable<(Type, object)> deserialization = new List<(Type, object)>
             {
                 (typeof(Player), playerSerialization),
-                (typeof(MoveCommand), new MoveCommandSerialization(hashedObjects, typeIdConversion)),
-                (typeof(FireCommand), new FireCommandSerialization(hashedObjects, typeIdConversion))
+                (typeof(MoveCommand), new MoveCommandSerialization(hashedObjects)),
+                (typeof(FireCommand), new FireCommandSerialization(hashedObjects))
             };
 
             Dictionary<Type, object> dictionary = new Dictionary<Type, object>();

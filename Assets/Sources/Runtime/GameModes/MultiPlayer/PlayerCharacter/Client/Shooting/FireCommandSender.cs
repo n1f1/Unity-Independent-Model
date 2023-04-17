@@ -2,7 +2,7 @@
 using GameModes.MultiPlayer.PlayerCharacter.Common.Shooting;
 using Model.Characters.Player;
 using Model.Shooting;
-using Networking.PacketSend.ObjectSend;
+using Networking.Common.PacketSend.ObjectSend;
 using Vector3 = System.Numerics.Vector3;
 
 namespace GameModes.MultiPlayer.PlayerCharacter.Client.Shooting
@@ -16,8 +16,8 @@ namespace GameModes.MultiPlayer.PlayerCharacter.Client.Shooting
             NotReconciledCommands<FireCommand> notReconciledFireCommands)
         {
             _characterShooter = player.CharacterShooter;
-            Weapon = new SendFireCommandWeapon(player, networkObjectSender, notReconciledFireCommands, player.Weapon);
-            Aim = player.Aim;
+            Weapon = new SendFireCommandWeapon(player, networkObjectSender, notReconciledFireCommands);
+            Aim = player.CharacterShooter.Aim;
         }
 
         public IWeapon Weapon { get; }

@@ -1,5 +1,5 @@
-﻿using Networking.Connection;
-using Networking.PacketReceive.Replication.ObjectCreationReplication;
+﻿using Networking.Common.Replication.ObjectCreationReplication;
+using Networking.Server;
 
 namespace Server.Client
 {

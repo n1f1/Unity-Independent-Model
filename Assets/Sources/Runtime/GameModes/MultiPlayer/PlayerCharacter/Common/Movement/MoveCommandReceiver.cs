@@ -4,7 +4,7 @@ using GameModes.MultiPlayer.PlayerCharacter.Client;
 using GameModes.MultiPlayer.PlayerCharacter.Client.Construction;
 using GameModes.MultiPlayer.PlayerCharacter.Client.Reconciliation;
 using GameModes.MultiPlayer.PlayerCharacter.Remote.Movement;
-using Networking.PacketReceive;
+using Networking.Common.PacketReceive;
 using UnityEngine;
 
 namespace GameModes.MultiPlayer.PlayerCharacter.Common.Movement

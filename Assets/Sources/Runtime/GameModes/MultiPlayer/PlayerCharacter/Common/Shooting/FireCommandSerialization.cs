@@ -1,16 +1,16 @@
 ﻿using System.Numerics;
 using Model.Characters.Player;
-using Networking.ObjectsHashing;
-using Networking.PacketReceive.Replication.ObjectCreationReplication;
-using Networking.PacketReceive.Replication.Serialization;
-using Networking.StreamIO;
+using Networking.Common.Replication.ObjectsHashing;
+using Networking.Common.Replication.Serialization;
+using Networking.Common.StreamIO;
+using Networking.Common.Utilities;
 
 namespace GameModes.MultiPlayer.PlayerCharacter.Common.Shooting
 {
     public class FireCommandSerialization : DefaultSerialization, ISerialization<FireCommand>, IDeserialization<FireCommand>
     {
-        public FireCommandSerialization(IHashedObjectsList hashedObjects, ITypeIdConversion typeIdConversion) : base(
-            hashedObjects, typeIdConversion)
+        public FireCommandSerialization(IHashedObjectsList hashedObjects) : base(
+            hashedObjects)
         {
         }
 

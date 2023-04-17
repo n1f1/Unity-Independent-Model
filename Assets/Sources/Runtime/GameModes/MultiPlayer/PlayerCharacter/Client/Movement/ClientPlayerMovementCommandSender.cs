@@ -3,7 +3,7 @@ using GameModes.MultiPlayer.PlayerCharacter.Client.Reconciliation;
 using GameModes.MultiPlayer.PlayerCharacter.Common.Movement;
 using Model.Characters;
 using Model.Characters.Player;
-using Networking.PacketSend.ObjectSend;
+using Networking.Common.PacketSend.ObjectSend;
 using Vector3 = System.Numerics.Vector3;
 
 namespace GameModes.MultiPlayer.PlayerCharacter.Client.Movement

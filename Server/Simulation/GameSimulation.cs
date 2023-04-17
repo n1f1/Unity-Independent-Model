@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using Model.Shooting.Bullets;
-using Networking.Connection;
+using Networking.Server;
 using Server.Simulation.Physics;
 using GameClient = Server.Client.GameClient;
 

@@ -4,7 +4,7 @@ using GameModes.MultiPlayer.PlayerCharacter.Common.Shooting;
 using Model.Characters.Player;
 using Model.Shooting;
 using Model.Shooting.Bullets;
-using Networking.PacketSend.ObjectSend;
+using Networking.Common.PacketSend.ObjectSend;
 
 namespace GameModes.MultiPlayer.PlayerCharacter.Client.Shooting
 {
@@ -17,12 +17,12 @@ namespace GameModes.MultiPlayer.PlayerCharacter.Client.Shooting
         private short _id;
 
         public SendFireCommandWeapon(Player player, INetworkObjectSender sender,
-            NotReconciledCommands<FireCommand> reconciledCommands, IWeapon weapon)
+            NotReconciledCommands<FireCommand> reconciledCommands)
         {
-            _weapon = weapon ?? throw new ArgumentNullException(nameof(weapon));
             _reconciledCommands = reconciledCommands ?? throw new ArgumentNullException(nameof(reconciledCommands));
             _sender = sender ?? throw new ArgumentNullException(nameof(sender));
             _player = player ?? throw new ArgumentNullException(nameof(player));
+            _weapon = _player.CharacterShooter.Weapon;
         }
 
         public IBullet Shoot(IAim aim)
@@ -30,10 +30,11 @@ namespace GameModes.MultiPlayer.PlayerCharacter.Client.Shooting
             FireCommand fireCommand =
                 new FireCommand(_player, _player.Transform.Position, aim.Trajectory.Finish, ++_id);
             
+            fireCommand.Execute();
             _sender.Send(fireCommand);
             _reconciledCommands.Add(fireCommand);
 
-            return _weapon.Shoot(aim);
+            return fireCommand.Bullet;
         }
 
         public bool CanShoot(IAim aim) =>

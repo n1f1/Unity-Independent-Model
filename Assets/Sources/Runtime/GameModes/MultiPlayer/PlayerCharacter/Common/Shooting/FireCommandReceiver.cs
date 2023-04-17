@@ -2,7 +2,7 @@
 using GameModes.MultiPlayer.PlayerCharacter.Client;
 using GameModes.MultiPlayer.PlayerCharacter.Client.Construction;
 using GameModes.MultiPlayer.PlayerCharacter.Client.Reconciliation;
-using Networking.PacketReceive;
+using Networking.Common.PacketReceive;
 
 namespace GameModes.MultiPlayer.PlayerCharacter.Common.Shooting
 {

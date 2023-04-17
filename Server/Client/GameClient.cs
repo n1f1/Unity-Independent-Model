@@ -2,8 +2,8 @@
 using GameModes.MultiPlayer.PlayerCharacter.Common.Movement;
 using GameModes.MultiPlayer.PlayerCharacter.Common.Shooting;
 using Model.Characters.Player;
-using Networking.Connection;
-using Networking.PacketReceive.Replication.ObjectCreationReplication;
+using Networking.Common.Replication.ObjectCreationReplication;
+using Networking.Server;
 
 namespace Server.Client
 {

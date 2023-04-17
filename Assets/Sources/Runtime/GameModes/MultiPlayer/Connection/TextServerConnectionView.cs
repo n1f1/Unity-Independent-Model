@@ -1,4 +1,4 @@
-﻿using Networking.Connection;
+﻿using Networking.Client.Connection;
 using TMPro;
 using UnityEngine;
 

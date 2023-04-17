@@ -2,9 +2,10 @@
 using System.Numerics;
 using GameModes.MultiPlayer.PlayerCharacter.Client;
 using Model.Characters.Player;
-using Networking.Connection;
-using Networking.PacketReceive.Replication.ObjectCreationReplication;
-using Networking.PacketSend;
+using Networking.Common.PacketSend;
+using Networking.Common.Replication.ObjectCreationReplication;
+using Networking.Server;
+using Networking.Server.Connection;
 using Server.Characters.ClientPlayer;
 using Server.Simulation;
 

@@ -1,7 +1,7 @@
 ﻿using System;
 using GameModes.MultiPlayer.PlayerCharacter.Common;
-using Networking.PacketReceive.Replication.Serialization;
-using Networking.StreamIO;
+using Networking.Common.Replication.Serialization;
+using Networking.Common.StreamIO;
 
 namespace GameModes.MultiPlayer.PlayerCharacter.Client
 {

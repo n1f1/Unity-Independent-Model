@@ -1,6 +1,6 @@
 ﻿using System;
 using GameModes.MultiPlayer.PlayerCharacter.Common.Shooting;
-using Networking.PacketReceive;
+using Networking.Common.PacketReceive;
 
 namespace Server.Client
 {

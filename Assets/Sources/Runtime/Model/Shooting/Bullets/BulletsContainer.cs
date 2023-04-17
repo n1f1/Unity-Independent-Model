@@ -19,20 +19,11 @@ namespace Model.Shooting.Bullets
 
         public void Update(float deltaTime)
         {
-            Stack<IBullet> collidedBullets = UpdateBulletsAndProcessCollisions(deltaTime);
-            DestroyBullets(collidedBullets);
+            UpdateBulletsAndProcessCollisions(deltaTime);
         }
 
-        private void DestroyBullets(Stack<IBullet> collidedBullets)
+        private void UpdateBulletsAndProcessCollisions(float deltaTime)
         {
-            while (collidedBullets.Count > 0)
-                _bulletDestroyer.Destroy(collidedBullets.Pop());
-        }
-
-        private Stack<IBullet> UpdateBulletsAndProcessCollisions(float deltaTime)
-        {
-            Stack<IBullet> collidedBullets = new Stack<IBullet>(16);
-
             for (LinkedListNode<IBullet> node = _bullets.First; node != null; node = node.Next)
             {
                 IBullet bullet = node.Value;
@@ -41,12 +32,10 @@ namespace Model.Shooting.Bullets
 
                 if (bullet.Collided)
                 {
-                    collidedBullets.Push(bullet);
+                    _bulletDestroyer.Destroy(bullet);
                     _bullets.Remove(node);
                 }
             }
-
-            return collidedBullets;
         }
     }
 }

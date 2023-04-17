@@ -7,7 +7,7 @@ using GameModes.MultiPlayer.PlayerCharacter.Common.Movement;
 using GameModes.MultiPlayer.PlayerCharacter.Common.Shooting;
 using Model.Characters;
 using Model.Characters.Player;
-using Networking.PacketSend.ObjectSend;
+using Networking.Common.PacketSend.ObjectSend;
 using Simulation;
 using Simulation.Characters.Player;
 using Simulation.Infrastructure;

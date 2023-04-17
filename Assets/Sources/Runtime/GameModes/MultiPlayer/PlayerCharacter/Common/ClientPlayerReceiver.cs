@@ -1,7 +1,7 @@
 using System;
 using GameModes.MultiPlayer.PlayerCharacter.Client;
 using GameModes.MultiPlayer.PlayerCharacter.Client.Construction;
-using Networking.PacketReceive;
+using Networking.Common.PacketReceive;
 using Simulation.Infrastructure;
 
 namespace GameModes.MultiPlayer.PlayerCharacter.Common

@@ -1,6 +1,6 @@
 ﻿using System;
 using Model.Characters.Player;
-using Networking.PacketReceive;
+using Networking.Common.PacketReceive;
 using Simulation.Infrastructure;
 
 namespace GameModes.MultiPlayer.PlayerCharacter.Remote

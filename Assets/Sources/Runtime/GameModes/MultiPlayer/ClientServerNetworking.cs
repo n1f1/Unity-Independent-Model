@@ -2,13 +2,15 @@
 using System.Collections.Generic;
 using System.Net.Sockets;
 using System.Threading.Tasks;
-using Networking.Connection;
-using Networking.PacketReceive;
-using Networking.PacketReceive.Replication;
-using Networking.PacketReceive.Replication.ObjectCreationReplication;
-using Networking.PacketReceive.Replication.Serialization;
-using Networking.PacketSend.ObjectSend;
-using Networking.StreamIO;
+using Networking.Client;
+using Networking.Client.Connection;
+using Networking.Common;
+using Networking.Common.PacketReceive;
+using Networking.Common.PacketSend.ObjectSend;
+using Networking.Common.Replication;
+using Networking.Common.Replication.ObjectCreationReplication;
+using Networking.Common.Replication.Serialization;
+using Networking.Common.StreamIO;
 
 namespace GameModes.MultiPlayer
 {

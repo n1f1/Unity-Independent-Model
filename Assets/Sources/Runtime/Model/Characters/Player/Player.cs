@@ -28,8 +28,6 @@ namespace Model.Characters.Player
         public Transform Transform => _transform;
         public IDamageable Damageable => _damageable;
         public CharacterShooter CharacterShooter => _shooter;
-        public IWeapon Weapon => CharacterShooter.Weapon;
-        public IAim Aim => CharacterShooter.Aim;
 
         public void UpdateTime(float deltaTime)
         {

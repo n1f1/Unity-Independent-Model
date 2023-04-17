@@ -1,8 +1,9 @@
 ﻿using System;
 using System.Net.Sockets;
-using Networking.Connection;
-using Networking.PacketReceive;
-using Networking.PacketReceive.Replication;
+using Networking.Common.PacketReceive;
+using Networking.Common.Replication;
+using Networking.Server;
+using Networking.Server.Connection;
 using Server.Simulation;
 
 namespace Server.Update

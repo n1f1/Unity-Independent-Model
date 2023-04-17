@@ -20,12 +20,14 @@ using Model.Characters.Player;
 using Model.Shooting.Bullets;
 using Model.SpatialObject;
 using Networking;
-using Networking.Connection;
-using Networking.ObjectsHashing;
-using Networking.PacketReceive.Replication.ObjectCreationReplication;
-using Networking.PacketReceive.Replication.Serialization;
-using Networking.PacketSend.ObjectSend;
-using Networking.StreamIO;
+using Networking.Client.Connection;
+using Networking.Common;
+using Networking.Common.PacketSend.ObjectSend;
+using Networking.Common.Replication.ObjectCreationReplication;
+using Networking.Common.Replication.ObjectsHashing;
+using Networking.Common.Replication.Serialization;
+using Networking.Common.StreamIO;
+using Networking.Common.StreamIO.NetworkSimulationTest;
 using Simulation.Characters.Player;
 using Simulation.Infrastructure;
 using Simulation.Shooting.Bullets;
@@ -94,16 +96,16 @@ namespace GameModes.MultiPlayer
             IGenericInterfaceList receivers = _networking.Receivers;
 
             deserialization.Register(typeof(ClientPlayer),
-                new ClientPlayerSerialization(new PlayerSerialization(hashedObjects, typeIdConversion, playerFactory)));
+                new ClientPlayerSerialization(new PlayerSerialization(hashedObjects, playerFactory)));
             deserialization.Register(typeof(Player),
-                new PlayerSerialization(hashedObjects, typeIdConversion, remotePlayerFactory));
+                new PlayerSerialization(hashedObjects, remotePlayerFactory));
             deserialization.Register(typeof(MoveCommand),
-                new MoveCommandSerialization(hashedObjects, typeIdConversion));
+                new MoveCommandSerialization(hashedObjects));
             deserialization.Register(typeof(FireCommand),
-                new FireCommandSerialization(hashedObjects, typeIdConversion));
+                new FireCommandSerialization(hashedObjects));
 
-            serialization.Register(typeof(MoveCommand), new MoveCommandSerialization(hashedObjects, typeIdConversion));
-            serialization.Register(typeof(FireCommand), new FireCommandSerialization(hashedObjects, typeIdConversion));
+            serialization.Register(typeof(MoveCommand), new MoveCommandSerialization(hashedObjects));
+            serialization.Register(typeof(FireCommand), new FireCommandSerialization(hashedObjects));
 
             receivers.Register(typeof(ClientPlayer),
                 new ClientPlayerReceiver(_objectToSimulationMap, _simulationClientPlayer));

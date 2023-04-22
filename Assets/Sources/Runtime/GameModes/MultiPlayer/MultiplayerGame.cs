@@ -7,6 +7,7 @@ using GameModes.MultiPlayer.PlayerCharacter.Client.Construction;
 using GameModes.MultiPlayer.PlayerCharacter.Client.Reconciliation;
 using GameModes.MultiPlayer.PlayerCharacter.Common;
 using GameModes.MultiPlayer.PlayerCharacter.Common.Construction;
+using GameModes.MultiPlayer.PlayerCharacter.Common.Health;
 using GameModes.MultiPlayer.PlayerCharacter.Common.Movement;
 using GameModes.MultiPlayer.PlayerCharacter.Common.Shooting;
 using GameModes.MultiPlayer.PlayerCharacter.Remote;
@@ -19,14 +20,12 @@ using Model.Characters.CharacterHealth;
 using Model.Characters.Player;
 using Model.Shooting.Bullets;
 using Model.SpatialObject;
-using Networking;
 using Networking.Client.Connection;
 using Networking.Common;
 using Networking.Common.PacketSend.ObjectSend;
 using Networking.Common.Replication.ObjectCreationReplication;
 using Networking.Common.Replication.ObjectsHashing;
 using Networking.Common.Replication.Serialization;
-using Networking.Common.StreamIO;
 using Networking.Common.StreamIO.NetworkSimulationTest;
 using Simulation.Characters.Player;
 using Simulation.Infrastructure;
@@ -95,21 +94,20 @@ namespace GameModes.MultiPlayer
             IGenericInterfaceList serialization = _networking.Serialization;
             IGenericInterfaceList receivers = _networking.Receivers;
 
+            deserialization.Register(typeof(TakeDamageCommand), new TakeDamageCommandSerialization(hashedObjects));
+            deserialization.Register(typeof(Player), new PlayerSerialization(hashedObjects, remotePlayerFactory));
+            deserialization.Register(typeof(MoveCommand), new MoveCommandSerialization(hashedObjects));
+            deserialization.Register(typeof(FireCommand), new FireCommandSerialization(hashedObjects));
             deserialization.Register(typeof(ClientPlayer),
                 new ClientPlayerSerialization(new PlayerSerialization(hashedObjects, playerFactory)));
-            deserialization.Register(typeof(Player),
-                new PlayerSerialization(hashedObjects, remotePlayerFactory));
-            deserialization.Register(typeof(MoveCommand),
-                new MoveCommandSerialization(hashedObjects));
-            deserialization.Register(typeof(FireCommand),
-                new FireCommandSerialization(hashedObjects));
 
             serialization.Register(typeof(MoveCommand), new MoveCommandSerialization(hashedObjects));
             serialization.Register(typeof(FireCommand), new FireCommandSerialization(hashedObjects));
 
+            receivers.Register(typeof(Player), new RemotePlayerReceiver(_objectToSimulationMap));
+            receivers.Register(typeof(TakeDamageCommand), new TakeDamageCommandReceiver());
             receivers.Register(typeof(ClientPlayer),
                 new ClientPlayerReceiver(_objectToSimulationMap, _simulationClientPlayer));
-            receivers.Register(typeof(Player), new RemotePlayerReceiver(_objectToSimulationMap));
             receivers.Register(typeof(FireCommand),
                 new FireCommandReceiver(_notReconciledFireCommands, _simulationClientPlayer));
             receivers.Register(typeof(MoveCommand),
@@ -132,8 +130,7 @@ namespace GameModes.MultiPlayer
 
             IPlayerFactory factory =
                 new PlayerWithViewAndSimulationFactory<IRemotePlayerSimulation>(playerSimulationFactory,
-                    viewInitializer, playerFactory,
-                    remotePlayerSimulationInitializer);
+                    viewInitializer, playerFactory, remotePlayerSimulationInitializer);
 
             return factory;
         }

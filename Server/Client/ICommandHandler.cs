@@ -10,7 +10,7 @@ namespace Server.Client
         void SendOutgoingCommands(Room room, ObjectReplicationPacketFactory objectReplicationPacketFactory);
     }
 
-    internal interface ICommandHandler<TCommand> : ICommandHandler
+    internal interface ICommandHandler<in TCommand> : ICommandHandler
     {
         void AddCommand(TCommand command);
     }

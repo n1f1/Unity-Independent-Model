@@ -5,6 +5,7 @@ using System.Text;
 using GameModes.MultiPlayer.PlayerCharacter.Client;
 using GameModes.MultiPlayer.PlayerCharacter.Client.Shooting;
 using GameModes.MultiPlayer.PlayerCharacter.Common;
+using GameModes.MultiPlayer.PlayerCharacter.Common.Health;
 using GameModes.MultiPlayer.PlayerCharacter.Common.Movement;
 using GameModes.MultiPlayer.PlayerCharacter.Common.Shooting;
 using Model.Characters.Player;
@@ -25,7 +26,8 @@ namespace GameModes.MultiPlayer
                 (typeof(Player), "PLYR"),
                 (typeof(ClientPlayer), "CLNT"),
                 (typeof(MoveCommand), "CMVE"),
-                (typeof(FireCommand), "FIRE")
+                (typeof(FireCommand), "FIRE"),
+                (typeof(TakeDamageCommand), "TDMG")
             };
 
             return tuples;

@@ -7,7 +7,6 @@ namespace Model.Characters.CharacterHealth
         private readonly IHealthView _healthView;
         private readonly IDeath _death;
         private readonly float _maxHealth;
-        private float _amount;
 
         public Health(float maxHealth, IHealthView healthView, IDeath death)
         {
@@ -15,14 +14,16 @@ namespace Model.Characters.CharacterHealth
                 throw new ArgumentOutOfRangeException();
 
             _maxHealth = maxHealth;
-            _amount = maxHealth;
+            Amount = maxHealth;
             _healthView = healthView ?? throw new ArgumentNullException();
             _death = death ?? throw new ArgumentNullException();
             _healthView.Display(1);
         }
 
+        public float Amount { get; private set; }
+
         public bool CanTakeDamage() =>
-            _amount > 0;
+            Amount > 0;
 
         public void TakeDamage(float damage)
         {
@@ -32,10 +33,10 @@ namespace Model.Characters.CharacterHealth
             if (CanTakeDamage() == false)
                 throw new InvalidOperationException();
 
-            _amount = Math.Clamp(_amount - damage, 0, _amount);
-            _healthView.Display(_amount / _maxHealth);
+            Amount = Math.Clamp(Amount - damage, 0, Amount);
+            _healthView.Display(Amount / _maxHealth);
 
-            if (_amount == 0)
+            if (Amount == 0)
                 _death.Die();
         }
     }

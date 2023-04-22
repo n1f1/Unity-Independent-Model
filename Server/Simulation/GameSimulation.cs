@@ -1,7 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using GameModes.MultiPlayer;
+using GameModes.MultiPlayer.PlayerCharacter.Common.Health;
 using Model.Shooting.Bullets;
 using Networking.Server;
+using Server.Simulation.CommandSend;
 using Server.Simulation.Physics;
 using GameClient = Server.Client.GameClient;
 
@@ -13,9 +16,12 @@ namespace Server.Simulation
         private readonly IPhysicsSimulation _physicsSimulation;
         private readonly Room _room;
         private readonly BulletsContainer _bulletsContainer;
+        private SimulationCommandSender<TakeDamageCommand> _commandSender;
 
-        public GameSimulation(IPhysicsSimulation physicsSimulation, Room room, BulletsContainer bulletsContainer)
+        public GameSimulation(IPhysicsSimulation physicsSimulation, Room room, BulletsContainer bulletsContainer,
+            SimulationCommandSender<TakeDamageCommand> commandSender)
         {
+            _commandSender = commandSender ?? throw new ArgumentNullException(nameof(commandSender));
             _room = room ?? throw new ArgumentNullException(nameof(room));
             _physicsSimulation = physicsSimulation ?? throw new ArgumentNullException(nameof(physicsSimulation));
             _bulletsContainer = bulletsContainer ?? throw new ArgumentNullException(nameof(bulletsContainer));
@@ -42,6 +48,8 @@ namespace Server.Simulation
                 gameClient.ProcessReceivedCommands();
                 gameClient.SendOutgoingCommands(_room);
             }
+            
+            _commandSender.Send(_room);
         }
     }
 }

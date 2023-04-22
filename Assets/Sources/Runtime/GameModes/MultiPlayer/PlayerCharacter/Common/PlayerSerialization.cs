@@ -5,7 +5,6 @@ using Networking.Common.Replication.ObjectsHashing;
 using Networking.Common.Replication.Serialization;
 using Networking.Common.StreamIO;
 using Networking.Common.Utilities;
-using UnityEngine;
 using Vector3 = System.Numerics.Vector3;
 
 namespace GameModes.MultiPlayer.PlayerCharacter.Common
@@ -25,6 +24,9 @@ namespace GameModes.MultiPlayer.PlayerCharacter.Common
             outputStream.Write(HashedObjects.RegisterOrGetRegistered(player));
             outputStream.Write(movement.Position);
             outputStream.Write(HashedObjects.RegisterOrGetRegistered(movement));
+            short registerOrGetRegistered = HashedObjects.RegisterOrGetRegistered(player.Damageable);
+            outputStream.Write(registerOrGetRegistered);
+            Console.WriteLine(registerOrGetRegistered);
         }
 
         public Player Deserialize(IInputStream inputStream)
@@ -32,11 +34,13 @@ namespace GameModes.MultiPlayer.PlayerCharacter.Common
             short playerInstanceId = inputStream.ReadInt16();
             Vector3 position = inputStream.ReadVector3();
             short movementInstanceID = inputStream.ReadInt16();
+            short damageableInstanceID = inputStream.ReadInt16();
             Player player = _playerFactory.CreatePlayer(position);
 
             HashedObjects.RegisterWithID(player, playerInstanceId);
             HashedObjects.RegisterWithID(player.CharacterMovement, movementInstanceID);
-            Console.Write($" id: {playerInstanceId} position: {player.CharacterMovement.Position}");
+            HashedObjects.RegisterWithID(player.Damageable, damageableInstanceID);
+            Console.Write($" id: {playerInstanceId} damageable: {damageableInstanceID}");
 
             return player;
         }

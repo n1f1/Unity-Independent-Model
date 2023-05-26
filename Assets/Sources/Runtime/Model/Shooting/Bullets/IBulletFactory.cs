@@ -1,4 +1,6 @@
-﻿namespace Model.Shooting.Bullets
+﻿using Model.Shooting.Shooter;
+
+namespace Model.Shooting.Bullets
 {
     public interface IBulletFactory<out TBullet> : IBulletDestroyer where TBullet : IBullet
     {

@@ -1,6 +1,7 @@
 using System;
 using Model.Shooting;
 using Model.Shooting.Bullets;
+using Model.Shooting.Shooter;
 using Model.SpatialObject;
 using Server.Characters.ClientPlayer;
 using Server.Simulation;

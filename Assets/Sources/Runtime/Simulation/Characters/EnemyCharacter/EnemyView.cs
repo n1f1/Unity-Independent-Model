@@ -1,7 +1,7 @@
 ﻿using Model.Characters.Enemy;
 using Simulation.Characters.CharacterHealth;
 
-namespace Simulation.Characters.Enemy
+namespace Simulation.Characters.EnemyCharacter
 {
     public class EnemyView : CharacterWithHealthView, IEnemyView
     {

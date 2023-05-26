@@ -1,6 +1,6 @@
 ﻿using Model.Characters.CharacterHealth;
 
-namespace Simulation.Characters.Enemy
+namespace Simulation.Characters.EnemyCharacter
 {
     public interface IEnemySimulation
     {

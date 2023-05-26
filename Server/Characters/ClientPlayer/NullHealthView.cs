@@ -9,5 +9,7 @@ namespace Server.Characters.ClientPlayer
         {
             Console.WriteLine("hit " + normalizedHealth);
         }
+
+        public float NormalizedHealth { get; }
     }
 }

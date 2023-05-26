@@ -11,7 +11,7 @@ using Model.Characters.Player;
 using Model.Shooting.Bullets;
 using Model.SpatialObject;
 using Simulation;
-using Simulation.Characters.Enemy;
+using Simulation.Characters.EnemyCharacter;
 using Simulation.Infrastructure;
 using Simulation.Shooting.Bullets;
 using Simulation.SpatialObject;

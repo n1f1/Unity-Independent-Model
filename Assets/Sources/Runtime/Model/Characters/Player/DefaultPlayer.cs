@@ -1,6 +1,7 @@
 ﻿using Model.Characters.CharacterHealth;
 using Model.Shooting;
 using Model.Shooting.Bullets;
+using Model.Shooting.Shooter;
 using Model.SpatialObject;
 using static Model.Characters.Player.Player;
 

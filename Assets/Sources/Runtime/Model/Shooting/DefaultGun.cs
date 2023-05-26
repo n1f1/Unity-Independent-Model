@@ -1,5 +1,6 @@
 ﻿using System;
 using Model.Shooting.Bullets;
+using Model.Shooting.Shooter;
 
 namespace Model.Shooting
 {

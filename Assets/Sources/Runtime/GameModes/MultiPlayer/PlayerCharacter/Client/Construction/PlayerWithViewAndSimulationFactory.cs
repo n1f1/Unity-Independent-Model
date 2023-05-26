@@ -1,11 +1,13 @@
 ﻿using GameModes.MultiPlayer.PlayerCharacter.Common.Construction;
 using Model.Characters.Player;
 using Simulation;
+using Simulation.Characters.Player;
 using Vector3 = System.Numerics.Vector3;
 
 namespace GameModes.MultiPlayer.PlayerCharacter.Client.Construction
 {
     internal class PlayerWithViewAndSimulationFactory<TSimulation> : IPlayerFactory
+        where TSimulation : IPlayerSimulation
     {
         private readonly ISimulationInitializer<Player, TSimulation, SimulationObject> _simulationInitializer;
         private readonly IPlayerWithViewFactory _playerFactory;
@@ -31,6 +33,9 @@ namespace GameModes.MultiPlayer.PlayerCharacter.Client.Construction
             Player player = _playerFactory.Create(position, simulation.Item1);
 
             _simulationInitializer.InitializeSimulation(player, simulation.Item2, simulation.Item3);
+
+            simulation.Item3.AddSimulation(
+                simulation.Item2.Damageable.Initialize(new DamageableFakeView(Player.MAXHealth, simulation.Item1.HealthView)));
 
             return player;
         }

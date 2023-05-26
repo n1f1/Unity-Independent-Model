@@ -1,6 +1,6 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!1001 &3285332074084947000
+--- !u!1001 &6148570180543107255
 PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
@@ -51,65 +51,65 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 3283861729837118801, guid: e6a4370b798b761409cdbff41597dd47, type: 3}
-      propertyPath: m_Materials.Array.data[0]
-      value: 
-      objectReference: {fileID: 2100000, guid: 38866e47de84425419c979fdf3e1f796, type: 2}
     - target: {fileID: 5330400972700064302, guid: e6a4370b798b761409cdbff41597dd47, type: 3}
       propertyPath: m_Name
-      value: Enemy Character Variant
+      value: RemotePlayer Character Variant
       objectReference: {fileID: 0}
-    - target: {fileID: 5838848613208419196, guid: e6a4370b798b761409cdbff41597dd47, type: 3}
-      propertyPath: m_AnchorMax.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 5838848613208419196, guid: e6a4370b798b761409cdbff41597dd47, type: 3}
-      propertyPath: m_AnchorMax.y
-      value: 0
-      objectReference: {fileID: 0}
-    m_RemovedComponents:
-    - {fileID: -7620999703828207980, guid: e6a4370b798b761409cdbff41597dd47, type: 3}
+    m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: e6a4370b798b761409cdbff41597dd47, type: 3}
---- !u!1 &7236927723848388118 stripped
+--- !u!1 &2066447930696125081 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 5330400972700064302, guid: e6a4370b798b761409cdbff41597dd47, type: 3}
-  m_PrefabInstance: {fileID: 3285332074084947000}
+  m_PrefabInstance: {fileID: 6148570180543107255}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &-711886275315569570
+--- !u!114 &-8648051156013528926
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7236927723848388118}
+  m_GameObject: {fileID: 2066447930696125081}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a04b2ba2a5b84a02b8676c3cefe706dc, type: 3}
+  m_Script: {fileID: 11500000, guid: 84eb7a328abb4a5ebfa4c6d4955c25ac, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &4170737115441048943
+--- !u!114 &-4888359921593197193
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7236927723848388118}
+  m_GameObject: {fileID: 2066447930696125081}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 36b9ae935c9b43ae85f234f0f7255977, type: 3}
+  m_Script: {fileID: 11500000, guid: 1eb65e87dae6448ca0158ceacf0c076b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &8258326307865483140
+--- !u!114 &-1274756429281935384
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7236927723848388118}
+  m_GameObject: {fileID: 2066447930696125081}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d6a0dab8d9e1427ba59f5998da955cf5, type: 3}
+  m_Script: {fileID: 11500000, guid: 00d7b14151624c82b6ced59f805d3480, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _enemyViewBehavior: {fileID: -711886275315569570}
-  _enemySimulationBehaviour: {fileID: 4170737115441048943}
+--- !u!114 &2194177111192662445
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2066447930696125081}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a98239b05f1b4e48ba8d14dc4f071a38, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _playerViewBehavior: {fileID: -8648051156013528926}
+  _playerSimulationBehaviour: {fileID: -1274756429281935384}
+  _remotePlayerBehavior: {fileID: -4888359921593197193}

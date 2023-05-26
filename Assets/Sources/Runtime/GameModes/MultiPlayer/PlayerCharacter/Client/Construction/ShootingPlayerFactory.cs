@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Numerics;
 using GameModes.MultiPlayer.PlayerCharacter.Common.Construction;
+using GameModes.MultiPlayer.PlayerCharacter.Common.Shooting;
 using Model.Characters.Player;
 using Model.Shooting;
 using Model.Shooting.Bullets;
+using Model.Shooting.Shooter;
 using Model.SpatialObject;
 
 namespace GameModes.MultiPlayer.PlayerCharacter.Client.Construction
@@ -27,7 +29,7 @@ namespace GameModes.MultiPlayer.PlayerCharacter.Client.Construction
 
             CharacterShooter characterShooter =
                 DefaultPlayer.CreateCharacterShooter(playerView, playerTransform, _bulletFactory, _bulletsContainer,
-                    damageableShooter);
+                    new CompositeShooter(damageableShooter, new ExcludeFakeDamageableView()));
 
             Player player = DefaultPlayer.Player(playerTransform, characterShooter, playerView);
             damageableShooter.Exclude(player.Damageable);

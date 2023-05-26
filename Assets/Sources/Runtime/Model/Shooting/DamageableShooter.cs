@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using Model.Characters.CharacterHealth;
+using Model.Shooting.Shooter;
 
 namespace Model.Shooting
 {

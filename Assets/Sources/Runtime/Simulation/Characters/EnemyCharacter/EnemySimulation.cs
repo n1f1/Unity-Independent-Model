@@ -2,7 +2,7 @@
 using Simulation.Physics;
 using UnityEngine;
 
-namespace Simulation.Characters.Enemy
+namespace Simulation.Characters.EnemyCharacter
 {
     class EnemySimulation : MonoBehaviour, IEnemySimulation
     {

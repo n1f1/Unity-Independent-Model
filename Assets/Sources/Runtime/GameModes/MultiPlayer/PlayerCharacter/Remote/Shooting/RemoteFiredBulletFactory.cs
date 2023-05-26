@@ -2,6 +2,7 @@
 using System.Numerics;
 using Model.Shooting;
 using Model.Shooting.Bullets;
+using Model.Shooting.Shooter;
 using Model.SpatialObject;
 
 namespace GameModes.MultiPlayer.PlayerCharacter.Remote.Shooting

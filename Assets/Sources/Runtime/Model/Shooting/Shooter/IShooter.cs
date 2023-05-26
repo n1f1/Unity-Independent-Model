@@ -1,6 +1,6 @@
 ﻿using Model.Characters.CharacterHealth;
 
-namespace Model.Shooting
+namespace Model.Shooting.Shooter
 {
     public interface IShooter
     {

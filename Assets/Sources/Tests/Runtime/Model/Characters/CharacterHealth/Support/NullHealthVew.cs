@@ -8,5 +8,7 @@ namespace Tests.Model.Characters.CharacterHealth.Support
         {
             
         }
+
+        public float NormalizedHealth { get; }
     }
 }

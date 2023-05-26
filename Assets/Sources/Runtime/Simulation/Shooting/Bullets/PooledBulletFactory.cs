@@ -1,6 +1,7 @@
 ﻿using System;
 using Model.Shooting;
 using Model.Shooting.Bullets;
+using Model.Shooting.Shooter;
 using Simulation.Pool;
 using Object = UnityEngine.Object;
 using Transform = Model.SpatialObject.Transform;

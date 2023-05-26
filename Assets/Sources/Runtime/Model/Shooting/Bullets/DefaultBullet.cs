@@ -1,5 +1,6 @@
 ﻿using System;
 using Model.Characters.CharacterHealth;
+using Model.Shooting.Shooter;
 using Model.SpatialObject;
 
 namespace Model.Shooting.Bullets

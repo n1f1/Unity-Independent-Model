@@ -3,7 +3,7 @@ using Simulation.Pool;
 using UnityEngine;
 using Utility;
 
-namespace Simulation.Characters.Enemy
+namespace Simulation.Characters.EnemyCharacter
 {
     public class EnemyTemplate : MonoBehaviour, IPoolable
     {

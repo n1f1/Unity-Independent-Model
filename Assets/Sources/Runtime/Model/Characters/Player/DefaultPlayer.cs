@@ -11,11 +11,12 @@ namespace Model.Characters.Player
     public static class DefaultPlayer
     {
         public static CharacterShooter CreateCharacterShooter(IPlayerView playerView, Transform transform,
-            IBulletFactory<IBullet> bulletFactory, BulletsContainer bulletsContainer, IShooter shooter)
+            IBulletFactory<IBullet> bulletFactory, BulletsContainer bulletsContainer, IShooter shooter,
+            float shootingCooldown)
         {
             CharacterShooter characterShooter = new CharacterShooter(
                 new ForwardAim(playerView.ForwardAimView),
-                new DefaultGun(bulletFactory, new Cooldown(ShootingCooldown), bulletsContainer, shooter),
+                new DefaultGun(bulletFactory, new Cooldown(shootingCooldown), bulletsContainer, shooter),
                 transform);
 
             return characterShooter;

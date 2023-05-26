@@ -164,8 +164,8 @@ namespace GameModes.MultiPlayer
 
         public void UpdateTime(float deltaTime)
         {
-            _networking?.ReadNetworkStream();
             _updatableContainer.UpdateTime(deltaTime);
+            _networking?.ReadNetworkStream();
             _bulletsContainer?.Update(deltaTime);
             _simulationClientPlayer?.UpdateTime(deltaTime);
         }

@@ -29,7 +29,7 @@ namespace GameModes.MultiPlayer.PlayerCharacter.Client.Construction
 
             CharacterShooter characterShooter =
                 DefaultPlayer.CreateCharacterShooter(playerView, playerTransform, _bulletFactory, _bulletsContainer,
-                    damageableShooter);
+                    damageableShooter, Player.ShootingCooldown);
 
             Player player = DefaultPlayer.Player(playerTransform, characterShooter, playerView, damageableShooter);
             damageableShooter.Exclude(player.Damageable);

@@ -65,7 +65,7 @@ namespace GameModes.SinglePlayer
 
             CharacterShooter characterShooter =
                 DefaultPlayer.CreateCharacterShooter(playerView, transform, _bulletFactory, _bulletsContainer,
-                    damageableShooter);
+                    damageableShooter, Player.ShootingCooldown);
 
             Player player = DefaultPlayer.Player(transform, characterShooter, playerView, damageableShooter);
             damageableShooter.Exclude(player.Damageable);

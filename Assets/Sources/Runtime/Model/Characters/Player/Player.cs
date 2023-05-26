@@ -1,6 +1,7 @@
 ﻿using System;
 using Model.Characters.CharacterHealth;
 using Model.Shooting;
+using Model.Shooting.Shooter;
 using Model.SpatialObject;
 
 namespace Model.Characters.Player
@@ -11,27 +12,30 @@ namespace Model.Characters.Player
         public const float ShootingCooldown = 0.1f;
         public const float CharacterSpeed = 5f;
 
-        private readonly CharacterMovement _characterMovement;
-        private readonly Transform _transform;
-        private readonly IDamageable _damageable;
-        private readonly CharacterShooter _shooter;
+        private readonly CharacterShooter _characterShooter;
 
-        public Player(Transform transform, IDamageable damageable, CharacterShooter characterShooter)
+        public Player(Transform transform, Health health, IDamageable damageable, CharacterShooter characterShooter,
+            DamageableShooter shooter)
         {
-            _damageable = damageable ?? throw new ArgumentNullException(nameof(damageable));
-            _transform = transform ?? throw new ArgumentNullException(nameof(transform));
-            _shooter = characterShooter ?? throw new ArgumentNullException(nameof(characterShooter));
-            _characterMovement = new CharacterMovement(_transform, CharacterSpeed);
+            Health = health ?? throw new ArgumentNullException(nameof(health));
+            Shooter = shooter ?? throw new ArgumentNullException(nameof(shooter));
+            Damageable = damageable ?? throw new ArgumentNullException(nameof(damageable));
+            Transform = transform ?? throw new ArgumentNullException(nameof(transform));
+            _characterShooter = characterShooter ?? throw new ArgumentNullException(nameof(characterShooter));
+            CharacterMovement = new CharacterMovement(transform, CharacterSpeed);
         }
+        
+        public DamageableShooter Shooter { get; }
+        public Health Health { get; }
+        public CharacterMovement CharacterMovement { get; }
+        public IDamageable Damageable { get; }
+        public Transform Transform { get; }
 
-        public CharacterMovement CharacterMovement => _characterMovement;
-        public Transform Transform => _transform;
-        public IDamageable Damageable => _damageable;
-        public CharacterShooter CharacterShooter => _shooter;
+        public CharacterShooter CharacterCharacterShooter => _characterShooter;
 
         public void UpdateTime(float deltaTime)
         {
-            _shooter.UpdateTime(deltaTime);
+            _characterShooter.UpdateTime(deltaTime);
         }
     }
 }

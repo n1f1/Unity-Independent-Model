@@ -14,8 +14,7 @@ using Simulation.Infrastructure;
 
 namespace GameModes.MultiPlayer.PlayerCharacter.Client.Construction
 {
-    internal class ClientPlayerSimulationInitializer : 
-        ISimulationInitializer<Player, IPlayerSimulation, SimulationObject>
+    internal class ClientPlayerSimulationInitializer
     {
         private readonly IObjectToSimulationMap _objectToSimulation;
         private readonly NotReconciledCommands<MoveCommand> _notReconciledCommands;
@@ -33,12 +32,21 @@ namespace GameModes.MultiPlayer.PlayerCharacter.Client.Construction
             _sender = sender ?? throw new ArgumentNullException(nameof(sender));
         }
 
-        public void InitializeSimulation(Player player, IPlayerSimulation playerSimulation, SimulationObject simulation)
+        public void InitializeSimulation(Player player, IPlayerSimulation playerSimulation, SimulationObject simulation,
+            IPlayerView view)
         {
             IMovable movable = new ClientPlayerMovementCommandSender(player, _sender, _notReconciledCommands);
-            var fireCommandSender = new FireCommandSender(player, _sender, _notReconciledFireCommands);
+            FireCommandSender fireCommandSender = new FireCommandSender(player, _sender, _notReconciledFireCommands);
+
+            DamageableFakeView damageableFakeView =
+                new DamageableFakeView(Player.MAXHealth, player.Health.Amount, view.HealthView);
+            
+            simulation.AddSimulation(playerSimulation.Damageable.Initialize(damageableFakeView));
+            player.Shooter.Exclude(damageableFakeView);
+
             simulation.AddUpdatableSimulation(playerSimulation.Movable.Initialize(movable));
             simulation.AddUpdatableSimulation(playerSimulation.CharacterShooter.Initialize(fireCommandSender));
+
             simulation.Enable();
             _objectToSimulation.RegisterNew(player, simulation);
         }

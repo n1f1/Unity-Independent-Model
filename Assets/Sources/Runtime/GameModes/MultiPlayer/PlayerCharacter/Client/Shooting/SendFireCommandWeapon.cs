@@ -22,7 +22,7 @@ namespace GameModes.MultiPlayer.PlayerCharacter.Client.Shooting
             _reconciledCommands = reconciledCommands ?? throw new ArgumentNullException(nameof(reconciledCommands));
             _sender = sender ?? throw new ArgumentNullException(nameof(sender));
             _player = player ?? throw new ArgumentNullException(nameof(player));
-            _weapon = _player.CharacterShooter.Weapon;
+            _weapon = _player.CharacterCharacterShooter.Weapon;
         }
 
         public IBullet Shoot(IAim aim)

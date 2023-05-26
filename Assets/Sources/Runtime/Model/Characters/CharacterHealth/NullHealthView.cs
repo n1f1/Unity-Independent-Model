@@ -3,13 +3,13 @@ using Model.Characters.CharacterHealth;
 
 namespace Server.Characters.ClientPlayer
 {
-    internal class NullHealthView : IHealthView
+    public class NullHealthView : IHealthView
     {
         public void Display(float normalizedHealth)
         {
             Console.WriteLine("hit " + normalizedHealth);
         }
 
-        public float NormalizedHealth { get; }
+        public float NormalizedHealth => 1;
     }
 }

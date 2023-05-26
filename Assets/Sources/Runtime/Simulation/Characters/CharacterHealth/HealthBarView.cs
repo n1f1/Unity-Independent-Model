@@ -8,8 +8,8 @@ namespace Simulation.Characters.CharacterHealth
     internal class HealthBarView : MonoBehaviour, IHealthView
     {
         private Slider _slider;
-        
-        public float NormalizedHealth { get; private set; }
+
+        public float NormalizedHealth { get; private set; } = 1;
 
         private void Awake()
         {

@@ -6,11 +6,11 @@ using UnityEngine;
 
 namespace GameModes.MultiPlayer.PlayerCharacter.Common.Construction
 {
-    internal class ClientPlayerSimulationFactory : ISimulationFactory<IPlayerSimulation>
+    internal class ClientPlayerSimulationViewFactory
     {
         private readonly SinglePlayerTemplate _template;
 
-        public ClientPlayerSimulationFactory(SinglePlayerTemplate template)
+        public ClientPlayerSimulationViewFactory(SinglePlayerTemplate template)
         {
             _template = template;
         }

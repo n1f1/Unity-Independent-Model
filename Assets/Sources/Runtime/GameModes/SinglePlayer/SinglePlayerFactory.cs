@@ -49,7 +49,7 @@ namespace GameModes.SinglePlayer
             Player player = CreatePlayer(position, playerView);
 
             simulation.AddUpdatableSimulation(playerSimulation.Movable.Initialize(player.CharacterMovement));
-            simulation.AddUpdatableSimulation(playerSimulation.CharacterShooter.Initialize(player.CharacterShooter));
+            simulation.AddUpdatableSimulation(playerSimulation.CharacterShooter.Initialize(player.CharacterCharacterShooter));
             simulation.Enable();
 
             _objectToSimulationMapping.RegisterNew(player, simulation);
@@ -67,7 +67,7 @@ namespace GameModes.SinglePlayer
                 DefaultPlayer.CreateCharacterShooter(playerView, transform, _bulletFactory, _bulletsContainer,
                     damageableShooter);
 
-            Player player = DefaultPlayer.Player(transform, characterShooter, playerView);
+            Player player = DefaultPlayer.Player(transform, characterShooter, playerView, damageableShooter);
             damageableShooter.Exclude(player.Damageable);
 
             return player;

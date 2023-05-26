@@ -34,7 +34,7 @@ namespace GameModes.MultiPlayer.PlayerCharacter.Remote.Construction
                 DefaultPlayer.CreateCharacterShooter(playerView, playerTransform, bulletFactory, _bulletsContainer,
                     damageableShooter);
 
-            Player player = DefaultPlayer.Player(playerTransform, characterShooter, playerView);
+            Player player = DefaultPlayer.Player(playerTransform, characterShooter, playerView, damageableShooter);
             damageableShooter.Exclude(player.Damageable);
 
             return player;

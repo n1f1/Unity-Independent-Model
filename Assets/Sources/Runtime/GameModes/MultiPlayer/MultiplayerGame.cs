@@ -122,14 +122,13 @@ namespace GameModes.MultiPlayer
                     _movementCommandPrediction);
 
             IViewInitializer<IPlayerView> viewInitializer = new ReplaceDeathView(new NullDeathView());
-
             IPlayerWithViewFactory playerFactory = new RemoteShootingPlayerFactory(bulletFactory, _bulletsContainer);
 
-            RemotePlayerSimulationFactory playerSimulationFactory =
-                new RemotePlayerSimulationFactory(_levelConfig.RemotePlayerTemplate);
+            RemotePlayerSimulationViewFactory playerSimulationViewFactory =
+                new RemotePlayerSimulationViewFactory(_levelConfig.RemotePlayerTemplate);
 
             IPlayerFactory factory =
-                new PlayerWithViewAndSimulationFactory<IRemotePlayerSimulation>(playerSimulationFactory,
+                new RemotePlayerFactory(playerSimulationViewFactory,
                     viewInitializer, playerFactory, remotePlayerSimulationInitializer);
 
             return factory;
@@ -140,8 +139,8 @@ namespace GameModes.MultiPlayer
         {
             IPositionView cameraView = Camera.main.GetComponentInParent<PositionView>();
 
-            ClientPlayerSimulationFactory clientPlayerSimulationFactory =
-                new ClientPlayerSimulationFactory(_levelConfig.PlayerTemplate);
+            ClientPlayerSimulationViewFactory clientPlayerSimulationViewFactory =
+                new ClientPlayerSimulationViewFactory(_levelConfig.PlayerTemplate);
 
             ClientPlayerSimulationInitializer simulationInitializer = new ClientPlayerSimulationInitializer(
                 _objectToSimulationMap, _notReconciledMoveCommands, _notReconciledFireCommands, networkObjectSender);
@@ -156,7 +155,7 @@ namespace GameModes.MultiPlayer
             IPlayerWithViewFactory playerFactory = new ShootingPlayerFactory(bulletFactory, _bulletsContainer);
 
             IPlayerFactory factory =
-                new PlayerWithViewAndSimulationFactory<IPlayerSimulation>(clientPlayerSimulationFactory,
+                new ClientPlayerFactory(clientPlayerSimulationViewFactory,
                     viewInitializer, playerFactory,
                     simulationInitializer);
 

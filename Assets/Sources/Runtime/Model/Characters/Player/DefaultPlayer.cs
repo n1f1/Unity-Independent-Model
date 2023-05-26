@@ -3,6 +3,7 @@ using Model.Shooting;
 using Model.Shooting.Bullets;
 using Model.Shooting.Shooter;
 using Model.SpatialObject;
+using Server.Characters.ClientPlayer;
 using static Model.Characters.Player.Player;
 
 namespace Model.Characters.Player
@@ -20,12 +21,11 @@ namespace Model.Characters.Player
             return characterShooter;
         }
 
-        public static Player Player(Transform transform, CharacterShooter characterShooter, IPlayerView playerView)
+        public static Player Player(Transform transform, CharacterShooter characterShooter, IPlayerView playerView,
+            DamageableShooter shooter)
         {
-            Player player = new Player(
-                transform,
-                new Health(MAXHealth, playerView.HealthView, new Death(playerView.DeathView)),
-                characterShooter);
+            Health damageable = new Health(MAXHealth, new NullHealthView(), new Death(playerView.DeathView));
+            Player player = new Player(transform, damageable, damageable, characterShooter, shooter);
 
             return player;
         }

@@ -15,9 +15,9 @@ namespace GameModes.MultiPlayer.PlayerCharacter.Client.Shooting
         public FireCommandSender(Player player, INetworkObjectSender networkObjectSender,
             NotReconciledCommands<FireCommand> notReconciledFireCommands)
         {
-            _characterShooter = player.CharacterShooter;
+            _characterShooter = player.CharacterCharacterShooter;
             Weapon = new SendFireCommandWeapon(player, networkObjectSender, notReconciledFireCommands);
-            Aim = player.CharacterShooter.Aim;
+            Aim = player.CharacterCharacterShooter.Aim;
         }
 
         public IWeapon Weapon { get; }

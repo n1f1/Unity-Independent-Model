@@ -1,16 +1,15 @@
 ﻿using System;
-using GameModes.MultiPlayer.PlayerCharacter.Common.Construction;
 using Model.Characters.Player;
 using Simulation;
 using Object = UnityEngine.Object;
 
 namespace GameModes.MultiPlayer.PlayerCharacter.Remote.Construction
 {
-    internal class RemotePlayerSimulationFactory : ISimulationFactory<IRemotePlayerSimulation>
+    internal class RemotePlayerSimulationViewFactory
     {
         private readonly RemotePlayerTemplate _template;
 
-        public RemotePlayerSimulationFactory(RemotePlayerTemplate template)
+        public RemotePlayerSimulationViewFactory(RemotePlayerTemplate template)
         {
             _template = template ? template : throw new ArgumentNullException(nameof(template));
         }

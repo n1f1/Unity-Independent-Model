@@ -25,7 +25,7 @@ namespace GameModes.MultiPlayer.PlayerCharacter.Common.Shooting
 
         public void Execute()
         {
-            CharacterShooter shooter = Player.CharacterShooter;
+            CharacterShooter shooter = Player.CharacterCharacterShooter;
             shooter.Aim.Aim(PlayerPosition, AimPosition);
 
             if (shooter.Weapon.CanShoot(shooter.Aim) == false)

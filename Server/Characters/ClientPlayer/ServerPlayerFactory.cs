@@ -44,7 +44,7 @@ namespace Server.Characters.ClientPlayer
             Health health = new Health(Player.MAXHealth, new NullHealthView(), new Death(new NullDeathView()));
             IDamageable damageable = new TakeDamageCommandSender(_commandHandler, health);
 
-            Player player = new Player(transform, damageable, characterShooter);
+            Player player = new Player(transform, health, damageable, characterShooter, damageableShooter);
             damageableShooter.Exclude(player.Damageable);
             _physicsSimulation.RegisterCollidable(rigidbody, player);
 

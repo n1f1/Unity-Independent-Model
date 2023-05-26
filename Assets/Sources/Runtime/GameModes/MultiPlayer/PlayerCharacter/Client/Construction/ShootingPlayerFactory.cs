@@ -29,9 +29,9 @@ namespace GameModes.MultiPlayer.PlayerCharacter.Client.Construction
 
             CharacterShooter characterShooter =
                 DefaultPlayer.CreateCharacterShooter(playerView, playerTransform, _bulletFactory, _bulletsContainer,
-                    new CompositeShooter(damageableShooter, new ExcludeFakeDamageableView()));
+                    damageableShooter);
 
-            Player player = DefaultPlayer.Player(playerTransform, characterShooter, playerView);
+            Player player = DefaultPlayer.Player(playerTransform, characterShooter, playerView, damageableShooter);
             damageableShooter.Exclude(player.Damageable);
 
             return player;

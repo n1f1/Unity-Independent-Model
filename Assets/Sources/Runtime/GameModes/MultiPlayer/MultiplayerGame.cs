@@ -122,7 +122,8 @@ namespace GameModes.MultiPlayer
                     _movementCommandPrediction);
 
             IViewInitializer<IPlayerView> viewInitializer = new ReplaceDeathView(new NullDeathView());
-            IPlayerWithViewFactory playerFactory = new RemoteShootingPlayerFactory(bulletFactory, _bulletsContainer);
+            IPlayerWithViewFactory playerFactory =
+                new RemoteShootingPlayerFactory(bulletFactory, _bulletsContainer, _objectToSimulationMap);
 
             RemotePlayerSimulationViewFactory playerSimulationViewFactory =
                 new RemotePlayerSimulationViewFactory(_levelConfig.RemotePlayerTemplate);

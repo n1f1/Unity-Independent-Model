@@ -1,8 +1,6 @@
 ﻿using System.Numerics;
 using GameModes.MultiPlayer.PlayerCharacter.Client.Construction;
 using GameModes.MultiPlayer.PlayerCharacter.Common.Construction;
-using GameModes.MultiPlayer.PlayerCharacter.Remote;
-using GameModes.MultiPlayer.PlayerCharacter.Remote.Construction;
 using Model.Characters.Player;
 using Simulation;
 using Simulation.Characters.Player;

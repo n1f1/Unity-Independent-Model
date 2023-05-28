@@ -1,5 +1,4 @@
 ﻿using System;
-using GameModes;
 using GameModes.Game;
 using GameModes.MultiPlayer;
 using GameModes.SinglePlayer;
@@ -9,7 +8,7 @@ using Object = UnityEngine.Object;
 
 namespace Menus.MainMenu
 {
-    public class MainMenu
+    public class MainMenu : IGame
     {
         private readonly IGameLoader _gameLoader;
 
@@ -36,6 +35,11 @@ namespace Menus.MainMenu
                     new LaunchMultiplayer(_gameLoader)));
 
             mainMenu.Window.Open();
+        }
+
+        public void Load()
+        {
+            Open();
         }
     }
 }

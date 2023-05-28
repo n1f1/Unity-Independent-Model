@@ -17,5 +17,8 @@ namespace GameModes.Game
 
         public void AddUpdate(IUpdatable updatable) =>
             _updatables.Add(updatable ?? throw new ArgumentNullException());
+
+        public void Remove(IUpdatable updatable) => 
+            _updatables.Remove(updatable);
     }
 }

@@ -1,5 +1,4 @@
-﻿using GameModes;
-using GameModes.Game;
+﻿using GameModes.Game;
 
 namespace Menus.MainMenu
 {
@@ -7,7 +6,6 @@ namespace Menus.MainMenu
     {
         public void Load()
         {
-            
         }
     }
 }

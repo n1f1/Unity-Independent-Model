@@ -1,7 +1,5 @@
 ﻿using System;
-using GameModes;
 using GameModes.Game;
-using UI;
 using UI.Commands;
 
 namespace Menus.MainMenu
@@ -17,9 +15,7 @@ namespace Menus.MainMenu
 
         public void Execute()
         {
-            _gameLoader.Load(new NullGame());
-            MainMenu mainMenu = new MainMenu(_gameLoader);
-            mainMenu.Open();
+            _gameLoader.Load(new MainMenu(_gameLoader));
         }
     }
 }

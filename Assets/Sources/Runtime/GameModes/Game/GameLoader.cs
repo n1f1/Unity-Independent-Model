@@ -9,6 +9,7 @@ namespace GameModes.Game
     {
         private readonly GameUpdate _gameUpdate;
         private AsyncOperation _sceneLoadingOperation;
+        private IGame _game;
 
         public GameLoader(GameUpdate gameUpdate)
         {
@@ -17,11 +18,17 @@ namespace GameModes.Game
 
         public async void Load(IGame game)
         {
-            _sceneLoadingOperation = SceneManager.LoadSceneAsync(1);
+            if (game == null)
+                throw new ArgumentNullException(nameof(game));
+            
+            _gameUpdate.Remove(_game);
+            _game = game;
 
+            _sceneLoadingOperation = SceneManager.LoadSceneAsync(1);
+            
             while (!_sceneLoadingOperation.isDone)
                 await Task.Yield();
-        
+
             game.Load();
             _gameUpdate.AddUpdate(game);
         }

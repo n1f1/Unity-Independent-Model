@@ -141,7 +141,7 @@ namespace GameModes.MultiPlayer
             IPositionView cameraView = Camera.main.GetComponentInParent<PositionView>();
 
             ClientPlayerSimulationViewFactory clientPlayerSimulationViewFactory =
-                new ClientPlayerSimulationViewFactory(_levelConfig.PlayerTemplate);
+                new ClientPlayerSimulationViewFactory(_levelConfig.ClientPlayerTemplate);
 
             ClientPlayerSimulationInitializer simulationInitializer = new ClientPlayerSimulationInitializer(
                 _objectToSimulationMap, _notReconciledMoveCommands, _notReconciledFireCommands, networkObjectSender);

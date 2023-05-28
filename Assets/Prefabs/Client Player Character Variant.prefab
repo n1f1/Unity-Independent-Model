@@ -53,7 +53,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5330400972700064302, guid: e6a4370b798b761409cdbff41597dd47, type: 3}
       propertyPath: m_Name
-      value: RemotePlayer Character Variant
+      value: Client Player Character Variant
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: e6a4370b798b761409cdbff41597dd47, type: 3}
@@ -74,7 +74,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 84eb7a328abb4a5ebfa4c6d4955c25ac, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &-4888359921593197193
+--- !u!114 &-1274756429281935384
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -83,10 +83,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 2066447930696125081}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1eb65e87dae6448ca0158ceacf0c076b, type: 3}
+  m_Script: {fileID: 11500000, guid: 00d7b14151624c82b6ced59f805d3480, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &2194177111192662445
+  _physicsDamageable: 1
+--- !u!114 &8830715666067811676
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -95,9 +96,8 @@ MonoBehaviour:
   m_GameObject: {fileID: 2066447930696125081}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a98239b05f1b4e48ba8d14dc4f071a38, type: 3}
+  m_Script: {fileID: 11500000, guid: ef72091adb0a4a628c394f2338377f4e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   _playerViewBehavior: {fileID: -8648051156013528926}
-  _playerSimulationBehaviour: {fileID: 0}
-  _remotePlayerBehavior: {fileID: -4888359921593197193}
+  _playerSimulationBehaviour: {fileID: -1274756429281935384}

@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using GameModes.MultiPlayer;
 using GameModes.MultiPlayer.PlayerCharacter.Common.Health;
 using Model.Shooting.Bullets;
 using Networking.Server;
@@ -12,11 +11,11 @@ namespace Server.Simulation
 {
     internal class GameSimulation
     {
+        private readonly SimulationCommandSender<TakeDamageCommand> _commandSender;
         private readonly List<GameClient> _gameClients = new();
         private readonly IPhysicsSimulation _physicsSimulation;
         private readonly Room _room;
         private readonly BulletsContainer _bulletsContainer;
-        private SimulationCommandSender<TakeDamageCommand> _commandSender;
 
         public GameSimulation(IPhysicsSimulation physicsSimulation, Room room, BulletsContainer bulletsContainer,
             SimulationCommandSender<TakeDamageCommand> commandSender)

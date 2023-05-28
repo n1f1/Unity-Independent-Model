@@ -9,6 +9,8 @@ namespace Simulation.Characters.Player
 {
     public class PlayerSimulation : MonoBehaviour, IPlayerSimulation
     {
+        [SerializeField] private bool _physicsDamageable;
+        
         public ISimulation<IMovable> Movable { get; set; }
         public ISimulation<ICharacterShooter> CharacterShooter { get; set; }
         public ISimulation<IDamageable> Damageable { get; set; }
@@ -17,7 +19,9 @@ namespace Simulation.Characters.Player
         {
             Movable = gameObject.AddComponent<PlayerMovement>().Initialize(new AxisInput());
             CharacterShooter = gameObject.AddComponent<PlayerShooter>();
-            Damageable = gameObject.AddComponent<DamageablePhysicsInteractableHolder>();
+            
+            if(_physicsDamageable)
+                Damageable = gameObject.AddComponent<DamageablePhysicsInteractableHolder>();
         }
     }
 }

@@ -24,6 +24,7 @@ namespace GameModes.MultiPlayer.PlayerCharacter.Common.Health
         public void Die()
         {
             SimulationObject simulationObject = _objectToSimulation.Get(_player);
+            simulationObject.Clear();
             simulationObject.Disable();
         }
     }

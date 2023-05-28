@@ -27,7 +27,6 @@ using Networking.Common.Replication.ObjectCreationReplication;
 using Networking.Common.Replication.ObjectsHashing;
 using Networking.Common.Replication.Serialization;
 using Networking.Common.StreamIO.NetworkSimulationTest;
-using Simulation.Characters.Player;
 using Simulation.Infrastructure;
 using Simulation.Shooting.Bullets;
 using Simulation.SpatialObject;
@@ -57,11 +56,13 @@ namespace GameModes.MultiPlayer
         public async void Load()
         {
             _levelConfig = Resources.Load<LevelConfig>(GameResourceConfigurations.LevelConfigsList);
+            var serverConnection = Resources.Load<ServerConnectionData>(GameResourceConfigurations.ServerConnection);
 
             var dictionary = new Dictionary<Type, int>().PopulateDictionaryFromTuple(SerializableTypesIdMap.Get());
             ITypeIdConversion typeIdConversion = new TypeIdConversion(dictionary);
             IServerConnectionView connectionView = new ServerConnectionView();
-            ClientServerNetworking networking = new ClientServerNetworking(connectionView, typeIdConversion);
+            ServerConnection connection = new(connectionView, serverConnection.IP, serverConnection.Port);
+            ClientServerNetworking networking = new ClientServerNetworking(connection, typeIdConversion);
 
             if (await networking.Connect() == false)
                 return;
@@ -89,20 +90,13 @@ namespace GameModes.MultiPlayer
             IPlayerFactory playerFactory = CreateClientPlayerFactory(_networking.ObjectSender, bulletFactory);
             _simulationClientPlayer = new ClientPlayerSimulation();
 
-            HashedObjectsList hashedObjects = new HashedObjectsList();
-            IGenericInterfaceList deserialization = _networking.Deserialization;
-            IGenericInterfaceList serialization = _networking.Serialization;
+            RegisterSerializations(remotePlayerFactory, playerFactory);
+            RegisterReceivers();
+        }
+
+        private void RegisterReceivers()
+        {
             IGenericInterfaceList receivers = _networking.Receivers;
-
-            deserialization.Register(typeof(TakeDamageCommand), new TakeDamageCommandSerialization(hashedObjects));
-            deserialization.Register(typeof(Player), new PlayerSerialization(hashedObjects, remotePlayerFactory));
-            deserialization.Register(typeof(MoveCommand), new MoveCommandSerialization(hashedObjects));
-            deserialization.Register(typeof(FireCommand), new FireCommandSerialization(hashedObjects));
-            deserialization.Register(typeof(ClientPlayer),
-                new ClientPlayerSerialization(new PlayerSerialization(hashedObjects, playerFactory)));
-
-            serialization.Register(typeof(MoveCommand), new MoveCommandSerialization(hashedObjects));
-            serialization.Register(typeof(FireCommand), new FireCommandSerialization(hashedObjects));
 
             receivers.Register(typeof(Player), new RemotePlayerReceiver(_objectToSimulationMap));
             receivers.Register(typeof(TakeDamageCommand), new TakeDamageCommandReceiver());
@@ -113,6 +107,23 @@ namespace GameModes.MultiPlayer
             receivers.Register(typeof(MoveCommand),
                 new MoveCommandReceiver(_notReconciledMoveCommands, _simulationClientPlayer,
                     _movementCommandPrediction));
+        }
+
+        private void RegisterSerializations(IPlayerFactory remotePlayerFactory, IPlayerFactory playerFactory)
+        {
+            HashedObjectsList hashedObjects = new HashedObjectsList();
+            IGenericInterfaceList deserialization = _networking.Deserialization;
+            IGenericInterfaceList serialization = _networking.Serialization;
+
+            deserialization.Register(typeof(TakeDamageCommand), new TakeDamageCommandSerialization(hashedObjects));
+            deserialization.Register(typeof(Player), new PlayerSerialization(hashedObjects, remotePlayerFactory));
+            deserialization.Register(typeof(MoveCommand), new MoveCommandSerialization(hashedObjects));
+            deserialization.Register(typeof(FireCommand), new FireCommandSerialization(hashedObjects));
+            deserialization.Register(typeof(ClientPlayer),
+                new ClientPlayerSerialization(new PlayerSerialization(hashedObjects, playerFactory)));
+
+            serialization.Register(typeof(MoveCommand), new MoveCommandSerialization(hashedObjects));
+            serialization.Register(typeof(FireCommand), new FireCommandSerialization(hashedObjects));
         }
 
         private IPlayerFactory CreateRemotePlayerFactory(PooledBulletFactory bulletFactory)
@@ -153,7 +164,8 @@ namespace GameModes.MultiPlayer
                         new OpenMenuOnDeath(_gameLoader))),
                 new AddPositionView(cameraView));
 
-            IPlayerWithViewFactory playerFactory = new ShootingPlayerFactory(bulletFactory, _bulletsContainer);
+            IPlayerWithViewFactory playerFactory =
+                new ShootingPlayerFactory(bulletFactory, _bulletsContainer, _objectToSimulationMap);
 
             IPlayerFactory factory =
                 new ClientPlayerFactory(clientPlayerSimulationViewFactory,

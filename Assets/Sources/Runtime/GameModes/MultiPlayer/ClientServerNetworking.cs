@@ -23,10 +23,10 @@ namespace GameModes.MultiPlayer
         private GameClient _gameClient;
         private INetworkStreamRead _streamRead;
 
-        public ClientServerNetworking(IServerConnectionView connectionView, ITypeIdConversion typeIdConversion)
+        public ClientServerNetworking(ServerConnection serverConnection, ITypeIdConversion typeIdConversion)
         {
-            _serverConnection = new ServerConnection(connectionView);
-            _typeIdConversion = typeIdConversion;
+            _serverConnection = serverConnection ?? throw new ArgumentNullException(nameof(serverConnection));
+            _typeIdConversion = typeIdConversion ?? throw new ArgumentNullException(nameof(typeIdConversion));
         }
 
         public INetworkObjectSender ObjectSender { get; private set; }

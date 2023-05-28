@@ -31,9 +31,11 @@ namespace GameModes.MultiPlayer.PlayerCharacter.Remote.Construction
         {
             Transform playerTransform = new Transform(playerView.PositionView, position);
 
-            DisablePlayerSimulationDeath disablePlayerSimulationDeath = new DisablePlayerSimulationDeath(_objectToSimulationMap);
-            playerView.DeathView = new CompositeDeath(playerView.DeathView, disablePlayerSimulationDeath);
+            DisablePlayerSimulationDeath disablePlayerSimulationDeath =
+                new DisablePlayerSimulationDeath(_objectToSimulationMap);
             
+            playerView.DeathView = new CompositeDeath(playerView.DeathView, disablePlayerSimulationDeath);
+
             playerView.ForwardAimView = new NullAimView();
             IBulletFactory<IBullet> bulletFactory = new RemoteFiredBulletFactory(playerTransform, _bulletFactory);
 

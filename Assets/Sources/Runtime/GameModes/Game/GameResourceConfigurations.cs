@@ -6,5 +6,6 @@ namespace GameModes.Game
         public const string LevelConfigsList = "LevelConfigsList";
         public const string PauseMenuConfiguration = "PauseMenuConfiguration";
         public const string ServerConnectionViewConfiguration = "ServerConnectionViewConfiguration";
+        public static string ServerConnection = "ServerConnectionConfiguration";
     }
 }

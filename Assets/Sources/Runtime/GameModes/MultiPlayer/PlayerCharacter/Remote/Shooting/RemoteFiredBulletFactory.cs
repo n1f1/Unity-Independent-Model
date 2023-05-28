@@ -27,10 +27,5 @@ namespace GameModes.MultiPlayer.PlayerCharacter.Remote.Shooting
 
             return new RemoteFiredBullet(bullet);
         }
-
-        public void Destroy(IBullet bullet)
-        {
-            _bulletFactory.Destroy(bullet);
-        }
     }
 }

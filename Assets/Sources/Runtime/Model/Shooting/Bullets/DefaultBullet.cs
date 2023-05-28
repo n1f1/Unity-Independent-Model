@@ -51,6 +51,19 @@ namespace Model.Shooting.Bullets
             UpdatePassedDistance(_passedTime);
         }
 
+        public void Hit(IDamageable damageable)
+        {
+            bool canHit = _shooter.CanHit(damageable);
+
+            if(canHit == false)
+                return;
+            
+            if (damageable.CanTakeDamage())
+                damageable.TakeDamage(_damage);
+
+            Collided = true;
+        }
+
         private void UpdatePassedDistance(float passedTime)
         {
             float normalizedPassedDistance = GetNormalizedPassedDistance(passedTime);
@@ -65,18 +78,5 @@ namespace Model.Shooting.Bullets
 
         private void UpdatePosition(float ratio) => 
             Transform.SetPosition(_trajectory.EvaluateForNormalizedRatio(ratio));
-
-        public void Hit(IDamageable damageable)
-        {
-            bool canHit = _shooter.CanHit(damageable);
-
-            if(canHit == false)
-                return;
-            
-            if (damageable.CanTakeDamage())
-                damageable.TakeDamage(_damage);
-
-            Collided = true;
-        }
     }
 }

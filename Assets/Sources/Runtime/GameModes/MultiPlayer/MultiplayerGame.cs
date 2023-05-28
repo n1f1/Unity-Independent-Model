@@ -83,7 +83,7 @@ namespace GameModes.MultiPlayer
 
             PooledBulletFactory bulletFactory =
                 BulletFactoryCreation.CreatePooledFactory(_levelConfig.BulletTemplate);
-            _bulletsContainer = new BulletsContainer(bulletFactory);
+            _bulletsContainer = new BulletsContainer(new BulletDestroyer(bulletFactory));
 
             IPlayerFactory remotePlayerFactory = CreateRemotePlayerFactory(bulletFactory);
             IPlayerFactory playerFactory = CreateClientPlayerFactory(_networking.ObjectSender, bulletFactory);

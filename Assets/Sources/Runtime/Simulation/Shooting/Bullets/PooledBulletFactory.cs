@@ -37,10 +37,9 @@ namespace Simulation.Shooting.Bullets
             return defaultBullet;
         }
 
-        public void Destroy(IBullet bullet)
+        public void Destroy(DefaultBullet bullet)
         {
-            if (bullet is DefaultBullet defaultBullet)
-                _objectPool.ReturnInactive(defaultBullet);
+            _objectPool.ReturnInactive(bullet);
         }
 
         private DefaultBullet GetFromPool() =>

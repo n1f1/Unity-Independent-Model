@@ -46,7 +46,7 @@ namespace Server.Client
             foreach (GameClient other in _game.GameClients)
                 serverClient.Sender.SendPacket(_replicationPacketFactory.Create(other.Player));
 
-            GameClient gameClient = new GameClient(player, _replicationPacketFactory);
+            GameClient gameClient = new GameClient(player, _replicationPacketFactory, serverClient);
             _playerToClientMap.Add(gameClient);
             _game.Add(gameClient);
         }

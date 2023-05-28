@@ -2,7 +2,6 @@
 using Model.Characters.CharacterHealth;
 using Model.Shooting.Bullets;
 using Model.SpatialObject;
-using Networking;
 using Networking.Common;
 
 namespace GameModes.MultiPlayer.PlayerCharacter.Remote.Shooting
@@ -25,6 +24,7 @@ namespace GameModes.MultiPlayer.PlayerCharacter.Remote.Shooting
 
         public bool Collided => _bullet.Collided;
         public Transform Transform => _bullet.Transform;
+        public IBullet Bullet => _bullet;
 
         public void UpdateTime(float deltaTime)
         {

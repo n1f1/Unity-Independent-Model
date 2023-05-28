@@ -76,14 +76,14 @@ namespace GameModes.SinglePlayer
             IObjectToSimulationMap objectToSimulationMap = new ObjectToSimulationMap();
 
             PooledBulletFactory bulletFactory = BulletFactoryCreation.CreatePooledFactory(_levelConfig.BulletTemplate);
-            _bulletsContainer = new BulletsContainer(bulletFactory);
+            _bulletsContainer = new BulletsContainer(new BulletDestroyer(bulletFactory));
 
             IDeathView playerDeath = new CompositeDeath(
                 new SetLooseGameStatus(_gameStatus),
                 new OpenMenuOnDeath(_gameLoader));
 
-            SinglePlayerFactory singlePlayerFactory = new SinglePlayerFactory(_levelConfig.PlayerTemplate, cameraView, bulletFactory,
-                objectToSimulationMap, playerDeath, _bulletsContainer);
+            SinglePlayerFactory singlePlayerFactory = new SinglePlayerFactory(_levelConfig.PlayerTemplate, cameraView,
+                bulletFactory, objectToSimulationMap, playerDeath, _bulletsContainer);
 
             _player = singlePlayerFactory.CreatePlayer(Vector3.Zero);
             _playerSimulation = objectToSimulationMap.Get(_player);

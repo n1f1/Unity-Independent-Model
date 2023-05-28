@@ -42,14 +42,34 @@ namespace Server.Simulation
                 _physicsSimulation.Update(time / 5f);
             }
 
+            UpdateClients(time);
+            _commandSender.Send(_room);
+            RemoveDeadPlayers();
+        }
+
+        private void UpdateClients(float time)
+        {
             foreach (GameClient gameClient in _gameClients)
             {
                 gameClient.Player.UpdateTime(time);
                 gameClient.ProcessReceivedCommands();
                 gameClient.SendOutgoingCommands(_room);
             }
-            
-            _commandSender.Send(_room);
+        }
+
+        private void RemoveDeadPlayers()
+        {
+            for (var i = 0; i < _gameClients.Count; i++)
+            {
+                GameClient gameClient = _gameClients[i];
+                
+                if (gameClient.Player.Health.Dead)
+                {
+                    _gameClients.Remove(gameClient);
+                    _room.Remove(gameClient.ServerClient);
+                    --i;
+                }
+            }
         }
     }
 }

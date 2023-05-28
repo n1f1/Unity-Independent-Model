@@ -12,15 +12,18 @@ namespace Server.Client
         private readonly ObjectReplicationPacketFactory _objectReplicationPacketFactory;
         private readonly ICommandHandler[] _commandHandlers;
 
-        public GameClient(Player player, ObjectReplicationPacketFactory objectReplicationPacketFactory)
+        public GameClient(Player player, ObjectReplicationPacketFactory objectReplicationPacketFactory,
+            ServerClient serverClient)
         {
             _objectReplicationPacketFactory = objectReplicationPacketFactory;
+            ServerClient = serverClient ?? throw new ArgumentNullException(nameof(serverClient));
             Player = player ?? throw new ArgumentNullException(nameof(player));
             MoveCommandHandler = new MoveCommandHandler(player);
             FireCommandHandler = new FireCommandHandler(player);
             _commandHandlers = new ICommandHandler[] {MoveCommandHandler, FireCommandHandler};
         }
 
+        public ServerClient ServerClient { get; }
         public ICommandHandler<MoveCommand> MoveCommandHandler { get; }
         public ICommandHandler<FireCommand> FireCommandHandler { get; }
         public Player Player { get; }

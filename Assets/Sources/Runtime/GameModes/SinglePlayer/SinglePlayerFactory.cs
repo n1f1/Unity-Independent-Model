@@ -7,7 +7,6 @@ using Model.SpatialObject;
 using Simulation;
 using Simulation.Characters.Player;
 using Simulation.Infrastructure;
-using Simulation.Shooting;
 using Object = UnityEngine.Object;
 using Transform = Model.SpatialObject.Transform;
 using Vector3 = System.Numerics.Vector3;

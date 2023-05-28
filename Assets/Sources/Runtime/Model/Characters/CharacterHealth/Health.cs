@@ -21,6 +21,7 @@ namespace Model.Characters.CharacterHealth
         }
 
         public float Amount { get; private set; }
+        public bool Dead => Amount == 0;
 
         public bool CanTakeDamage() =>
             Amount > 0;

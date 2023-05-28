@@ -17,7 +17,7 @@ namespace GameModes.MultiPlayer.PlayerCharacter.Remote.Construction
     {
         private readonly BulletsContainer _bulletsContainer;
         private readonly IBulletFactory<IBullet> _bulletFactory;
-        private IObjectToSimulationMap _objectToSimulationMap;
+        private readonly IObjectToSimulationMap _objectToSimulationMap;
 
         public RemoteShootingPlayerFactory(PooledBulletFactory bulletFactory, BulletsContainer bulletsContainer,
             IObjectToSimulationMap objectToSimulation)

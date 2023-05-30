@@ -1,7 +1,6 @@
 using System;
-using Model.Characters.CharacterHealth;
 
-namespace Server.Characters.ClientPlayer
+namespace Model.Characters.CharacterHealth
 {
     public class NullHealthView : IHealthView
     {

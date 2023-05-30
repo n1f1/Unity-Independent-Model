@@ -1,6 +1,6 @@
 ﻿using System.Numerics;
 
-namespace Model.Shooting
+namespace Model.Shooting.Trajectory
 {
     public interface ITrajectory
     {

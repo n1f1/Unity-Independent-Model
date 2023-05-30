@@ -1,4 +1,5 @@
 ﻿using System.Numerics;
+using Model.Shooting.Trajectory;
 
 namespace Model.Shooting
 {

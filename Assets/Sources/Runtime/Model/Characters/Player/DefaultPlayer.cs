@@ -3,7 +3,6 @@ using Model.Shooting;
 using Model.Shooting.Bullets;
 using Model.Shooting.Shooter;
 using Model.SpatialObject;
-using Server.Characters.ClientPlayer;
 using static Model.Characters.Player.Player;
 
 namespace Model.Characters.Player

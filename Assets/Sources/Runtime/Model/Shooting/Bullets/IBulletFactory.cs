@@ -1,4 +1,5 @@
 ﻿using Model.Shooting.Shooter;
+using Model.Shooting.Trajectory;
 
 namespace Model.Shooting.Bullets
 {

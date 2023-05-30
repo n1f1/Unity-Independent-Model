@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Numerics;
 
-namespace Model.Shooting
+namespace Model.Shooting.Trajectory
 {
     public class ForwardTrajectory : ITrajectory
     {
@@ -9,11 +9,12 @@ namespace Model.Shooting
         {
             Start = start;
             Finish = finish;
+            Distance = Vector3.Distance(Start, Finish);
         }
         
         public Vector3 Start { get; }
         public Vector3 Finish { get; }
-        public float Distance => Vector3.Distance(Start, Finish);
+        public float Distance { get; }
 
         public Vector3 EvaluateForNormalizedRatio(float ratio)
         {

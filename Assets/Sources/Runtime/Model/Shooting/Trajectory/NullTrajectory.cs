@@ -1,6 +1,6 @@
 using System.Numerics;
 
-namespace Model.Shooting.Bullets
+namespace Model.Shooting.Trajectory
 {
     public class NullTrajectory : ITrajectory
     {

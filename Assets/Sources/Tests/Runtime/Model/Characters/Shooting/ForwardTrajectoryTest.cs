@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Numerics;
 using Model.Shooting;
+using Model.Shooting.Trajectory;
 using NUnit.Framework;
 
 namespace Tests.Model.Characters.Shooting

@@ -12,5 +12,10 @@ namespace GameModes.MultiPlayer.PlayerCharacter.Client.Shooting
 
         public bool Collided { get; }
         public Transform Transform { get; }
+        
+        public void UpdateTime(float deltaTime)
+        {
+            
+        }
     }
 }

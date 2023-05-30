@@ -7,5 +7,6 @@
         void RegisterCollidable(IRigidbody rigidbody, object body);
         void AddCollision(IRigidbody rigidbody, ICollision collision);
         void Remove(object body);
+        void Remove(IRigidbody rigidBody);
     }
 }

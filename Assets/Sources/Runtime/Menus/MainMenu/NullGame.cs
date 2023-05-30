@@ -7,5 +7,10 @@ namespace Menus.MainMenu
         public void Load()
         {
         }
+
+        public void UpdateTime(float deltaTime)
+        {
+            
+        }
     }
 }

@@ -31,7 +31,7 @@ namespace GameModes.MultiPlayer.PlayerCharacter.Remote.Shooting
             if (_aheadServer > 0)
             {
                 _aheadServer += deltaTime;
-                deltaTime *= (1 + _aheadServer / NetworkConstants.RTT);
+                deltaTime *= (1 + _aheadServer / NetworkConstants.RTT * 2f);
 
                 if (_aheadServer < deltaTime)
                     deltaTime = _aheadServer;

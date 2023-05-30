@@ -1,5 +1,4 @@
 using System;
-using System.Numerics;
 using GameModes.MultiPlayer.PlayerCharacter.Common.Health;
 using Model.Characters.CharacterHealth;
 using Model.Characters.Player;
@@ -42,7 +41,7 @@ namespace Server.Characters.ClientPlayer
                 transform);
 
             Health health = new Health(Player.MAXHealth, Player.MAXHealth, new NullHealthView(),
-                new Death(new NullDeathView()));
+                new Death(new RemoveRigidbodyOnDeath(rigidbody, _physicsSimulation)));
 
             IDamageable damageable = new TakeDamageCommandSender(_commandHandler, health);
 

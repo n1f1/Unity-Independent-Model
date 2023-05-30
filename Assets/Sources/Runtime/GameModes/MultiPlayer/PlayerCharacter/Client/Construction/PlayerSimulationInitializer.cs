@@ -2,7 +2,7 @@
 using GameModes.MultiPlayer.PlayerCharacter.Client.Movement;
 using GameModes.MultiPlayer.PlayerCharacter.Client.Reconciliation;
 using GameModes.MultiPlayer.PlayerCharacter.Client.Shooting;
-using GameModes.MultiPlayer.PlayerCharacter.Common.Construction;
+using GameModes.MultiPlayer.PlayerCharacter.Common.Health;
 using GameModes.MultiPlayer.PlayerCharacter.Common.Movement;
 using GameModes.MultiPlayer.PlayerCharacter.Common.Shooting;
 using Model.Characters;
@@ -33,13 +33,13 @@ namespace GameModes.MultiPlayer.PlayerCharacter.Client.Construction
         }
 
         public void InitializeSimulation(Player player, IPlayerSimulation playerSimulation, SimulationObject simulation,
-            IPlayerView view)
+            IPlayerView view, FakeHealthView fakeHealthView)
         {
             IMovable movable = new ClientPlayerMovementCommandSender(player, _sender, _notReconciledCommands);
             FireCommandSender fireCommandSender = new FireCommandSender(player, _sender, _notReconciledFireCommands);
 
             DamageableFakeView damageableFakeView =
-                new DamageableFakeView(Player.MAXHealth, player.Health.Amount, view.HealthView);
+                new DamageableFakeView(Player.MAXHealth, player.Health.Amount, fakeHealthView);
             
             simulation.AddSimulation(playerSimulation.Damageable.Initialize(damageableFakeView));
             player.Shooter.Exclude(damageableFakeView);

@@ -25,7 +25,7 @@ namespace Model.Characters.Player
             IPlayerView playerView,
             DamageableShooter shooter)
         {
-            Health damageable = new Health(health, MAXHealth, new NullHealthView(), new Death(playerView.DeathView));
+            Health damageable = new Health(health, MAXHealth, playerView.HealthView, new Death(playerView.DeathView));
             Player player = new Player(transform, damageable, damageable, characterShooter, shooter);
 
             return player;

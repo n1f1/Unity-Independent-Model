@@ -42,5 +42,10 @@ namespace Simulation
             _simulations.Clear();
             _updatableList.Clear();
         }
+        
+        public void AddUpdatable(IUpdatable updatable)
+        {
+            _updatableList.Add(updatable);
+        }
     }
 }

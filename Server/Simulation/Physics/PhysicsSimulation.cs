@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Numerics;
 
 namespace Server.Simulation.Physics
@@ -7,6 +8,7 @@ namespace Server.Simulation.Physics
     {
         private readonly Dictionary<IRigidbody, object> _collidableBodies = new();
         private readonly Dictionary<object, IRigidbody> _objectToRigidbody = new();
+        private readonly Dictionary<IRigidbody, object> _rigidbodyToObject = new();
         private readonly List<RigidBody> _rigidbodies = new();
         private Dictionary<IRigidbody, ICollision> _collisions = new();
 
@@ -54,11 +56,17 @@ namespace Server.Simulation.Physics
         {
             _collidableBodies.Add(rigidbody, body);
             _objectToRigidbody.Add(body, rigidbody);
+            _rigidbodyToObject.Add(rigidbody, body);
         }
 
         public void AddCollision(IRigidbody rigidbody, ICollision collision)
         {
             _collisions.Add(rigidbody, collision);
+        }
+
+        public void Remove(IRigidbody rigidBody)
+        {
+            Remove(_rigidbodyToObject[rigidBody]);
         }
 
         public void Remove(object body)

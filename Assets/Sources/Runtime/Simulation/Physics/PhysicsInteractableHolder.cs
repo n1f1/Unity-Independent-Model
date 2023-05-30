@@ -1,5 +1,4 @@
 ﻿using System;
-using Model;
 using UnityEngine;
 
 namespace Simulation.Physics
@@ -13,6 +12,10 @@ namespace Simulation.Physics
             InteractableObject = enemyPlayerPrediction ?? throw new ArgumentException();
             
             return this;
+        }
+
+        public void UpdateTime(float deltaTime)
+        {
         }
     }
 }

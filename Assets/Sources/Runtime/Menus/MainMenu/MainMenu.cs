@@ -41,5 +41,10 @@ namespace Menus.MainMenu
         {
             Open();
         }
+
+        public void UpdateTime(float deltaTime)
+        {
+            
+        }
     }
 }

@@ -10,16 +10,16 @@ namespace Tests.Model.Characters.CharacterHealth
         [Test]
         public void CanNotInitializeInInvalidState()
         {
-            Health health = new Health(100, new NullHealthVew(), new Death(new NullDeathView()));
+            Health health = new Health(100, 100, new NullHealthVew(), new Death(new NullDeathView()));
             Assert.True(health.CanTakeDamage());
             Assert.Throws<ArgumentOutOfRangeException>(() =>
-                new Health(0f, new NullHealthVew(), new Death(new NullDeathView())));
+                new Health(0f, 0f, new NullHealthVew(), new Death(new NullDeathView())));
         }
 
         [Test]
         public void CanTakeOnlyValidDamage()
         {
-            Health health = new Health(100, new NullHealthVew(), new Death(new NullDeathView()));
+            Health health = new Health(100, 100, new NullHealthVew(), new Death(new NullDeathView()));
             health.TakeDamage(50);
             Assert.True(health.CanTakeDamage());
             health.TakeDamage(50);
@@ -32,7 +32,7 @@ namespace Tests.Model.Characters.CharacterHealth
         public void DiesInTime()
         {
             TestDeathStatus testDeathStatus = new TestDeathStatus();
-            Health health = new Health(100, new NullHealthVew(), testDeathStatus);
+            Health health = new Health(100, 100, new NullHealthVew(), testDeathStatus);
             health.TakeDamage(50);
             Assert.False(testDeathStatus.Dead);
             health.TakeDamage(50);

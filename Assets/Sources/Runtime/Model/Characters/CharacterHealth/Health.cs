@@ -8,13 +8,22 @@ namespace Model.Characters.CharacterHealth
         private readonly IDeath _death;
         private readonly float _maxHealth;
 
-        public Health(float maxHealth, IHealthView healthView, IDeath death)
+        public Health(float health, float maxHealth, IHealthView healthView, IDeath death)
         {
+            Console.WriteLine();
+            Console.WriteLine(health);
+            Console.WriteLine(maxHealth);
             if (maxHealth <= 0)
+                throw new ArgumentOutOfRangeException();
+            
+            if (health <= 0)
+                throw new ArgumentOutOfRangeException();
+
+            if (health > maxHealth)
                 throw new ArgumentOutOfRangeException();
 
             _maxHealth = maxHealth;
-            Amount = maxHealth;
+            Amount = health;
             _healthView = healthView ?? throw new ArgumentNullException();
             _death = death ?? throw new ArgumentNullException();
             _healthView.Display(1);

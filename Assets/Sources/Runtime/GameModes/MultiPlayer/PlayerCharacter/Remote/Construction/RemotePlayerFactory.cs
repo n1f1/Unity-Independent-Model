@@ -1,11 +1,8 @@
-﻿using System.Numerics;
-using GameModes.MultiPlayer.PlayerCharacter.Common.Construction;
-using GameModes.MultiPlayer.PlayerCharacter.Remote;
-using GameModes.MultiPlayer.PlayerCharacter.Remote.Construction;
+﻿using GameModes.MultiPlayer.PlayerCharacter.Common.Construction;
 using Model.Characters.Player;
 using Simulation;
 
-namespace GameModes.MultiPlayer
+namespace GameModes.MultiPlayer.PlayerCharacter.Remote.Construction
 {
     internal class RemotePlayerFactory : IPlayerFactory
     {
@@ -24,13 +21,13 @@ namespace GameModes.MultiPlayer
             _playerSimulationViewFactory = playerSimulationViewFactory;
         }
 
-        public Player CreatePlayer(Vector3 position)
+        public Player CreatePlayer(PlayerData playerData)
         {
             (IPlayerView, IRemotePlayerSimulation, SimulationObject) created = _playerSimulationViewFactory.Create();
             
             _viewInitializer.InitializeView(created.Item1);
 
-            Player player = _playerFactory.Create(position, created.Item1);
+            Player player = _playerFactory.Create(playerData, created.Item1);
 
             _simulationInitializer.InitializeSimulation(player, created.Item2, created.Item3, created.Item1);
             

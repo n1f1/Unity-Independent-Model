@@ -32,7 +32,7 @@ namespace Server.Client
 
         public void Connect(ServerClient serverClient)
         {
-            Player player = _playerFactory.CreatePlayer(new Vector3(1, 0, 1));
+            Player player = _playerFactory.CreatePlayer(new PlayerData(new Vector3(1, 0, 1), Player.MAXHealth));
 
             INetworkPacket playerPacket = _replicationPacketFactory.Create(player);
             INetworkPacket clientPlayerPacket = _replicationPacketFactory.Create(new ClientPlayer(player));

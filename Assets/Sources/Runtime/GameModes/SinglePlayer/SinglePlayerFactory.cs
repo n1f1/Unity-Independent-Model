@@ -9,7 +9,6 @@ using Simulation.Characters.Player;
 using Simulation.Infrastructure;
 using Object = UnityEngine.Object;
 using Transform = Model.SpatialObject.Transform;
-using Vector3 = System.Numerics.Vector3;
 
 namespace GameModes.SinglePlayer
 {
@@ -35,7 +34,7 @@ namespace GameModes.SinglePlayer
             _cameraView = cameraView ?? throw new ArgumentNullException(nameof(cameraView));
         }
 
-        public Player CreatePlayer(Vector3 position)
+        public Player CreatePlayer(PlayerData playerData)
         {
             SinglePlayerTemplate playerTemplate = Object.Instantiate(_playerTemplate);
             SimulationObject simulation = new SimulationObject(playerTemplate.gameObject);
@@ -45,10 +44,11 @@ namespace GameModes.SinglePlayer
             playerView.PositionView = new CompositePositionView(playerView.PositionView, _cameraView);
             playerView.DeathView = _deathView;
 
-            Player player = CreatePlayer(position, playerView);
+            Player player = CreatePlayer(playerData, playerView);
 
             simulation.AddUpdatableSimulation(playerSimulation.Movable.Initialize(player.CharacterMovement));
-            simulation.AddUpdatableSimulation(playerSimulation.CharacterShooter.Initialize(player.CharacterCharacterShooter));
+            simulation.AddUpdatableSimulation(
+                playerSimulation.CharacterShooter.Initialize(player.CharacterCharacterShooter));
             simulation.Enable();
 
             _objectToSimulationMapping.RegisterNew(player, simulation);
@@ -56,9 +56,9 @@ namespace GameModes.SinglePlayer
             return player;
         }
 
-        private Player CreatePlayer(Vector3 position, IPlayerView playerView)
+        private Player CreatePlayer(PlayerData playerData, IPlayerView playerView)
         {
-            Transform transform = new Transform(playerView.PositionView, position);
+            Transform transform = new Transform(playerView.PositionView, playerData.Position);
 
             DamageableShooter damageableShooter = new DamageableShooter();
 
@@ -66,7 +66,9 @@ namespace GameModes.SinglePlayer
                 DefaultPlayer.CreateCharacterShooter(playerView, transform, _bulletFactory, _bulletsContainer,
                     damageableShooter, Player.ShootingCooldown);
 
-            Player player = DefaultPlayer.Player(transform, characterShooter, playerView, damageableShooter);
+            Player player = DefaultPlayer.Player(playerData.Health, transform, characterShooter, playerView,
+                damageableShooter);
+            
             damageableShooter.Exclude(player.Damageable);
 
             return player;

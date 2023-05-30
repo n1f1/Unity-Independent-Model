@@ -26,12 +26,12 @@ namespace Server.Characters.ClientPlayer
             _bulletsContainer = bulletsContainer ?? throw new ArgumentNullException(nameof(bulletsContainer));
         }
 
-        public Player CreatePlayer(Vector3 position)
+        public Player CreatePlayer(PlayerData playerData)
         {
             IRigidbody rigidbody = _physicsSimulation.CreateCapsuleRigidbody(0.5f);
-            rigidbody.UpdatePosition(position);
+            rigidbody.UpdatePosition(playerData.Position);
             Cooldown cooldown = new Cooldown(Player.ShootingCooldown);
-            Transform transform = new Transform(new UpdateRigidbody(rigidbody), position);
+            Transform transform = new Transform(new UpdateRigidbody(rigidbody), playerData.Position);
 
             DamageableShooter damageableShooter = new DamageableShooter();
 
@@ -41,7 +41,9 @@ namespace Server.Characters.ClientPlayer
                     damageableShooter),
                 transform);
 
-            Health health = new Health(Player.MAXHealth, new NullHealthView(), new Death(new NullDeathView()));
+            Health health = new Health(Player.MAXHealth, Player.MAXHealth, new NullHealthView(),
+                new Death(new NullDeathView()));
+
             IDamageable damageable = new TakeDamageCommandSender(_commandHandler, health);
 
             Player player = new Player(transform, health, damageable, characterShooter, damageableShooter);

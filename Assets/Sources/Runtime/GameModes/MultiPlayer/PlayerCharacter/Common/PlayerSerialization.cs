@@ -26,7 +26,8 @@ namespace GameModes.MultiPlayer.PlayerCharacter.Common
             outputStream.Write(HashedObjects.RegisterOrGetRegistered(movement));
             short registerOrGetRegistered = HashedObjects.RegisterOrGetRegistered(player.Damageable);
             outputStream.Write(registerOrGetRegistered);
-            Console.WriteLine(registerOrGetRegistered);
+            outputStream.Write(player.Health.Amount);
+            Console.WriteLine(player.Health.Amount);
         }
 
         public Player Deserialize(IInputStream inputStream)
@@ -35,12 +36,12 @@ namespace GameModes.MultiPlayer.PlayerCharacter.Common
             Vector3 position = inputStream.ReadVector3();
             short movementInstanceID = inputStream.ReadInt16();
             short damageableInstanceID = inputStream.ReadInt16();
-            Player player = _playerFactory.CreatePlayer(position);
+            float health = inputStream.ReadSingle();
+            Player player = _playerFactory.CreatePlayer(new PlayerData(position, health));
 
             HashedObjects.RegisterWithID(player, playerInstanceId);
             HashedObjects.RegisterWithID(player.CharacterMovement, movementInstanceID);
             HashedObjects.RegisterWithID(player.Damageable, damageableInstanceID);
-            Console.Write($" id: {playerInstanceId} damageable: {damageableInstanceID}");
 
             return player;
         }

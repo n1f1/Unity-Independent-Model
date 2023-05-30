@@ -1,11 +1,9 @@
-﻿using System.Numerics;
-using GameModes.MultiPlayer.PlayerCharacter.Client.Construction;
-using GameModes.MultiPlayer.PlayerCharacter.Common.Construction;
+﻿using GameModes.MultiPlayer.PlayerCharacter.Common.Construction;
 using Model.Characters.Player;
 using Simulation;
 using Simulation.Characters.Player;
 
-namespace GameModes.MultiPlayer
+namespace GameModes.MultiPlayer.PlayerCharacter.Client.Construction
 {
     internal class ClientPlayerFactory : IPlayerFactory
     {
@@ -24,13 +22,13 @@ namespace GameModes.MultiPlayer
             _playerSimulationViewFactory = playerSimulationViewFactory;
         }
 
-        public Player CreatePlayer(Vector3 position)
+        public Player CreatePlayer(PlayerData playerData)
         {
             (IPlayerView, IPlayerSimulation, SimulationObject) created = _playerSimulationViewFactory.Create();
             
             _viewInitializer.InitializeView(created.Item1);
 
-            Player player = _playerFactory.Create(position, created.Item1);
+            Player player = _playerFactory.Create(playerData, created.Item1);
 
             _simulationInitializer.InitializeSimulation(player, created.Item2, created.Item3, created.Item1);
             

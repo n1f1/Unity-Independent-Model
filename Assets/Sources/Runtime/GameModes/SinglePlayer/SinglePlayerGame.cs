@@ -85,7 +85,7 @@ namespace GameModes.SinglePlayer
             SinglePlayerFactory singlePlayerFactory = new SinglePlayerFactory(_levelConfig.PlayerTemplate, cameraView,
                 bulletFactory, objectToSimulationMap, playerDeath, _bulletsContainer);
 
-            _player = singlePlayerFactory.CreatePlayer(Vector3.Zero);
+            _player = singlePlayerFactory.CreatePlayer(new PlayerData(Vector3.Zero, Player.MAXHealth));
             _playerSimulation = objectToSimulationMap.Get(_player);
         }
     }

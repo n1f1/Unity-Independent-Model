@@ -8,8 +8,11 @@ namespace Model.Characters.Enemy
 {
     public class Enemy : IUpdatable
     {
+        private const float MAXHealth = 100f;
+        private const int Cooldown = 1;
+        private const float Speed = 4f;
+
         private readonly IDeath _death;
-        private readonly Health _health;
         private readonly EnemyAttack _enemyAttack;
         private readonly FollowTarget _followTarget;
         private readonly Cooldown _cooldown;
@@ -22,16 +25,16 @@ namespace Model.Characters.Enemy
             Transform transform = new Transform(positionView, position);
             
             _death = new Death(new NullDeathView());
-            _health = new Health(100f, healthView, _death);
-            _cooldown = new Cooldown(1);
+            Health = new Health(MAXHealth, MAXHealth, healthView, _death);
+            _cooldown = new Cooldown(Cooldown);
 
             _enemyAttack = new EnemyAttack(player.Damageable, new CooldownAttack(_cooldown,
                 new DistanceAttack(player.Transform, transform, new DefaultAttack())));
 
-            _followTarget = new FollowTarget(player.Transform, transform, new CharacterMovement(transform, 4f));
+            _followTarget = new FollowTarget(player.Transform, transform, new CharacterMovement(transform, Speed));
         }
         
-        public Health Health => _health;
+        public Health Health { get; }
         public bool Dead => _death.Dead;
 
         public void UpdateTime(float deltaTime)

@@ -1,6 +1,5 @@
 using System;
 using GameModes.Game;
-using UI;
 using UI.Commands;
 
 namespace GameModes.SinglePlayer

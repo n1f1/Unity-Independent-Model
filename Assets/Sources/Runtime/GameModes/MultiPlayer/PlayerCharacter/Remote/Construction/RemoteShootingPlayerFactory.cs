@@ -27,13 +27,13 @@ namespace GameModes.MultiPlayer.PlayerCharacter.Remote.Construction
             _bulletFactory = bulletFactory ?? throw new ArgumentNullException(nameof(bulletFactory));
         }
 
-        public Player Create(Vector3 position, IPlayerView playerView)
+        public Player Create(PlayerData playerData, IPlayerView playerView)
         {
-            Transform playerTransform = new Transform(playerView.PositionView, position);
+            Transform playerTransform = new Transform(playerView.PositionView, playerData.Position);
 
             DisablePlayerSimulationDeath disablePlayerSimulationDeath =
                 new DisablePlayerSimulationDeath(_objectToSimulationMap);
-            
+
             playerView.DeathView = new CompositeDeath(playerView.DeathView, disablePlayerSimulationDeath);
 
             playerView.ForwardAimView = new NullAimView();
@@ -45,7 +45,9 @@ namespace GameModes.MultiPlayer.PlayerCharacter.Remote.Construction
                 DefaultPlayer.CreateCharacterShooter(playerView, playerTransform, bulletFactory, _bulletsContainer,
                     damageableShooter, 0f);
 
-            Player player = DefaultPlayer.Player(playerTransform, characterShooter, playerView, damageableShooter);
+            Player player = DefaultPlayer.Player(playerData.Health, playerTransform, characterShooter, playerView,
+                damageableShooter);
+            
             damageableShooter.Exclude(player.Damageable);
             disablePlayerSimulationDeath.SetPlayer(player);
 

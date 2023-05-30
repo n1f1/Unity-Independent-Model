@@ -22,10 +22,11 @@ namespace Model.Characters.Player
             return characterShooter;
         }
 
-        public static Player Player(Transform transform, CharacterShooter characterShooter, IPlayerView playerView,
+        public static Player Player(float health, Transform transform, CharacterShooter characterShooter,
+            IPlayerView playerView,
             DamageableShooter shooter)
         {
-            Health damageable = new Health(MAXHealth, new NullHealthView(), new Death(playerView.DeathView));
+            Health damageable = new Health(health, MAXHealth, new NullHealthView(), new Death(playerView.DeathView));
             Player player = new Player(transform, damageable, damageable, characterShooter, shooter);
 
             return player;

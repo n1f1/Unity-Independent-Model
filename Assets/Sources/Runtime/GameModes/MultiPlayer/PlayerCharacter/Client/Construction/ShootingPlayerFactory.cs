@@ -1,13 +1,10 @@
 ﻿using System;
-using System.Numerics;
 using GameModes.MultiPlayer.PlayerCharacter.Common.Construction;
 using GameModes.MultiPlayer.PlayerCharacter.Common.Health;
-using GameModes.MultiPlayer.PlayerCharacter.Common.Shooting;
 using Model.Characters.CharacterHealth;
 using Model.Characters.Player;
 using Model.Shooting;
 using Model.Shooting.Bullets;
-using Model.Shooting.Shooter;
 using Model.SpatialObject;
 using Simulation.Infrastructure;
 
@@ -27,22 +24,23 @@ namespace GameModes.MultiPlayer.PlayerCharacter.Client.Construction
             _objectToSimulationMap = objectToSimulation ?? throw new ArgumentNullException(nameof(objectToSimulation));
         }
 
-        public Player Create(Vector3 position, IPlayerView playerView)
+        public Player Create(PlayerData playerData, IPlayerView playerView)
         {
-            Transform playerTransform = new Transform(playerView.PositionView, position);
-            
+            Transform playerTransform = new Transform(playerView.PositionView, playerData.Position);
+
             DisablePlayerSimulationDeath disablePlayerSimulationDeath =
                 new DisablePlayerSimulationDeath(_objectToSimulationMap);
-            
+
             playerView.DeathView = new CompositeDeath(playerView.DeathView, disablePlayerSimulationDeath);
-            
+
             DamageableShooter damageableShooter = new DamageableShooter();
 
             CharacterShooter characterShooter =
                 DefaultPlayer.CreateCharacterShooter(playerView, playerTransform, _bulletFactory, _bulletsContainer,
                     damageableShooter, Player.ShootingCooldown);
 
-            Player player = DefaultPlayer.Player(playerTransform, characterShooter, playerView, damageableShooter);
+            Player player = DefaultPlayer.Player(playerData.Health, playerTransform, characterShooter, playerView,
+                damageableShooter);
             damageableShooter.Exclude(player.Damageable);
             disablePlayerSimulationDeath.SetPlayer(player);
 

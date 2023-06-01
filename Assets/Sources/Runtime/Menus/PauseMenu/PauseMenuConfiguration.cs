@@ -6,7 +6,7 @@ namespace Menus.PauseMenu
     public class PauseMenuConfiguration : ScriptableObject
     {
         [SerializeField] private PauseMenuScreen _pauseScreenTemplate;
-    
+
         public PauseMenuScreen PauseScreenTemplate => _pauseScreenTemplate;
     }
 }

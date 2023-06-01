@@ -1,4 +1,5 @@
-﻿using GameModes.MultiPlayer.PlayerCharacter.Common.Movement;
+﻿using System;
+using GameModes.MultiPlayer.PlayerCharacter.Common.Movement;
 using Model.Characters;
 using Vector3 = System.Numerics.Vector3;
 
@@ -8,6 +9,7 @@ namespace GameModes.MultiPlayer.PlayerCharacter.Remote.Movement
     {
         private readonly float _serverFixedDeltaTime;
         private readonly float _roundTripTime;
+
         private Vector3 _nextPosition;
         private MoveCommand _lastCommand;
         private float _timeSinceLastPacket;
@@ -43,8 +45,9 @@ namespace GameModes.MultiPlayer.PlayerCharacter.Remote.Movement
 
         private void Predict(CharacterMovement playerCharacterMovement)
         {
-            playerCharacterMovement.Move(Vector3.Lerp(_currentPosition, _nextPosition,
-                _timeSinceLastPacket / _serverFixedDeltaTime));
+            float passedFraction = _timeSinceLastPacket / _serverFixedDeltaTime;
+            Vector3 position = Vector3.Lerp(_currentPosition, _nextPosition, passedFraction);
+            playerCharacterMovement.Move(position);
         }
 
         private void Rollback(float deltaTime, CharacterMovement playerCharacterMovement)
@@ -57,7 +60,7 @@ namespace GameModes.MultiPlayer.PlayerCharacter.Remote.Movement
         {
             Vector3 direction = Vector3.Normalize(nextPosition - movement.Position);
 
-            if (Vector3.Distance(nextPosition, movement.Position) < movement.Speed * deltaTime)
+            if (Vector3.DistanceSquared(nextPosition, movement.Position) < Math.Pow(movement.Speed * deltaTime, 2))
                 movement.Move(nextPosition);
             else
                 movement.Move(direction, deltaTime);

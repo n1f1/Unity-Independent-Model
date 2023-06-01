@@ -12,8 +12,8 @@ namespace Model.Characters.Player
         public CharacterShooter(IAim aim, IWeapon weapon, Transform character)
         {
             Aim = aim ?? throw new ArgumentNullException(nameof(aim));
-            Weapon = weapon ?? throw new ArgumentNullException();
-            _character = character ?? throw new ArgumentNullException();
+            Weapon = weapon ?? throw new ArgumentNullException(nameof(weapon));
+            _character = character ?? throw new ArgumentNullException(nameof(character));
         }
 
         public IWeapon Weapon { get; }

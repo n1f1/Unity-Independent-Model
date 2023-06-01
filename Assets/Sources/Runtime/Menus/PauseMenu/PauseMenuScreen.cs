@@ -1,5 +1,4 @@
-﻿using UI;
-using UI.Buttons;
+﻿using UI.Buttons;
 using UI.Windows;
 using UnityEngine;
 
@@ -11,7 +10,7 @@ namespace Menus.PauseMenu
         [SerializeField] private CommandButton _resumeGame;
         [SerializeField] private CommandButton _mainMenu;
         [SerializeField] private FadeWindow _fadeWindow;
-        
+
         public CommandButton PauseButton => _pauseButton;
         public CommandButton ResumeGame => _resumeGame;
         public CommandButton MainMenu => _mainMenu;

@@ -6,7 +6,7 @@ namespace Menus.MainMenu
     public class MainMenuConfiguration : ScriptableObject
     {
         [SerializeField] private MainMenuScreen _mainMenuScreenTemplate;
-    
+
         public MainMenuScreen MainMenuScreenTemplate => _mainMenuScreenTemplate;
     }
 }

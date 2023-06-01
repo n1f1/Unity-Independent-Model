@@ -38,6 +38,7 @@ namespace GameModes.MultiPlayer
     {
         private readonly IGameLoader _gameLoader;
         private readonly UpdatableContainer _updatableContainer = new();
+        
         private LevelConfig _levelConfig;
         private GameStatus _gameStatus;
         private IObjectToSimulationMap _objectToSimulationMap;
@@ -98,7 +99,7 @@ namespace GameModes.MultiPlayer
         {
             IGenericInterfaceList receivers = _networking.Receivers;
 
-            receivers.Register(typeof(Player), new RemotePlayerReceiver(_objectToSimulationMap));
+            receivers.Register(typeof(Player), new RemotePlayerReceiver());
             receivers.Register(typeof(TakeDamageCommand), new TakeDamageCommandReceiver());
             receivers.Register(typeof(ClientPlayer),
                 new ClientPlayerReceiver(_objectToSimulationMap, _simulationClientPlayer));

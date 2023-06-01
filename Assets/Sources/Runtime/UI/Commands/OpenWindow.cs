@@ -12,7 +12,7 @@ namespace UI.Commands
             _mainMenu = mainMenu ?? throw new ArgumentNullException(nameof(mainMenu));
         }
 
-        public void Execute() => 
+        public void Execute() =>
             _mainMenu.Open();
     }
 }

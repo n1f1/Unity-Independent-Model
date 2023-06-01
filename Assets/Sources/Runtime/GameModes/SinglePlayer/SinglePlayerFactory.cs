@@ -16,19 +16,18 @@ namespace GameModes.SinglePlayer
     {
         private readonly IPositionView _cameraView;
         private readonly IBulletFactory<IBullet> _bulletFactory;
-        private readonly IObjectToSimulationMap _objectToSimulationMapping;
+        private readonly IObjectToSimulationMap _objectToSimulationMap;
         private readonly IDeathView _deathView;
         private readonly BulletsContainer _bulletsContainer;
         private readonly SinglePlayerTemplate _playerTemplate;
 
         public SinglePlayerFactory(SinglePlayerTemplate playerTemplate, IPositionView cameraView,
-            IBulletFactory<IBullet> pooledBulletFactory, IObjectToSimulationMap objectToSimulationMapping,
+            IBulletFactory<IBullet> pooledBulletFactory, IObjectToSimulationMap objectToSimulation,
             IDeathView deathView, BulletsContainer bulletsContainer)
         {
-            _playerTemplate = playerTemplate ?? throw new ArgumentNullException(nameof(playerTemplate));
+            _playerTemplate = playerTemplate ? playerTemplate : throw new ArgumentNullException(nameof(playerTemplate));
             _deathView = deathView ?? throw new ArgumentNullException(nameof(deathView));
-            _objectToSimulationMapping =
-                objectToSimulationMapping ?? throw new ArgumentNullException(nameof(objectToSimulationMapping));
+            _objectToSimulationMap = objectToSimulation ?? throw new ArgumentNullException(nameof(objectToSimulation));
             _bulletFactory = pooledBulletFactory ?? throw new ArgumentNullException(nameof(pooledBulletFactory));
             _bulletsContainer = bulletsContainer ?? throw new ArgumentNullException(nameof(bulletsContainer));
             _cameraView = cameraView ?? throw new ArgumentNullException(nameof(cameraView));
@@ -51,7 +50,7 @@ namespace GameModes.SinglePlayer
                 playerSimulation.CharacterShooter.Initialize(player.CharacterCharacterShooter));
             simulation.Enable();
 
-            _objectToSimulationMapping.RegisterNew(player, simulation);
+            _objectToSimulationMap.RegisterNew(player, simulation);
 
             return player;
         }
@@ -68,7 +67,7 @@ namespace GameModes.SinglePlayer
 
             Player player = DefaultPlayer.Player(playerData.Health, transform, characterShooter, playerView,
                 damageableShooter);
-            
+
             damageableShooter.Exclude(player.Damageable);
 
             return player;

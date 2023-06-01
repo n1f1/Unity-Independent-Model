@@ -6,7 +6,7 @@ namespace Server.Client
     internal class PlayerToClientMap
     {
         private readonly Dictionary<Player, GameClient> _clients = new();
-        
+
         public void Add(GameClient gameClient)
         {
             _clients.Add(gameClient.Player, gameClient);

@@ -8,10 +8,10 @@ namespace Model.Shooting
     {
         private readonly HashSet<IDamageable> _excludeDamageables = new();
 
-        public bool CanHit(IDamageable damageable) => 
+        public bool CanHit(IDamageable damageable) =>
             _excludeDamageables.Contains(damageable) == false;
 
-        public void Exclude(IDamageable playerDamageable) => 
+        public void Exclude(IDamageable playerDamageable) =>
             _excludeDamageables.Add(playerDamageable);
     }
 }

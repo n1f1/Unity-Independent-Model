@@ -21,7 +21,7 @@ namespace Simulation.Characters.Player
         public ISimulation<IMovable> Initialize(IMovable enemyPlayerPrediction)
         {
             _movable = enemyPlayerPrediction ?? throw new ArgumentNullException();
-            
+
             return this;
         }
 

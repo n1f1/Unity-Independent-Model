@@ -10,7 +10,7 @@ namespace Simulation.Physics
         public ISimulation<TSimulated> Initialize(TSimulated enemyPlayerPrediction)
         {
             InteractableObject = enemyPlayerPrediction ?? throw new ArgumentException();
-            
+
             return this;
         }
 

@@ -7,6 +7,7 @@ namespace GameModes.MultiPlayer.PlayerCharacter.Common.Health
     public class FakeHealthView : IHealthView, IUpdatable
     {
         private readonly IHealthView _healthView;
+        
         private float _targetValue;
         private float _timeToUpdateView;
         private float _realUpdateDelay = 0.2f;
@@ -23,10 +24,10 @@ namespace GameModes.MultiPlayer.PlayerCharacter.Common.Health
             if (_timeToUpdateView <= 0)
                 _healthView.Display(_targetValue);
         }
-        
+
         public void Display(float normalizedHealth)
         {
-            if(normalizedHealth == _targetValue)
+            if (normalizedHealth == _targetValue)
                 _healthView.Display(normalizedHealth);
             else
                 _timeToUpdateView = _realUpdateDelay;

@@ -8,24 +8,24 @@ namespace Model.Shooting.Trajectory.Bezier
         public static Vector3 GetOnBezier(in float t, in Vector3[] controlPoints)
         {
             int count = controlPoints.Length - 1;
-            
+
             if (count > 16)
                 throw new ArgumentOutOfRangeException(nameof(controlPoints.Length));
-            
-            if (t <= 0) 
+
+            if (t <= 0)
                 return controlPoints[0];
-            
+
             if (t >= 1)
                 return controlPoints[^1];
 
             Vector3 p = new Vector3();
 
-            for (int i = 0; i < controlPoints.Length; ++i) 
+            for (int i = 0; i < controlPoints.Length; ++i)
                 p += Bernstein(count, i, t) * controlPoints[i];
 
             return p;
         }
-        
+
         private static float Bernstein(in int n, in int i, in float t)
         {
             float t_i = (float) Math.Pow(t, i);
@@ -34,11 +34,12 @@ namespace Model.Shooting.Trajectory.Bezier
             float basis = Binomial(n, i) * t_i * t_n_minus_i;
             return basis;
         }
-        
-        private static float Binomial(in int n, in int i) => 
+
+        private static float Binomial(in int n, in int i) =>
             Factorial[n] / (Factorial[i] * Factorial[n - i]);
 
-        private static readonly float[] Factorial = {
+        private static readonly float[] Factorial =
+        {
             1.0f,
             1.0f,
             2.0f,

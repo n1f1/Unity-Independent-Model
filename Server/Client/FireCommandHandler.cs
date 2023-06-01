@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using GameModes.MultiPlayer.PlayerCharacter.Common.Shooting;
-using Model.Characters.Player;
 using Networking;
 using Networking.Common;
 using Networking.Common.Replication.ObjectCreationReplication;
@@ -11,13 +10,7 @@ namespace Server.Client
 {
     internal class FireCommandHandler : ICommandHandler<FireCommand>
     {
-        private readonly Player _player;
         private readonly List<FireCommand> _fireCommands = new();
-        
-        public FireCommandHandler(Player player)
-        {
-            _player = player ?? throw new ArgumentNullException(nameof(player));
-        }
 
         public bool Dirty { get; private set; }
 
@@ -33,7 +26,7 @@ namespace Server.Client
             {
                 fireCommand.Execute();
 
-                if (fireCommand.Succeeded) 
+                if (fireCommand.Succeeded)
                     fireCommand.Bullet.UpdateTime(NetworkConstants.ServerFixedDeltaTime / 2f);
             }
         }

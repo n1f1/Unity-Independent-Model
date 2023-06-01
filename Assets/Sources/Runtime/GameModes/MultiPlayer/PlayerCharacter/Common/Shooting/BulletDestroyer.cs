@@ -3,7 +3,7 @@ using GameModes.MultiPlayer.PlayerCharacter.Remote.Shooting;
 using Model.Shooting.Bullets;
 using Simulation.Shooting.Bullets;
 
-namespace GameModes.MultiPlayer
+namespace GameModes.MultiPlayer.PlayerCharacter.Common.Shooting
 {
     public class BulletDestroyer : IBulletDestroyer
     {

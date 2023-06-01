@@ -9,7 +9,7 @@ namespace UI.Windows
 
         private IWindow _window => (IWindow) _windowBehavior;
 
-        private void OnValidate() => 
+        private void OnValidate() =>
             InspectorInterfaceInjection.TrySetObject<IWindow>(ref _windowBehavior);
 
         public virtual void Open() =>

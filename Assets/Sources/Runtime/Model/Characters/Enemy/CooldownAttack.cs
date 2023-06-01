@@ -11,8 +11,8 @@ namespace Model.Characters.Enemy
 
         public CooldownAttack(Cooldown cooldown, IAttacker attacker)
         {
-            _attacker = attacker ?? throw new ArgumentNullException();
-            _cooldown = cooldown ?? throw new ArgumentNullException();
+            _attacker = attacker ?? throw new ArgumentNullException(nameof(attacker));
+            _cooldown = cooldown ?? throw new ArgumentNullException(nameof(cooldown));
         }
 
         public bool CanAttack(IDamageable damageable) =>

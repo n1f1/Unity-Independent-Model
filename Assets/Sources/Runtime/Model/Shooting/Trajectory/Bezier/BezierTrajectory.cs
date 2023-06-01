@@ -11,14 +11,14 @@ namespace Model.Shooting.Trajectory.Bezier
             Start = start;
             Finish = finish;
             Distance = distance;
-            _controlPoints = new[]{Start, curve, Finish};
+            _controlPoints = new[] {Start, curve, Finish};
         }
 
         public Vector3 Start { get; }
         public Vector3 Finish { get; }
         public float Distance { get; }
 
-        public Vector3 EvaluateForNormalizedRatio(float ratio) => 
+        public Vector3 EvaluateForNormalizedRatio(float ratio) =>
             BezierCurve.GetOnBezier(ratio, _controlPoints);
     }
 }

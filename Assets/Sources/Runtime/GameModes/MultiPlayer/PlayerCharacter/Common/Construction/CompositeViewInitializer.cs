@@ -13,7 +13,7 @@ namespace GameModes.MultiPlayer.PlayerCharacter.Common.Construction
 
         public void InitializeView(TView playerView)
         {
-            foreach (IViewInitializer<TView> initializer in _initializers) 
+            foreach (IViewInitializer<TView> initializer in _initializers)
                 initializer.InitializeView(playerView);
         }
     }

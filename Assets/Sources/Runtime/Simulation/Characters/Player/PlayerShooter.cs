@@ -7,13 +7,15 @@ namespace Simulation.Characters.Player
 {
     internal class PlayerShooter : MonoBehaviour, ISimulation<ICharacterShooter>
     {
+        private const string AimPlaneLayerName = "AimPlane";
+
         private LayerMask _layerMask;
         private ICharacterShooter _simulation;
         private Camera _camera;
         private RaycastHit[] _raycastHitBuffer;
 
         private void Awake() =>
-            _layerMask = LayerMask.GetMask("AimPlane");
+            _layerMask = LayerMask.GetMask(AimPlaneLayerName);
 
         public ISimulation<ICharacterShooter> Initialize(ICharacterShooter enemyPlayerPrediction)
         {
@@ -34,7 +36,7 @@ namespace Simulation.Characters.Player
         {
             Ray ray = _camera.ScreenPointToRay(UnityEngine.Input.mousePosition);
 
-            if (UnityEngine.Physics.RaycastNonAlloc(ray, _raycastHitBuffer, 999f, _layerMask) > 0)
+            if (UnityEngine.Physics.RaycastNonAlloc(ray, _raycastHitBuffer, 50, _layerMask) > 0)
                 _simulation.AimAt(_raycastHitBuffer[0].point.Convert());
             else
                 _simulation.Aim.Stop();
@@ -42,11 +44,11 @@ namespace Simulation.Characters.Player
 
         private void ProcessShooting()
         {
-            if (UnityEngine.Input.GetMouseButton(0))
-            {
-                if (_simulation.Weapon.CanShoot(_simulation.Aim))
-                    _simulation.Weapon.Shoot(_simulation.Aim);
-            }
+            if (!UnityEngine.Input.GetMouseButton(0))
+                return;
+
+            if (_simulation.Weapon.CanShoot(_simulation.Aim))
+                _simulation.Weapon.Shoot(_simulation.Aim);
         }
     }
 }

@@ -12,7 +12,7 @@ namespace Model.Characters.Enemy
 
         public void Add(Enemy enemy)
         {
-            _enemies.AddLast(enemy ?? throw new ArgumentNullException());
+            _enemies.AddLast(enemy ?? throw new ArgumentNullException(nameof(enemy)));
         }
 
         public void UpdateTime(float deltaTime)

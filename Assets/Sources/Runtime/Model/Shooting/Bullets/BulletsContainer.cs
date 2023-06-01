@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 
 namespace Model.Shooting.Bullets
@@ -9,7 +10,7 @@ namespace Model.Shooting.Bullets
 
         public BulletsContainer(IBulletDestroyer bulletDestroyer)
         {
-            _bulletDestroyer = bulletDestroyer;
+            _bulletDestroyer = bulletDestroyer ?? throw new ArgumentNullException(nameof(bulletDestroyer));
         }
 
         public void Add(IBullet bullet)

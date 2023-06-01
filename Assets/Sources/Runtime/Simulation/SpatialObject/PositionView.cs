@@ -6,7 +6,15 @@ namespace Simulation.SpatialObject
 {
     internal class PositionView : MonoBehaviour, IPositionView
     {
-        public void UpdatePosition(Vector3 position) => 
-            transform.position = new UnityEngine.Vector3(position.X, position.Y, position.Z);
+        private UnityEngine.Vector3 _transformPosition = UnityEngine.Vector3.zero;
+
+        public void UpdatePosition(Vector3 position)
+        {
+            _transformPosition.x = position.X;
+            _transformPosition.y = position.Y;
+            _transformPosition.z = position.Z;
+
+            transform.position = _transformPosition;
+        }
     }
 }

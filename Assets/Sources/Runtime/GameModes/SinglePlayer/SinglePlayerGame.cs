@@ -1,6 +1,7 @@
 using System;
 using GameModes.Game;
 using GameModes.MultiPlayer;
+using GameModes.MultiPlayer.PlayerCharacter.Common.Shooting;
 using GameModes.Status;
 using GameModes.Status.Pause;
 using Menus.PauseMenu;

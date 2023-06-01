@@ -7,6 +7,7 @@ namespace Model.Characters.Enemy
 {
     public class EnemySpawner
     {
+        private const int SpawnOffset = 30;
         private readonly EnemyContainer _enemyContainer;
         private readonly IEnemyFactory _enemyFactory;
         private readonly Transform _spawnCenter;
@@ -29,7 +30,7 @@ namespace Model.Characters.Enemy
         {
             Random random = new Random();
 
-            for (int i = 0; i < _enemyCount; i++) 
+            for (int i = 0; i < _enemyCount; i++)
                 CreateEnemy(random);
         }
 
@@ -42,7 +43,7 @@ namespace Model.Characters.Enemy
         private void DestroyDeadEnemies(IEnumerable<Enemy> dead)
         {
             Random random = new Random();
-            
+
             foreach (Enemy enemy in dead)
             {
                 _enemyFactory.Destroy(enemy);
@@ -57,14 +58,14 @@ namespace Model.Characters.Enemy
             _enemyContainer.Add(enemy);
         }
 
-        private float GetAxisPosition(Random random) => 
-            random.Next(-30, 30);
+        private float GetAxisPosition(Random random) =>
+            random.Next(-SpawnOffset, SpawnOffset);
 
         private int GetOutOfScreenAxisPosition(Random random)
         {
             int axis = random.Next(0, 2);
-            axis = Math.Sign(axis - 0.5f) * random.Next(30, 35);
-            
+            axis = Math.Sign(axis - 0.5f) * random.Next(SpawnOffset, SpawnOffset + 5);
+
             return axis;
         }
     }

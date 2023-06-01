@@ -14,9 +14,9 @@ namespace Model.Characters.Enemy
 
         public DistanceAttack(Transform followTarget, Transform transform, IAttacker attacker)
         {
-            _transform = transform ?? throw new ArgumentNullException();
-            _followTarget = followTarget ?? throw new ArgumentNullException();
-            _attacker = attacker ?? throw new ArgumentNullException();
+            _transform = transform ?? throw new ArgumentNullException(nameof(transform));
+            _followTarget = followTarget ?? throw new ArgumentNullException(nameof(followTarget));
+            _attacker = attacker ?? throw new ArgumentNullException(nameof(attacker));
         }
 
         public bool CanAttack(IDamageable damageable) =>

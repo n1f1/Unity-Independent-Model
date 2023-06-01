@@ -12,11 +12,13 @@ namespace GameModes.MultiPlayer.PlayerCharacter.Common.Shooting
         private readonly NotReconciledCommands<FireCommand> _notReconciledCommands;
         private readonly ClientPlayerSimulation _simulationClientPlayer;
 
-        public FireCommandReceiver(NotReconciledCommands<FireCommand> notReconciledCommands, ClientPlayerSimulation simulationClientPlayer)
+        public FireCommandReceiver(NotReconciledCommands<FireCommand> notReconciledCommands,
+            ClientPlayerSimulation simulationClientPlayer)
         {
             _notReconciledCommands =
                 notReconciledCommands ?? throw new ArgumentNullException(nameof(notReconciledCommands));
-            _simulationClientPlayer = simulationClientPlayer ?? throw new ArgumentNullException(nameof(simulationClientPlayer));
+            _simulationClientPlayer =
+                simulationClientPlayer ?? throw new ArgumentNullException(nameof(simulationClientPlayer));
         }
 
         public void Receive(FireCommand createdObject)

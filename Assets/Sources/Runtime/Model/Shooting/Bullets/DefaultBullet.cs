@@ -19,23 +19,23 @@ namespace Model.Shooting.Bullets
         public DefaultBullet(Transform transform, ITrajectory trajectory, IShooter shooter, float speed = 0,
             int damage = 0)
         {
-            Transform = transform ?? throw new ArgumentNullException();
+            Transform = transform ?? throw new ArgumentNullException(nameof(transform));
             Reset(trajectory, speed, damage, shooter);
         }
-        
+
         public bool Collided { get; private set; }
         public Transform Transform { get; }
 
         public void Reset(ITrajectory trajectory, float speed, int damage, IShooter shooter)
         {
-            _trajectory = trajectory ?? throw new ArgumentNullException();
+            _trajectory = trajectory ?? throw new ArgumentNullException(nameof(trajectory));
             _shooter = shooter ?? throw new ArgumentNullException(nameof(shooter));
 
-            if (_speed < 0)
-                throw new ArgumentOutOfRangeException();
+            if (speed < 0)
+                throw new ArgumentOutOfRangeException(nameof(speed));
 
             if (damage < 0)
-                throw new ArgumentException();
+                throw new ArgumentOutOfRangeException(nameof(damage));
 
             _speed = speed;
             _damage = damage;
@@ -56,9 +56,9 @@ namespace Model.Shooting.Bullets
         {
             bool canHit = _shooter.CanHit(damageable);
 
-            if(canHit == false)
+            if (canHit == false)
                 return;
-            
+
             if (damageable.CanTakeDamage())
                 damageable.TakeDamage(_damage);
 
@@ -77,7 +77,7 @@ namespace Model.Shooting.Bullets
         private float GetNormalizedPassedDistance(float passedTime) =>
             Math.Clamp(passedTime * _speed / _distance, 0, 1);
 
-        private void UpdatePosition(float ratio) => 
+        private void UpdatePosition(float ratio) =>
             Transform.SetPosition(_trajectory.EvaluateForNormalizedRatio(ratio));
     }
 }

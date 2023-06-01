@@ -38,10 +38,8 @@ namespace Simulation.Shooting.Bullets
             return defaultBullet;
         }
 
-        public void Destroy(DefaultBullet bullet)
-        {
+        public void Destroy(DefaultBullet bullet) => 
             _objectPool.ReturnInactive(bullet);
-        }
 
         private DefaultBullet GetFromPool() =>
             _objectPool.GetFreeByKey();

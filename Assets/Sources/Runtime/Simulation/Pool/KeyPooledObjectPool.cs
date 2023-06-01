@@ -41,10 +41,10 @@ namespace Simulation.Pool
         {
             if (_keysOfInactiveInPool.ContainsKey(key))
                 throw new InvalidOperationException();
-            
+
             if (_keyToActiveInPool.ContainsKey(key))
                 throw new InvalidOperationException();
-            
+
             _keysOfInactiveInPool.Add(key, poolable);
             poolable.Disable();
         }
@@ -62,7 +62,7 @@ namespace Simulation.Pool
             TPooled pooled = _keyToActiveInPool[key];
             pooled.Disable();
             _keyToActiveInPool.Remove(key);
-            
+
             return pooled;
         }
     }

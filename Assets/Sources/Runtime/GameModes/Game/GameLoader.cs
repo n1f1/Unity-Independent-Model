@@ -20,12 +20,12 @@ namespace GameModes.Game
         {
             if (game == null)
                 throw new ArgumentNullException(nameof(game));
-            
+
             _gameUpdate.Remove(_game);
             _game = game;
 
             _sceneLoadingOperation = SceneManager.LoadSceneAsync(1);
-            
+
             while (!_sceneLoadingOperation.isDone)
                 await Task.Yield();
 

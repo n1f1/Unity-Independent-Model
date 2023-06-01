@@ -31,8 +31,10 @@ namespace GameModes.MultiPlayer.PlayerCharacter.Remote.Movement
         private void AddIfNew(CharacterMovement newCharacterMovement)
         {
             if (_predictions.ContainsKey(newCharacterMovement) == false)
-                _predictions.Add(newCharacterMovement,
-                    new MovementCommandPrediction(_roundTripTime, _serverFixedDeltaTime));
+            {
+                var commandPrediction = new MovementCommandPrediction(_roundTripTime, _serverFixedDeltaTime);
+                _predictions.Add(newCharacterMovement, commandPrediction);
+            }
         }
     }
 }

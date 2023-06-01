@@ -4,7 +4,7 @@ using Networking.Common.PacketReceive;
 
 namespace Server.Client
 {
-    internal class GameClientMoveCommandReceiver: IReplicatedObjectReceiver<MoveCommand>
+    internal class GameClientMoveCommandReceiver : IReplicatedObjectReceiver<MoveCommand>
     {
         private readonly PlayerToClientMap _playerToClientMap;
 

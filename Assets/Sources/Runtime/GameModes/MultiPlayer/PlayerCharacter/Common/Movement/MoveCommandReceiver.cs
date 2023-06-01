@@ -13,16 +13,14 @@ namespace GameModes.MultiPlayer.PlayerCharacter.Common.Movement
     {
         private readonly NotReconciledCommands<MoveCommand> _notReconciledCommands;
         private readonly ClientPlayerSimulation _simulationClientPlayer;
-        private readonly IMovementCommandPrediction _movementCommandPrediction;
+        private readonly IMovementCommandPrediction _movementPrediction;
 
         public MoveCommandReceiver(NotReconciledCommands<MoveCommand> reconciled,
-            ClientPlayerSimulation simulationClientPlayer, IMovementCommandPrediction movementCommandPrediction)
+            ClientPlayerSimulation simulation, IMovementCommandPrediction movementPrediction)
         {
-            _movementCommandPrediction = movementCommandPrediction ??
-                                       throw new ArgumentNullException(nameof(movementCommandPrediction));
-            _simulationClientPlayer = simulationClientPlayer ?? throw new ArgumentNullException(nameof(simulationClientPlayer));
-            _notReconciledCommands =
-                reconciled ?? throw new ArgumentNullException(nameof(reconciled));
+            _movementPrediction = movementPrediction ?? throw new ArgumentNullException(nameof(movementPrediction));
+            _simulationClientPlayer = simulation ?? throw new ArgumentNullException(nameof(simulation));
+            _notReconciledCommands = reconciled ?? throw new ArgumentNullException(nameof(reconciled));
         }
 
         public void Receive(MoveCommand newCommand)
@@ -35,17 +33,17 @@ namespace GameModes.MultiPlayer.PlayerCharacter.Common.Movement
 
         private void ProcessRemotePlayerCommand(MoveCommand newCommand)
         {
-            _movementCommandPrediction.PredictNextPacket(newCommand);
+            _movementPrediction.PredictNextPacket(newCommand);
         }
 
         private void ProcessClientPlayerCommand(MoveCommand newCommand)
         {
             _notReconciledCommands.ReconcileAllBefore(newCommand);
             IEnumerable<MoveCommand> notReconciled = _notReconciledCommands.GetNotReconciled();
-            
+
             newCommand.Execute();
-            
-            foreach (MoveCommand moveCommand in notReconciled) 
+
+            foreach (MoveCommand moveCommand in notReconciled)
                 moveCommand.Execute();
         }
     }

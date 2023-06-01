@@ -11,7 +11,7 @@ namespace Model.Shooting.Trajectory
             Finish = finish;
             Distance = Vector3.Distance(Start, Finish);
         }
-        
+
         public Vector3 Start { get; }
         public Vector3 Finish { get; }
         public float Distance { get; }

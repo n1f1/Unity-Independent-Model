@@ -13,16 +13,16 @@ namespace Simulation.Characters.EnemyCharacter
         public IEnemyView EnemyView => (IEnemyView) _enemyViewBehavior;
         public IEnemySimulation EnemySimulation => (IEnemySimulation) _enemySimulationBehaviour;
 
-        protected virtual void OnValidate()
+        private void OnValidate()
         {
             InspectorInterfaceInjection.TrySetObject<IEnemyView>(ref _enemyViewBehavior);
             InspectorInterfaceInjection.TrySetObject<IEnemySimulation>(ref _enemySimulationBehaviour);
         }
 
-        public void Enable() => 
+        public void Enable() =>
             gameObject.SetActive(true);
 
-        public void Disable() => 
+        public void Disable() =>
             gameObject.SetActive(false);
     }
 }

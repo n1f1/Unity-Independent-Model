@@ -22,18 +22,14 @@ namespace Server.Characters.Shooting
         public IBullet CreateBullet(ITrajectory trajectory, float speed, int damage, IShooter shooter)
         {
             IRigidbody rigidbody = _physicsSimulation.CreateCapsuleRigidbody(0.3f);
-            
+
             IBullet bullet = new DefaultBullet(new Transform(new UpdateRigidbody(rigidbody)), trajectory,
                 shooter, speed, damage);
-            
+
             _physicsSimulation.RegisterCollidable(rigidbody, bullet);
             _physicsSimulation.AddCollision(rigidbody, new ServerBulletCollision(bullet));
-            
-            return bullet;
-        }
 
-        public void Destroy(IBullet bullet)
-        {
+            return bullet;
         }
     }
 }

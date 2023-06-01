@@ -1,5 +1,4 @@
-﻿using GameModes.MultiPlayer.PlayerCharacter.Common.Health;
-using Simulation.Pool;
+﻿using Simulation.Pool;
 using UnityEngine;
 
 namespace Simulation
@@ -8,7 +7,6 @@ namespace Simulation
     {
         public SimulationObject(GameObject template) : base(template)
         {
-            
         }
 
         public void Enable()

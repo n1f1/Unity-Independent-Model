@@ -13,6 +13,7 @@ namespace Server.Client
     {
         private readonly Player _player;
         private readonly Queue<MoveCommand> _moveCommands = new();
+        
         private Vector3 _acceleration;
         private float _deltaTime;
         private short _id;

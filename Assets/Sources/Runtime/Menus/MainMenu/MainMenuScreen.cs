@@ -1,5 +1,4 @@
-﻿using UI;
-using UI.Buttons;
+﻿using UI.Buttons;
 using UI.Windows;
 using UnityEngine;
 

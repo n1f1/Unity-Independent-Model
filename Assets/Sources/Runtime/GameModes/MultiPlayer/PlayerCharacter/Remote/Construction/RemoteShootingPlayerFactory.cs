@@ -47,7 +47,7 @@ namespace GameModes.MultiPlayer.PlayerCharacter.Remote.Construction
 
             Player player = DefaultPlayer.Player(playerData.Health, playerTransform, characterShooter, playerView,
                 damageableShooter);
-            
+
             damageableShooter.Exclude(player.Damageable);
             disablePlayerSimulationDeath.SetPlayer(player);
 

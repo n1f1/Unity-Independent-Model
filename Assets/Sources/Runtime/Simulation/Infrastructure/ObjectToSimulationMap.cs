@@ -11,7 +11,7 @@ namespace Simulation.Infrastructure
         {
             _objectToSimulation.Add(simulated, simulationObject);
         }
-        
+
         public SimulationObject Unregister<TSimulated>(TSimulated simulated)
         {
             SimulationObject simulation = Get(simulated);
@@ -24,7 +24,7 @@ namespace Simulation.Infrastructure
         {
             if (_objectToSimulation.ContainsKey(simulated) == false)
                 throw new InvalidOperationException();
-            
+
             SimulationObject simulation = (SimulationObject) _objectToSimulation[simulated];
 
             return simulation;

@@ -13,9 +13,9 @@ namespace Model.Characters.Enemy
 
         public FollowTarget(Transform target, Transform transform, CharacterMovement characterMovement)
         {
-            _transform = transform ?? throw new ArgumentNullException();
-            _characterMovement = characterMovement ?? throw new ArgumentNullException();
-            _target = target ?? throw new ArgumentNullException();
+            _transform = transform ?? throw new ArgumentNullException(nameof(transform));
+            _characterMovement = characterMovement ?? throw new ArgumentNullException(nameof(characterMovement));
+            _target = target ?? throw new ArgumentNullException(nameof(target));
         }
 
         public void Follow(float deltaTime)
@@ -41,6 +41,7 @@ namespace Model.Characters.Enemy
         {
             Vector3 stopOffset = -_stoppingDistance * Vector3.Normalize(_target.Position - _transform.Position);
             Vector3 direction = _target.Position + stopOffset - _transform.Position;
+
             return direction;
         }
     }

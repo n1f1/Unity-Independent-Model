@@ -7,12 +7,10 @@ namespace Server.Characters.Shooting
     {
         public void Aim(Vector3 position, Vector3 aimPosition)
         {
-            
         }
 
         public void Stop()
         {
-            
         }
     }
 }

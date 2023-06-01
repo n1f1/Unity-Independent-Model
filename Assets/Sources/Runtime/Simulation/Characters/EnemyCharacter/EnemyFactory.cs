@@ -10,8 +10,7 @@ namespace Simulation.Characters.EnemyCharacter
     {
         private readonly Model.Characters.Player.Player _player;
         private readonly EnemyTemplate _enemyTemplate;
-        private readonly KeyPooledObjectPool<Enemy, PoolableSimulationObject<EnemyTemplate>>
-            _objectPool = new();
+        private readonly KeyPooledObjectPool<Enemy, PoolableSimulationObject<EnemyTemplate>> _objectPool = new();
 
         private PoolableSimulationObject<EnemyTemplate> _freeSimulationToReuse;
 

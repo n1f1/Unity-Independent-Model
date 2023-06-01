@@ -12,8 +12,6 @@ namespace Model.Characters.Player
         public const float ShootingCooldown = 0.1f;
         public const float CharacterSpeed = 5f;
 
-        private readonly CharacterShooter _characterShooter;
-
         public Player(Transform transform, Health health, IDamageable damageable, CharacterShooter characterShooter,
             DamageableShooter shooter)
         {
@@ -21,21 +19,20 @@ namespace Model.Characters.Player
             Shooter = shooter ?? throw new ArgumentNullException(nameof(shooter));
             Damageable = damageable ?? throw new ArgumentNullException(nameof(damageable));
             Transform = transform ?? throw new ArgumentNullException(nameof(transform));
-            _characterShooter = characterShooter ?? throw new ArgumentNullException(nameof(characterShooter));
+            CharacterCharacterShooter = characterShooter ?? throw new ArgumentNullException(nameof(characterShooter));
             CharacterMovement = new CharacterMovement(transform, CharacterSpeed);
         }
-        
+
         public DamageableShooter Shooter { get; }
         public Health Health { get; }
         public CharacterMovement CharacterMovement { get; }
         public IDamageable Damageable { get; }
         public Transform Transform { get; }
-
-        public CharacterShooter CharacterCharacterShooter => _characterShooter;
+        public CharacterShooter CharacterCharacterShooter { get; }
 
         public void UpdateTime(float deltaTime)
         {
-            _characterShooter.UpdateTime(deltaTime);
+            CharacterCharacterShooter.UpdateTime(deltaTime);
         }
     }
 }

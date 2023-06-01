@@ -7,33 +7,27 @@ namespace Model.Characters
     public class CharacterMovement : IMovable
     {
         private readonly Transform _transform;
-        private readonly float _speed;
 
         public CharacterMovement(Transform transform, float speed)
         {
-            _transform = transform ?? throw new ArgumentNullException();
+            _transform = transform ?? throw new ArgumentNullException(nameof(transform));
 
-            if (Speed < 0)
-                throw new ArgumentOutOfRangeException();
+            if (speed < 0)
+                throw new ArgumentOutOfRangeException(nameof(speed));
 
-            _speed = speed;
+            Speed = speed;
         }
 
         public Vector3 Position => _transform.Position;
-
-        public float Speed => _speed;
+        public float Speed { get; }
 
         public void Move(Vector3 direction, float deltaTime) =>
             _transform.SetPosition(_transform.Position + direction * deltaTime * Speed);
 
-        public void Move(Vector3 position)
-        {
+        public void Move(Vector3 position) =>
             _transform.SetPosition(position);
-        }
 
-        public Vector3 GetPosition(Vector3 direction, float time)
-        {
-            return _transform.Position + direction * time * Speed;
-        }
+        public Vector3 GetPosition(Vector3 direction, float time) =>
+            _transform.Position + direction * time * Speed;
     }
 }

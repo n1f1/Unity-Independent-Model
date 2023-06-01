@@ -9,9 +9,10 @@ namespace Simulation.Physics
     {
         protected IPhysicsInteraction<TInteractionType> PhysicsInteraction;
 
-        public ISimulation<IPhysicsInteraction<TInteractionType>> Initialize(IPhysicsInteraction<TInteractionType> enemyPlayerPrediction)
+        public ISimulation<IPhysicsInteraction<TInteractionType>> Initialize(
+            IPhysicsInteraction<TInteractionType> physicsInteraction)
         {
-            PhysicsInteraction = enemyPlayerPrediction ?? throw new ArgumentException();
+            PhysicsInteraction = physicsInteraction ?? throw new ArgumentException();
 
             return this;
         }

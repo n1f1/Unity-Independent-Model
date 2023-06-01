@@ -26,11 +26,9 @@ namespace Server.Simulation.CommandSend
             while (_commands.Count > 0)
             {
                 TCommand replicatingObject = _commands.Pop();
-                Console.WriteLine(replicatingObject);
-                Console.WriteLine(replicatingObject.GetType());
                 INetworkPacket packet = _replicationPacketFactory.Create(replicatingObject);
 
-                foreach (ServerClient client in room.Clients) 
+                foreach (ServerClient client in room.Clients)
                     client.Sender.SendPacket(packet);
             }
         }

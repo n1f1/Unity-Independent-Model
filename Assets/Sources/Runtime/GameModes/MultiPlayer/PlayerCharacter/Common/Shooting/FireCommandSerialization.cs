@@ -7,7 +7,8 @@ using Networking.Common.Utilities;
 
 namespace GameModes.MultiPlayer.PlayerCharacter.Common.Shooting
 {
-    public class FireCommandSerialization : DefaultSerialization, ISerialization<FireCommand>, IDeserialization<FireCommand>
+    public class FireCommandSerialization : DefaultSerialization, ISerialization<FireCommand>,
+        IDeserialization<FireCommand>
     {
         public FireCommandSerialization(IHashedObjectsList hashedObjects) : base(
             hashedObjects)

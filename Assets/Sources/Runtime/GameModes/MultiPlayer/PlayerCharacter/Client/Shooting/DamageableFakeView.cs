@@ -2,7 +2,7 @@
 using GameModes.MultiPlayer.PlayerCharacter.Common.Health;
 using Model.Characters.CharacterHealth;
 
-namespace GameModes.MultiPlayer.PlayerCharacter.Client.Construction
+namespace GameModes.MultiPlayer.PlayerCharacter.Client.Shooting
 {
     internal class DamageableFakeView : IDamageable
     {

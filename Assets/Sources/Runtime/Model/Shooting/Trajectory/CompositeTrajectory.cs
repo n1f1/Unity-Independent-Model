@@ -27,7 +27,7 @@ namespace Model.Shooting.Trajectory
             foreach (ITrajectory trajectory in _trajectories)
             {
                 float trajectoryDistance = trajectory.Distance;
-                
+
                 if (distance <= trajectoryDistance)
                     return trajectory.EvaluateForNormalizedRatio(distance / trajectoryDistance);
 

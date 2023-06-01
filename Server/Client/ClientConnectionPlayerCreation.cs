@@ -18,6 +18,7 @@ namespace Server.Client
         private readonly GameSimulation _game;
         private readonly PlayerToClientMap _playerToClientMap;
         private readonly ServerPlayerFactory _playerFactory;
+        private readonly PlayerData _defaultPlayerData = new PlayerData(new Vector3(1, 0, 1), Player.MAXHealth);
 
         public ClientConnectionPlayerCreation(ObjectReplicationPacketFactory replicationPacketFactory, Room room,
             GameSimulation game, PlayerToClientMap playerToClientMap, ServerPlayerFactory serverPlayerFactory)
@@ -32,8 +33,7 @@ namespace Server.Client
 
         public void Connect(ServerClient serverClient)
         {
-            Player player = _playerFactory.CreatePlayer(new PlayerData(new Vector3(1, 0, 1), Player.MAXHealth));
-
+            Player player = _playerFactory.CreatePlayer(_defaultPlayerData);
             INetworkPacket playerPacket = _replicationPacketFactory.Create(player);
             INetworkPacket clientPlayerPacket = _replicationPacketFactory.Create(new ClientPlayer(player));
 

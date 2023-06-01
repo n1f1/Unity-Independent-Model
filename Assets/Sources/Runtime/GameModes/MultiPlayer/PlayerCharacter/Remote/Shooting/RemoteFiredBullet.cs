@@ -8,7 +8,10 @@ namespace GameModes.MultiPlayer.PlayerCharacter.Remote.Shooting
 {
     internal class RemoteFiredBullet : IBullet
     {
+        private const float CatchUpSpeed = 2f;
+
         private readonly IBullet _bullet;
+
         private float _realTime;
         private float _aheadServer = NetworkConstants.RTT;
 
@@ -31,7 +34,7 @@ namespace GameModes.MultiPlayer.PlayerCharacter.Remote.Shooting
             if (_aheadServer > 0)
             {
                 _aheadServer += deltaTime;
-                deltaTime *= (1 + _aheadServer / NetworkConstants.RTT * 2f);
+                deltaTime *= 1 + _aheadServer / NetworkConstants.RTT * CatchUpSpeed;
 
                 if (_aheadServer < deltaTime)
                     deltaTime = _aheadServer;

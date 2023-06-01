@@ -4,7 +4,7 @@ using Networking.Common.PacketReceive;
 
 namespace Server.Client
 {
-    internal class GameClientFireCommandReceiver: IReplicatedObjectReceiver<FireCommand>
+    internal class GameClientFireCommandReceiver : IReplicatedObjectReceiver<FireCommand>
     {
         private readonly PlayerToClientMap _playerToClientMap;
 

@@ -14,10 +14,10 @@ namespace GameModes.MultiPlayer.PlayerCharacter.Client
             _playerSerialization = playerSerialization ?? throw new ArgumentNullException(nameof(playerSerialization));
         }
 
-        public void Serialize(ClientPlayer inObject, IOutputStream outputStream) => 
+        public void Serialize(ClientPlayer inObject, IOutputStream outputStream) =>
             _playerSerialization.Serialize(inObject.Player, outputStream);
 
-        public ClientPlayer Deserialize(IInputStream inputStream) => 
+        public ClientPlayer Deserialize(IInputStream inputStream) =>
             new(_playerSerialization.Deserialize(inputStream));
     }
 }

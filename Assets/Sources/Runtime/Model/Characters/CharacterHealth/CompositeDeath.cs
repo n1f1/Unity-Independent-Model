@@ -13,7 +13,7 @@ namespace Model.Characters.CharacterHealth
 
         public void Die()
         {
-            foreach (IDeathView deathView in _deathViews) 
+            foreach (IDeathView deathView in _deathViews)
                 deathView.Die();
         }
     }

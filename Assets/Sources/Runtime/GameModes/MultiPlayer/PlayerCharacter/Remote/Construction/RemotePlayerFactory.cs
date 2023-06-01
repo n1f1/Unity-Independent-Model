@@ -33,7 +33,7 @@ namespace GameModes.MultiPlayer.PlayerCharacter.Remote.Construction
 
             Player player = _playerFactory.Create(playerData, created.Item1);
 
-            _simulationInitializer.InitializeSimulation(player, created.Item2, created.Item3, created.Item1,
+            _simulationInitializer.InitializeSimulation(player, created.Item2, created.Item3,
                 fakeHealthView);
             created.Item3.AddUpdatable(fakeHealthView);
 

@@ -2,7 +2,8 @@
 
 namespace GameModes.MultiPlayer.Connection
 {
-    [CreateAssetMenu(menuName = "Create ServerConnectionViewConfiguration", fileName = "ServerConnectionViewConfiguration", order = 0)]
+    [CreateAssetMenu(menuName = "Create ServerConnectionViewConfiguration",
+        fileName = "ServerConnectionViewConfiguration", order = 0)]
     public class ServerConnectionViewConfiguration : ScriptableObject
     {
         [SerializeField] private ServerConnectionWindow _connectionWindow;

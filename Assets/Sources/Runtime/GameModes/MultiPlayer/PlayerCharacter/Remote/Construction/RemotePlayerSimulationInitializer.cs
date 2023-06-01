@@ -1,5 +1,6 @@
 ﻿using System;
 using GameModes.MultiPlayer.PlayerCharacter.Client.Construction;
+using GameModes.MultiPlayer.PlayerCharacter.Client.Shooting;
 using GameModes.MultiPlayer.PlayerCharacter.Common.Health;
 using GameModes.MultiPlayer.PlayerCharacter.Remote.Movement;
 using Model.Characters.Player;
@@ -26,14 +27,13 @@ namespace GameModes.MultiPlayer.PlayerCharacter.Remote.Construction
         }
 
         public void InitializeSimulation(Player player, IRemotePlayerSimulation playerSimulation,
-            SimulationObject simulation, IPlayerView view, FakeHealthView fakeHealthView)
+            SimulationObject simulation, FakeHealthView fakeHealthView)
         {
-            var prediction =
-                new RemotePlayerMovementPrediction(_movementCommandPrediction, player.CharacterMovement);
+            var prediction = new RemotePlayerMovementPrediction(_movementCommandPrediction, player.CharacterMovement);
 
             DamageableFakeView damageableFakeView =
                 new DamageableFakeView(Player.MAXHealth, player.Health.Amount, fakeHealthView);
-            
+
             simulation.AddSimulation(playerSimulation.Damageable.Initialize(damageableFakeView));
             player.Shooter.Exclude(damageableFakeView);
 

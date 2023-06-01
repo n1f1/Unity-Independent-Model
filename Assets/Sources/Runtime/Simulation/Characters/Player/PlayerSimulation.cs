@@ -14,7 +14,7 @@ namespace Simulation.Characters.Player
         [SerializeField] private bool _physicsDamageable;
         [SerializeField] private bool _botMovement;
         [SerializeField] private List<Vector2> _botMoveData;
-        
+
         private IMovementInput _movementInput;
 
         public ISimulation<IMovable> Movable { get; set; }
@@ -26,20 +26,15 @@ namespace Simulation.Characters.Player
             _movementInput = new AxisInput();
 
 #if UNITY_EDITOR
-            if (_botMovement) 
+            if (_botMovement)
                 _movementInput = new BotInput(_botMoveData);
 #endif
-            
+
             Movable = gameObject.AddComponent<PlayerMovement>().Initialize(_movementInput);
             CharacterShooter = gameObject.AddComponent<PlayerShooter>();
-            
-            if(_physicsDamageable)
-                Damageable = gameObject.AddComponent<DamageablePhysicsInteractableHolder>();
-        }
 
-        private void Update()
-        {
-            _botMoveData.Add(new Vector2(_movementInput.X, _movementInput.Y));
+            if (_physicsDamageable)
+                Damageable = gameObject.AddComponent<DamageablePhysicsInteractableHolder>();
         }
     }
 }

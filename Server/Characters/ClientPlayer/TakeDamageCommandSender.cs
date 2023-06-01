@@ -21,12 +21,12 @@ namespace Server.Characters.ClientPlayer
         {
             float amount = _health.Amount;
             _health.TakeDamage(damage);
-            
+
             TakeDamageCommand command = new TakeDamageCommand(this, amount - _health.Amount);
             _commandHandler.Send(command);
         }
 
-        public bool CanTakeDamage() => 
+        public bool CanTakeDamage() =>
             _health.CanTakeDamage();
     }
 }

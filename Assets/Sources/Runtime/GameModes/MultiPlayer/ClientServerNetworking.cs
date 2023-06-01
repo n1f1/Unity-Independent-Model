@@ -70,7 +70,7 @@ namespace GameModes.MultiPlayer
             return true;
         }
 
-        public void ReadNetworkStream() => 
+        public void ReadNetworkStream() =>
             StreamRead.ReadNetworkStream(_inputStream);
     }
 }

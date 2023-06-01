@@ -9,7 +9,7 @@ namespace Model.SpatialObject
 
         public Transform(IPositionView positionView, Vector3 position = new())
         {
-            _positionView = positionView ?? throw new ArgumentNullException();
+            _positionView = positionView ?? throw new ArgumentNullException(nameof(positionView));
             SetPosition(position);
         }
 

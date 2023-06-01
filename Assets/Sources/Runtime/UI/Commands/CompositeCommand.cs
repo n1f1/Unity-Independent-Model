@@ -13,7 +13,7 @@ namespace UI.Commands
 
         public void Execute()
         {
-            foreach (ICommand command in _commands) 
+            foreach (ICommand command in _commands)
                 command.Execute();
         }
     }

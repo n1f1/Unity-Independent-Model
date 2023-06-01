@@ -29,7 +29,7 @@ using Server.Update;
 
 namespace Server
 {
-    class Program
+    static class Program
     {
         static async Task Main(string[] args)
         {
@@ -59,7 +59,7 @@ namespace Server
             GameSimulation game = new GameSimulation(physicsSimulation, room, bulletsContainer, commandSender);
 
             PlayerToClientMap playerToClientMap = new PlayerToClientMap();
-            
+
             ServerPlayerFactory playerFactory =
                 new ServerPlayerFactory(bulletsContainer, physicsSimulation, commandSender);
 

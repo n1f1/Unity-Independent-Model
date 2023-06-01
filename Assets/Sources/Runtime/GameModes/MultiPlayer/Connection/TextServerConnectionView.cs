@@ -6,11 +6,14 @@ namespace GameModes.MultiPlayer.Connection
 {
     internal class TextServerConnectionView : MonoBehaviour, IServerConnectionView
     {
+        private const string ConnectingText = "Connecting...";
+        private const string ConnectedText = "Connected!";
+
         [SerializeField] private TextMeshProUGUI _textMeshPro;
 
         public void DisplayConnecting()
         {
-            _textMeshPro.text = "Connecting...";
+            _textMeshPro.text = ConnectingText;
         }
 
         public void DisplayError(string errorMessage)
@@ -20,7 +23,7 @@ namespace GameModes.MultiPlayer.Connection
 
         public void DisplayConnected()
         {
-            _textMeshPro.text = "Connected!";
+            _textMeshPro.text = ConnectedText;
         }
     }
 }

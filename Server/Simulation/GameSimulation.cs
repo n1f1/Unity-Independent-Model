@@ -11,6 +11,9 @@ namespace Server.Simulation
 {
     internal class GameSimulation
     {
+        private const int _physicsIterationsPerFrame = 5;
+        private const float _physicsIterationTime = (float) 1 / _physicsIterationsPerFrame;
+
         private readonly SimulationCommandSender<TakeDamageCommand> _commandSender;
         private readonly List<GameClient> _gameClients = new();
         private readonly IPhysicsSimulation _physicsSimulation;
@@ -28,17 +31,15 @@ namespace Server.Simulation
 
         public IEnumerable<GameClient> GameClients => _gameClients;
 
-        public void Add(GameClient player)
-        {
+        public void Add(GameClient player) =>
             _gameClients.Add(player);
-        }
 
         public void AddPassedTime(float time)
         {
-            for (int i = 0; i < 5; i++)
+            for (int i = 0; i < _physicsIterationsPerFrame; i++)
             {
-                _bulletsContainer.Update(time / 5f);
-                _physicsSimulation.Update(time / 5f);
+                _bulletsContainer.Update(time * _physicsIterationTime);
+                _physicsSimulation.Update(time * _physicsIterationTime);
             }
 
             UpdateClients(time);
@@ -61,7 +62,7 @@ namespace Server.Simulation
             for (var i = 0; i < _gameClients.Count; i++)
             {
                 GameClient gameClient = _gameClients[i];
-                
+
                 if (gameClient.Player.Health.Dead)
                 {
                     _gameClients.Remove(gameClient);

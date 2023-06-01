@@ -87,7 +87,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _physicsDamageable: 1
-  _botMovement: 1
+  _botMovement: 0
   _botMoveData:
   - {x: 0, y: 0}
   - {x: 0, y: 0}

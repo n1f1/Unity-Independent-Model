@@ -19,7 +19,7 @@ namespace Server.Client
             ServerClient = serverClient ?? throw new ArgumentNullException(nameof(serverClient));
             Player = player ?? throw new ArgumentNullException(nameof(player));
             MoveCommandHandler = new MoveCommandHandler(player);
-            FireCommandHandler = new FireCommandHandler(player);
+            FireCommandHandler = new FireCommandHandler();
             _commandHandlers = new ICommandHandler[] {MoveCommandHandler, FireCommandHandler};
         }
 

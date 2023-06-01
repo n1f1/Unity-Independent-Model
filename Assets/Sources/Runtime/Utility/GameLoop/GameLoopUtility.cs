@@ -1,7 +1,4 @@
-﻿using System;
-using System.Linq;
-using UnityEngine;
-using UnityEngine.LowLevel;
+﻿using UnityEngine.LowLevel;
 
 namespace Utility.GameLoop
 {
@@ -32,17 +29,17 @@ namespace Utility.GameLoop
             if (def.type == typeof(T))
                 return def;
 
-            if (def.subSystemList == null) 
+            if (def.subSystemList == null)
                 return default;
-            
+
             foreach (PlayerLoopSystem s in def.subSystemList)
             {
                 PlayerLoopSystem system = FindSubSystem<T>(s);
-                    
+
                 if (system.type == typeof(T))
                     return system;
             }
-            
+
             return default;
         }
     }

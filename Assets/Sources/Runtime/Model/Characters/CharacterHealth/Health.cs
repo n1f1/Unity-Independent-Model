@@ -10,23 +10,14 @@ namespace Model.Characters.CharacterHealth
 
         public Health(float health, float maxHealth, IHealthView healthView, IDeath death)
         {
-            Console.WriteLine();
-            Console.WriteLine(health);
-            Console.WriteLine(maxHealth);
-            if (maxHealth <= 0)
-                throw new ArgumentOutOfRangeException();
-            
-            if (health <= 0)
-                throw new ArgumentOutOfRangeException();
-
-            if (health > maxHealth)
+            if (maxHealth <= 0 || health <= 0 || health > maxHealth)
                 throw new ArgumentOutOfRangeException();
 
             _maxHealth = maxHealth;
             Amount = health;
-            _healthView = healthView ?? throw new ArgumentNullException();
-            _death = death ?? throw new ArgumentNullException();
-            _healthView.Display(1);
+            _healthView = healthView ?? throw new ArgumentNullException(nameof(healthView));
+            _death = death ?? throw new ArgumentNullException(nameof(death));
+            Display();
         }
 
         public float Amount { get; private set; }
@@ -44,10 +35,13 @@ namespace Model.Characters.CharacterHealth
                 throw new InvalidOperationException();
 
             Amount = Math.Clamp(Amount - damage, 0, Amount);
-            _healthView.Display(Amount / _maxHealth);
+            Display();
 
             if (Amount == 0)
                 _death.Die();
         }
+
+        private void Display() => 
+            _healthView.Display(Amount / _maxHealth);
     }
 }

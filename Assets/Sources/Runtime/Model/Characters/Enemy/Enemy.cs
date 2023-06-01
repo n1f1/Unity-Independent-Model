@@ -20,7 +20,7 @@ namespace Model.Characters.Enemy
         public Enemy(Vector3 position, Player.Player player, IHealthView healthView, IPositionView positionView)
         {
             if (player == null)
-                throw new ArgumentNullException();
+                throw new ArgumentNullException(nameof(player));
 
             Transform transform = new Transform(positionView, position);
             

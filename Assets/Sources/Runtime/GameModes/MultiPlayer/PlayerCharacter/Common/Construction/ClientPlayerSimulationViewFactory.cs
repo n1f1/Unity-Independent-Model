@@ -1,8 +1,9 @@
-﻿using GameModes.SinglePlayer;
+﻿using System;
+using GameModes.SinglePlayer;
 using Model.Characters.Player;
 using Simulation;
 using Simulation.Characters.Player;
-using UnityEngine;
+using Object = UnityEngine.Object;
 
 namespace GameModes.MultiPlayer.PlayerCharacter.Common.Construction
 {
@@ -12,7 +13,7 @@ namespace GameModes.MultiPlayer.PlayerCharacter.Common.Construction
 
         public ClientPlayerSimulationViewFactory(SinglePlayerTemplate template)
         {
-            _template = template;
+            _template = template ? template : throw new ArgumentNullException(nameof(template));
         }
 
         public (IPlayerView, IPlayerSimulation, SimulationObject) Create()

@@ -1,4 +1,5 @@
-﻿using System.Numerics;
+﻿using System;
+using System.Numerics;
 using Model.Shooting.Trajectory;
 
 namespace Model.Shooting
@@ -14,7 +15,7 @@ namespace Model.Shooting
 
         public ForwardAim(IAimView aimView)
         {
-            _aimView = aimView;
+            _aimView = aimView ?? throw new ArgumentNullException(nameof(aimView));
         }
 
         public void Aim(Vector3 position, Vector3 aimPosition)

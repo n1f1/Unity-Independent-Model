@@ -40,7 +40,7 @@ namespace GameModes.MultiPlayer.PlayerCharacter.Client.Construction
 
             DamageableFakeView damageableFakeView =
                 new DamageableFakeView(Player.MAXHealth, player.Health.Amount, fakeHealthView);
-            
+
             simulation.AddSimulation(playerSimulation.Damageable.Initialize(damageableFakeView));
             player.Shooter.Exclude(damageableFakeView);
 
